@@ -5,7 +5,6 @@ feature_text: |
   A demo of Markdown and HTML includes
 feature_image: "https://www.10wallpaper.com/wallpaper/2560x1600/1603/Polygon_triangles_green-Design_Thmem_HD_Wallpaper_2560x1600.jpg"
 excerpt: "A demo of Markdown and HTML includes"
-aside: true
 ---
 
 # Heading 1

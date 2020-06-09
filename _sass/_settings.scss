@@ -16,6 +16,7 @@ $white: #ffffff !default;
 // Typography
 $bodytype: (
   font-family: "Space Mono, monospace",
+  font-size: 12pt,
   regular: 400,
   bold: 700,
   italic: italic,
@@ -24,13 +25,15 @@ $bodytype: (
 
 $headingtype: (
   font-family: '"Karla", monospace',
-  regular: 800,
+  font-size: 20pt,
+  regular: 400,
   bold: 700,
   cap-height: 0.75
 ) !default;
 
 $monospacetype: (
   font-family: "Menlo, monospace",
+  font-size: 10pt,
   regular: 400,
   cap-height: 0.68
 ) !default;

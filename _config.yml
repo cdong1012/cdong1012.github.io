@@ -84,9 +84,9 @@ repo: "https://github.com/cdong1012/cdong1012.github.io"
 email: "cdong49@gatech.edu"
 
 # disqus: "alembic-1" # Blog post comments, uncomment the option and set the site ID from your Disqus account
-# google_analytics: ''
-# google_analytics_anonymize_ip: ''
-# service_worker: false # Will turn off the service worker if set to false
+google_analytics: 'UA-168923617-1'
+google_analytics_anonymize_ip: false
+service_worker: true # Will turn off the service worker if set to false
 css_inline: true # Will insert all styles into a single <style> block in the <head> element and remove the style <link> reference
 
 # 8. Site favicons & manifest icons
@@ -125,7 +125,7 @@ social_links: # Appears in sidebar. Set the urls then uncomment and comment out 
   LinkedIn: https://www.linkedin.com/in/chuong-dong-1012/
   GitHub: https://github.com/cdong1012
   Facebook: https://www.facebook.com/dongnguyen.chuong/
-  #RSS: /feed.xml
+  RSS: /feed.xml
 
 sharing_links: # Appear at the bottom of single blog posts, add as desired. The value can be 'true' or the desired button colour
   Twitter: "#0d94e7"

@@ -5,20 +5,27 @@ aside: true
 ---
 
 
-
+<br/>
 # About Me
+<br/>
+{% include figure.html image="/uploads/peter.png" position="center" width="500" height="500"%}
+<p style="text-align:center;">This is me :blush:</p>
 
-{% include figure.html image="/uploads/peter.png" caption="Here's a photo of me :)" position="center" width="300" height="300"%}
-<p style="text-align:center;"> {% include button.html text="I'm a button" link="https://david.darn.es" %} </p>
+**Hi guys! My name is Chuong, and I'm a third-year Computer Science student at [Georgia Tech](https://www.gatech.edu/ "Georgia Tech") with a concentration in Systems & Architecture and Info Internetwork.**
 
-<p style="text-align:center;">Yeet</p>
+**I'm interested in cyber security topics such as penetration testing, exploit development, reverse engineering, and malware development.**
 
-<br/><br/>
+**I'm dedicating this blog to writing about my projects as well as the things that I'm learning as I explore the security field!**
+
+**Thank you for visiting, and I hope you enjoy your stay!**
+
 <br/><br/>
 
 <hr>
-#### Let's get **in touch**!
 
-*Feel free to contact me if you have any feedback or need more information about me*
+## Let's get in touch!
 
-{% include site-form.html %}
+*If you want to learn more about me or my blog posts, feel free to contact me through my email cdong49@gatech.edu.*
+
+*You may also reach me on social media links listed under the section on the side panel. :grin:*
+
