@@ -56,12 +56,12 @@ timezone: America/New_York # Timezone for blog posts and alike
 # 5. Collections
 collections:
   posts:
-    title: Posts # Needed for Siteleaf
+    title: <br/>Blog Posts<hr><br/> # Needed for Siteleaf
     output: true
-    description: "My thoughts and ideas" # The post list page content
-    feature_text: |
-      Welcome to the blog
-    feature_image: "https://www.10wallpaper.com/wallpaper/2560x1600/1603/Polygon_triangles_green-Design_Thmem_HD_Wallpaper_2560x1600.jpg"
+    aside: true
+    #description: "My thoughts and ideas" # The post list page content
+    #feature_text:
+    #feature_image: "https://www.10wallpaper.com/wallpaper/2560x1600/1603/Polygon_triangles_green-Design_Thmem_HD_Wallpaper_2560x1600.jpg"
 
 #6. Jekyll collections settings
 defaults:
@@ -74,7 +74,7 @@ defaults:
 # 7. Site settings
 encoding: utf-8 # Make sure the encoding is right
 lang: en-GB # Set the site language
-title: "Chuong's Website" # Site name or title, also used in jekyll-seo-tag
+title: "Chuong Dong" # Site name or title, also used in jekyll-seo-tag
 
 logo: "/assets/logos/logo-cdong.gif" # Site logo, also used in jekyll-seo-tag
 description: "Ya yeet description" # Site description and default description, also used in jekyll-seo-tag
@@ -117,7 +117,7 @@ navigation_header:
 #   url: https://github.com/daviddarnes/alembic
 
 navigation_footer:
-- title: Chuong Dong
+- title: Chuong's Security Blog
   url: https://cdong1012.github.io
 
 social_links: # Appears in sidebar. Set the urls then uncomment and comment out as desired

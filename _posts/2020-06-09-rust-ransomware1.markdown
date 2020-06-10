@@ -1,14 +1,14 @@
 ---
-title: Rust Ransomware Part 1
+title: Rust Ransomware (Part 1)
 categories:
 - Malware Development
-description: Rust Ransomware - Setup and anti-reversing techniques
+description: Rust Ransomware | Setup and anti-reversing techniques
 ---
 
-
-# Rust Ransomware: Part 1
-## Setting up & Implementing Anti-Rerversing techniques in malwares
-
+# Rust Ransomware | Part 1
+### Setting up & Implementing Anti-Rerversing techniques in malwares  
+<hr>
+<br/>
 
 ### Set up
 - To set up this lab, please make sure you have a recent version of [Rust](https://www.rust-lang.org/tools/install "Rust Installation") installed.
@@ -35,13 +35,12 @@ description: Rust Ransomware - Setup and anti-reversing techniques
 
 ```
 
+
 ---
 
+### Anti-Reversing techniques
 
-### Anti-Reversing techniques:
-
-
-### I. IsDebuggerPresent
+#### I. IsDebuggerPresent
 
 
 - *IsDebuggerPresent* is a cool WinAPI function used to check for the **BeingDebugged** flag in the PEB (Process Environment Block) and will return a non-zero value if it is indeed being debug.
@@ -127,7 +126,7 @@ description: Rust Ransomware - Setup and anti-reversing techniques
 
     - Since I'm a bit lazy, I'm not going to attempt this, but maybe we can come back for this another time!
   
-### II. Check for sandbox
+#### II. Check for sandbox
 - There are a variety of sandbox-evasion techniques. I'm just going to list out a few of them for us to try and implement down here.
   
 - If you are interested in more details, I suggest taking a look at [this research paper](https://www.sans.org/reading-room/whitepapers/forensics/detecting-malware-sandbox-evasion-techniques-36667) 
@@ -353,7 +352,7 @@ description: Rust Ransomware - Setup and anti-reversing techniques
 
 ---
 
-### III. Recap
+#### III. Recap
    * We have build the foundation for our malware today! Anti-Reversing is a cool step in malware development since you get to see about the attacker's perspective to protect their own malware against reverse engineer!
 
 

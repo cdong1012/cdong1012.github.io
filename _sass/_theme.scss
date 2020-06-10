@@ -51,7 +51,7 @@ body {
   background-size: cover;
   background-position: center;
   .container {
-    min-height: 35vh;
+    min-height: 40vh;
     max-width: 60%;
     @include flex-direction(column);
     @include justify-content(center);
@@ -147,8 +147,8 @@ body {
 
 .aside {
   @include breakpoint(break-1) {
-    max-width: 15%;
-    margin-left: 3%;
+    max-width: 20%;
+    margin-left: 5%;
     @include flex(1, 0, auto);
     opacity: 0.7;
     transition: opacity .1s;
@@ -158,7 +158,7 @@ body {
     }
     &--left {
       margin-left: 0;
-      margin-right: 3%;
+      margin-right: 5%;
       order: -1;
     }
     &:hover {
@@ -395,7 +395,7 @@ pre code {
 }
 
 .required {
-  color: red;
+  color: rgb(255, 255, 255);
 }
 
 ::-webkit-input-placeholder {
