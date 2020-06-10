@@ -1,13 +1,12 @@
 ---
-title: Description of an Alembic
+title: Rust Ransomware Part 1
 categories:
-- General
-feature_image: "https://picsum.photos/2560/600?image=872"
+- Malware Development
 ---
 
 
 # Rust Ransomware: Part 1
-# Setting up & Anti Rerverse Engineering technique in malwares
+## Setting up & Anti Rerverse Engineering technique in malwares
 
 ### 1. Set up
 - To set up this lab, please make sure you have a recent version of [Rust](https://www.rust-lang.org/tools/install "Rust Installation") installed.
@@ -36,21 +35,20 @@ feature_image: "https://picsum.photos/2560/600?image=872"
         
 ### 2. Anti-Reversing techniques
 1. **IsDebuggerPresent**
-    - IsDebuggerPresent is a cool WinAPI function used to check for the BeingDebugged flag in the PEB (Process Environment Block) 
-        and will return a non-zero value if it is indeed being debug.
+    * *IsDebuggerPresent* is a cool WinAPI function used to check for the **BeingDebugged** flag in the PEB (Process Environment Block) and will return a non-zero value if it is indeed being debug.
     
-    - In theory, if this functions returns a non-zero value, the malware should exit immediately instead of executing its behavior to prevent reverse engineers from being able to run it with a debugger attached
+    * In theory, if this functions returns a non-zero value, the malware should exit immediately instead of executing its behavior to prevent reverse engineers from being able to run it with a debugger attached
 
-    - You can read more about the documentation [here](https://docs.microsoft.com/en-us/windows/win32/api/debugapi/nf-debugapi-isdebuggerpresent "IsDebuggerPresent")
+    * You can read more about the documentation [here](https://docs.microsoft.com/en-us/windows/win32/api/debugapi/nf-debugapi-isdebuggerpresent "IsDebuggerPresent")
     
-    - This is what the documentation from Rust Winapi looks like
+    * This is what the documentation from Rust Winapi looks like
         ![alt text](https://github.com/cdong1012/Rust-Ransomware/blob/master/image/IsDebuggerPresent.JPG "IsDebuggerPresent")
 
-    - If you trace down the type of the returned variable (*BOOL*), you will find that *BOOL* is just a wrapper for *i32* in Rust!
+    * If you trace down the type of the returned variable (*BOOL*), you will find that *BOOL* is just a wrapper for *i32* in Rust!
 
-    - At this point, we're ready to try it out in main.rs!
+    * At this point, we're ready to try it out in main.rs!
 
-    - First, since *IsDebuggerPresent* is from the winapi::um::debugapi crate, we need to import it in **Cargo.toml**.
+    * First, since *IsDebuggerPresent* is from the winapi::um::debugapi crate, we need to import it in **Cargo.toml**.
 
     ```
         winapi = { version = "0.3", features = ["debugapi"}
@@ -59,7 +57,7 @@ feature_image: "https://picsum.photos/2560/600?image=872"
 
     - After that, we can lay it out in **main.rs**:
 
-    ``` Rust
+    ``` rust
 
         #[cfg(windows)]
         extern crate winapi;
@@ -86,11 +84,11 @@ feature_image: "https://picsum.photos/2560/600?image=872"
 
     ```
 
-    - First, we check if IsDebuggerPresent() returns a 0 or any other number. If it's 0, the program is not being debugged, so we continue to print "Hello, world!"
+    * First, we check if *IsDebuggerPresent()* returns a 0 or any other number. If it's 0, the program is not being debugged, so we continue to print "Hello, world!"
 
-    - If it's being debugged, we print the debug code out and call std::process::exit(0) to exit immediately!
+    * If it's being debugged, we print the debug code out and call std::process::exit(0) to exit immediately!
 
-    - Here is the result:
+    * Here is the result:
         1. Double clicking on the executable /target/debug/Rust-Ransomware.exe. As you can see, the program prints out "Hello, world!"
 
         ![alt text](https://github.com/cdong1012/Rust-Ransomware/blob/master/image/noDebugger.JPG "No debugger")
@@ -99,9 +97,9 @@ feature_image: "https://picsum.photos/2560/600?image=872"
 
         ![alt text](https://github.com/cdong1012/Rust-Ransomware/blob/master/image/debuggerIDA2.JPG "Debugger")
 
-    - There are some [ways](https://www.aldeid.com/wiki/IsDebuggerPresent) that reverse engineers can bypass this through dynamic patching or static patching the executable itself, and we can do more things to make our executable anti-patching.
+    * There are some [ways](https://www.aldeid.com/wiki/IsDebuggerPresent) that reverse engineers can bypass this through dynamic patching or static patching the executable itself, and we can do more things to make our executable anti-patching.
 
-    - Since I'm a bit lazy, I'm not going to attempt this, but maybe we can come back for this another time!
+    * Since I'm a bit lazy, I'm not going to attempt this, but maybe we can come back for this another time!
   
 2. **Check for sandbox**
     - There are a variety of sandbox-evasion techniques. I'm just going to list out a few of them for us to try and implement down here.
@@ -112,7 +110,7 @@ feature_image: "https://picsum.photos/2560/600?image=872"
         * Idle time: The normal idle time on your PC or mine is typically really really short when we are using them. It's around 0.047 seconds on my laptop currently. For a sandbox, there won't be much action happening, and their idle time is typically really long.
             * We can check and see if the idle time is over a minute. If it is, we are probably in a sandbox
 
-            ``` Rust
+            ``` rust
                 use winapi::um::sysinfoapi::GetTickCount;
                 use winapi::um::winuser::{GetLastInputInfo, LASTINPUTINFO};
 
@@ -142,7 +140,7 @@ feature_image: "https://picsum.photos/2560/600?image=872"
             * We also can make our malware execute at a specific date and time in the future, defeating the sandbox by waiting it out!
             * Since this does not need to be too complicated, I just let my malware sleep for an hour before executing anything.
 
-              ``` Rust
+              ``` rust
 
                 use winapi::um::synchapi::Sleep;
                 pub fn sleep_for_an_hour() {
@@ -155,7 +153,7 @@ feature_image: "https://picsum.photos/2560/600?image=872"
         * Usually, users interact with their computers through mouse clicks and the keyboard, but there is extremly unlikely that there is such human-like interactions in a sandbox.
         * We can make our malware wait for a certain user interactions before executing. The [Trojan.APT.BaneChan](https://www.fireeye.com/blog/threat-research/2013/04/trojan-apt-banechant-in-memory-trojan-that-observes-for-multiple-mouse-clicks.html) sits and waits for a number of mouse clicks before executing its malicious code. I figure we can use this trick!
 
-            ``` Rust
+            ``` rust
 
             use winapi::um::winuser::{GetAsyncKeyState, VK_RBUTTON};
             pub fn check_mouse_click(min_clicks: u32) {
@@ -175,7 +173,7 @@ feature_image: "https://picsum.photos/2560/600?image=872"
 
         * We can also check the position of the mouse. Since a sandbox does not move the mouse cursor around, we can record the original position, wait for 5 seconds, and record it again. If the mouse position matches exactly, it's highly possible that we are in a sandbox
 
-            ``` Rust
+            ``` rust
 
                 use winapi::um::winuser::{GetCursorPos};
                 use winapi::shared::windef::POINT;
@@ -198,15 +196,15 @@ feature_image: "https://picsum.photos/2560/600?image=872"
 
             ```
 
-    ***3. Running Processes and Services:***
+    3. ***Running Processes and Services:***
 
         * Usually, a sandbox has multiple antivirus programs, debuggers, monitoring programs running as active processes. Our malware can check for the availability of some of these to determine if it's being ran in a sandbox
-        
+    
         * In my code, I looked up how to [numerate all running processes from MSDN](https://docs.microsoft.com/en-us/windows/win32/psapi/enumerating-all-processes) and translate their C++ code into Rust.
-        
+    
         * Then I extract their names and compare it with a list of executable names that usually exists in sandbox environment.
   
-    ``` Rust
+    ``` rust
             
    pub fn check_process() -> bool {
        let mut a_processes: Vec<u32> = Vec::with_capacity(1024);
