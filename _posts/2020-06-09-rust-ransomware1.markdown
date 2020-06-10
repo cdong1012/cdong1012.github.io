@@ -19,7 +19,7 @@ description: Rust Ransomware - Setup and anti-reversing techniques
 ```
 
 - You should see a few files and folders created like below
-    ![alt text](https://github.com/cdong1012/Rust-Ransomware/blob/master/image/Cargoinit.JPG "Cargo init")
+    ![alt text](/uploads/Cargoinit.JPG "Cargo init")
 
     ⋅⋅* The **src** folder is where you should put your Rust codes in for the malware.
     ⋅⋅* The **target** folder is where you can find the products of your code after building it (The .exe file for the malware,...)
@@ -43,7 +43,7 @@ description: Rust Ransomware - Setup and anti-reversing techniques
     * You can read more about the documentation [here](https://docs.microsoft.com/en-us/windows/win32/api/debugapi/nf-debugapi-isdebuggerpresent "IsDebuggerPresent")
     
     * This is what the documentation from Rust Winapi looks like
-        ![alt text](https://github.com/cdong1012/Rust-Ransomware/blob/master/image/IsDebuggerPresent.JPG "IsDebuggerPresent")
+        ![alt text](/uploads/IsDebuggerPresent.JPG "IsDebuggerPresent")
 
     * If you trace down the type of the returned variable (*BOOL*), you will find that *BOOL* is just a wrapper for *i32* in Rust!
 
@@ -92,11 +92,11 @@ description: Rust Ransomware - Setup and anti-reversing techniques
     * Here is the result:
         1. Double clicking on the executable /target/debug/Rust-Ransomware.exe. As you can see, the program prints out "Hello, world!"
 
-        ![alt text](https://github.com/cdong1012/Rust-Ransomware/blob/master/image/noDebugger.JPG "No debugger")
+        ![alt text](/uploads/noDebugger.JPG "No debugger")
 
         1. Debugging this executable in IDA, we can set a break point where we compare eax(the return value from IsDebuggerPresent()). If we execute to this point, you can see that eax = 1, so we will exit immediately!
 
-        ![alt text](https://github.com/cdong1012/Rust-Ransomware/blob/master/image/debuggerIDA2.JPG "Debugger")
+        ![alt text](/uploads/debuggerIDA2.JPG "Debugger")
 
     * There are some [ways](https://www.aldeid.com/wiki/IsDebuggerPresent) that reverse engineers can bypass this through dynamic patching or static patching the executable itself, and we can do more things to make our executable anti-patching.
 
