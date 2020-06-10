@@ -14,7 +14,6 @@ layout: default
         {% assign collectiondata = site.collections | where: "label", page.collectionpage | first %}
         <h1>{{ collectiondata.title }}</h1>
         {{ collectiondata.description | markdownify }}
-
       {% else %}
 
         {{ content }}
