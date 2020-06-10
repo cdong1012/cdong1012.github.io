@@ -33,7 +33,6 @@ description: Rust Ransomware | Setup and anti-reversing techniques
 - Before starting, append this to your *Cargo.toml* file. Inside the **features** array, we can include the crates that we use from [Rust-Winapi](https://docs.rs/winapi/0.3.8/winapi/index.html "Rust Winapi"). For example, if I want to use Winduser.h on Windows, I can import it as below
 
 ```
-
     [target.'cfg(windows)'.dependencies]
     winapi = { version = "0.3", features = ["winuser"] }
 
@@ -146,6 +145,7 @@ description: Rust Ransomware | Setup and anti-reversing techniques
 
 
         ``` rust
+
             use winapi::um::sysinfoapi::GetTickCount;
             use winapi::um::winuser::{GetLastInputInfo, LASTINPUTINFO};
 
