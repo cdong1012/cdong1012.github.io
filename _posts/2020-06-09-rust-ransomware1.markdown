@@ -6,9 +6,13 @@ description: Rust Ransomware | Setup and anti-reversing techniques
 ---
 
 # Rust Ransomware | Part 1
+
+
 ### Setting up & Implementing Anti-Rerversing techniques in malwares  
+
+
 <hr>
-<br/>
+
 
 ### Set up
 - To set up this lab, please make sure you have a recent version of [Rust](https://www.rust-lang.org/tools/install "Rust Installation") installed.
@@ -38,7 +42,9 @@ description: Rust Ransomware | Setup and anti-reversing techniques
 
 ---
 
+
 ### Anti-Reversing techniques
+
 
 #### I. IsDebuggerPresent
 
