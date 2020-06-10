@@ -35,7 +35,7 @@ description: Rust Ransomware - Setup and anti-reversing techniques
 ```
         
 ### 2. Anti-Reversing techniques
-1. **IsDebuggerPresent**
+- **IsDebuggerPresent** 
     * *IsDebuggerPresent* is a cool WinAPI function used to check for the **BeingDebugged** flag in the PEB (Process Environment Block) and will return a non-zero value if it is indeed being debug.
     
     * In theory, if this functions returns a non-zero value, the malware should exit immediately instead of executing its behavior to prevent reverse engineers from being able to run it with a debugger attached
@@ -102,7 +102,7 @@ description: Rust Ransomware - Setup and anti-reversing techniques
 
     * Since I'm a bit lazy, I'm not going to attempt this, but maybe we can come back for this another time!
   
-2. **Check for sandbox**
+- **Check for sandbox**
     - There are a variety of sandbox-evasion techniques. I'm just going to list out a few of them for us to try and implement down here.
   
     - If you are interested in more details, I suggest taking a look at [this research paper](https://www.sans.org/reading-room/whitepapers/forensics/detecting-malware-sandbox-evasion-techniques-36667) 
