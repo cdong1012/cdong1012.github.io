@@ -76,7 +76,7 @@ encoding: utf-8 # Make sure the encoding is right
 lang: en-GB # Set the site language
 title: "Chuong's Website" # Site name or title, also used in jekyll-seo-tag
 
-logo: "/assets/logos/2000.png" # Site logo, also used in jekyll-seo-tag
+logo: "/assets/logos/logo-cdong.gif" # Site logo, also used in jekyll-seo-tag
 description: "Ya yeet description" # Site description and default description, also used in jekyll-seo-tag
 url: "https://github.com/cdong1012/cdong1012.github.io" # Site url, also used in jekyll-seo-tag
 baseurl: ""
@@ -117,15 +117,15 @@ navigation_header:
 #   url: https://github.com/daviddarnes/alembic
 
 navigation_footer:
-- title: Created by Chuong Dong
+- title: Chuong Dong
   url: https://cdong1012.github.io
 
 social_links: # Appears in sidebar. Set the urls then uncomment and comment out as desired
-  Twitter: https://twitter.com/ChuongDong1
   LinkedIn: https://www.linkedin.com/in/chuong-dong-1012/
   GitHub: https://github.com/cdong1012
+  Twitter: https://twitter.com/ChuongDong1
   Facebook: https://www.facebook.com/dongnguyen.chuong/
-  RSS: /feed.xml
+  # RSS: /feed.xml
 
 sharing_links: # Appear at the bottom of single blog posts, add as desired. The value can be 'true' or the desired button colour
   Twitter: "#0d94e7"

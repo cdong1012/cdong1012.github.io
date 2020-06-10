@@ -10,13 +10,13 @@ $bodyColour: #c5c6c7 !default;
 $linkColour: #45a29e !default;
 $hoverColour: #78bcfb !default;
 $focusColour: #45a29e !default;
-$captionColour: #66fcf1 !default;
+$captionColour: #529e99 !default;
 $white: #ffffff !default;
 
 // Typography
 $bodytype: (
   font-family: "Space Mono, monospace",
-  font-size: 12pt,
+  font-size: 12px,
   regular: 400,
   bold: 700,
   italic: italic,
@@ -25,7 +25,7 @@ $bodytype: (
 
 $headingtype: (
   font-family: '"Karla", monospace',
-  font-size: 20pt,
+  font-size: 16px,
   regular: 400,
   bold: 700,
   cap-height: 0.75
@@ -33,7 +33,7 @@ $headingtype: (
 
 $monospacetype: (
   font-family: "Menlo, monospace",
-  font-size: 10pt,
+  font-size: 12px,
   regular: 400,
   cap-height: 0.68
 ) !default;
