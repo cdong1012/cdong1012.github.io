@@ -217,7 +217,7 @@ After running the Java code, this is the result I get!! After putting it into my
 This is just a fun Reverse Engineering attempt because I am so bored at home nowadays, and I am definitely encouraging people to do their homework to learn instead of pulling something like this.
 
 
-Since I already know how to do it manually, I can justify my lazy actions of hacking my way through this assignment ;). 
+Since I already know how to do it manually, I can justify my lazy actions of hacking my way through this assignment :stuck_out_tongue_winking_eye:. 
 
 
 For my fellow CS major, I hope you have learned the wonderful tool JD-GUI to disassemble any *.class* or *Jar* file you encounter with.
