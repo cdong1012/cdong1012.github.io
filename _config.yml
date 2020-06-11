@@ -56,7 +56,7 @@ timezone: America/New_York # Timezone for blog posts and alike
 # 5. Collections
 collections:
   posts:
-    title: <br/>Blog Posts<hr><br/> # Needed for Siteleaf
+    title: Blog Posts # Needed for Siteleaf
     output: true
     aside: true
     #description: "My thoughts and ideas" # The post list page content
