@@ -326,7 +326,7 @@ We want to create a readable handle to the source file and a writable for the de
 As a result of this, we will be having a fully encrypted file by encrypting with our AES key.
 
 
-![alt text](https://github.com/cdong1012/Rust-Ransomware/blob/master/image/encrypted.JPG "encrypted")
+![alt text](https://github.com/cdong1012/cdong1012.github.io/blob/master/uploads/encrypted.JPG "encrypted")
 
 
 
@@ -395,7 +395,7 @@ Since we are hard-coding our BLOB and using the same BLOB for every file and eve
 Also, this is too easy for reverse engineers to get the entire BLOB out from the source code. If you try putting our executable into IDA, you should see something like this.
 
 
-![alt text](https://github.com/cdong1012/Rust-Ransomware/blob/master/image/IDA.JPG "ida")
+![alt text](https://github.com/cdong1012/cdong1012.github.io/blob/master/uploads/IDA.JPG "ida")
 
 
 The BLOB is fully visible on the stack if we run it through a debugger. With this information, reverse engineers can simply write a decrypting tool and release it for anyone to use, which defeats our ransomware's purpose.
