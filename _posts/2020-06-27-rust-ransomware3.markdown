@@ -1,5 +1,5 @@
 ---
-title: Rust Ransomware (Part 1)
+title: Rust Ransomware (Part 3)
 categories:
 - Malware Development
 description: Rust Ransomware | Traversing Windows Directory and Priviledge Escalation
