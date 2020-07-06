@@ -1,0 +1,338 @@
+---
+title: CSCML2020 CTF Write-up
+categories:
+- Reverse Engineering
+description: Reverse Engineering Challenges
+---
+
+# CSCML2020 Reverse Engineering Write-up
+
+
+### 1. TimeTravel
+
+
+This task's prompt was about time travelling, so I first assumed that it has to deal with time manipulation inside the executable.
+    ![alt text](/uploads/time_travel_prompt.JPG "Prompt")
+
+
+When I first ran the executable, this is what I get. Seems like we are just going through these dialogs forever, and nothing is being prompt for us to input
+    ![alt text](/uploads/time_travel_raw.JPG "RAW")
+
+
+Let's open it in IDA and see what we get!
+    ![alt text](/uploads/time_travel_IDA1.JPG "IDA1")
+
+
+First, we need to look for the main function. This is simple because we can start at the entry point and look for 3 push calls followed by a function call. 96.69% of the time, this function is main, and in this case, it is **sub_411AE0**.
+    ![alt text](/uploads/time_travel_main.JPG "main")
+
+
+Pretty straightforward function! **Main** is calling [CreateThread](https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createthread), and this thread is going to execute the code at **StartAddress**.
+
+
+Let's dive into this function! First, we see that this function makes a called to **sub_407850**. If you look into this function, you will see a call to [IsDebuggerPresent](https://docs.microsoft.com/en-us/windows/win32/api/debugapi/nf-debugapi-isdebuggerpresent). We can tell that this function is going to check if the code is being ran in a debugger. If it is, it might terminate or something.
+    ![alt text](/uploads/time_travel_check_debugger1.JPG "checkdebugger")
+
+
+Following this, we see a bunch of [GetModuleHandleA](https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getmodulehandlea), but we don't see any call to the modules being returned. Therefore, I just ignored it when looking at it!
+    ![alt text](/uploads/time_travel_check.JPG "Checks")
+
+
+This is the interesting part of the code. Earlier, we saw that the result of **sub_407850** is stored in *eax* as 1 if we are using a debugger, and then this value in eax is stored inside *esi*.
+
+
+Here, we are testing if *esi* is 0 or not. If it is not, we branch to **loc_410921**. If you execute the code through IDA, you will see this. It seems like we want to avoid branching to this section.
+    ![alt text](/uploads/debugphobia.JPG "Debugphobia")
+
+
+Also, from earlier when we ran it, it seems like the code branch to **loc_1207C9** to bring all of those dialogs. We might want to avoid this branch too. There are a few checks that we need to bypass.
+
+
+Seems like it's calling [GetSystemTime](https://docs.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getsystemtime) and read the system time into the buffer stored at *esi*. This buffer will be a struct of [SYSTEMTIME](https://docs.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-systemtime). From there, we can assume that [esi] = **wYear**, [esi + 2] = **wMonth**, and [esi + 6] = **wDay**. The code is checking if the year is 0x7D0 which is 2000, and month and day are 1.
+
+
+We can simply use OllyDBG to patch this executable and solve it!
+
+
+First, we need to change the debugger check into a bunch of 0x90 (NOPS) so we ignore this jump completely.
+
+
+```
+    test esi, esi
+    jnz     loc_120921
+```
+
+
+Second, we need to change the date to the current time on the system. Currently, it is 07/06/2020 in my machine, so let's change the checks to that. Here is how I patch the executable.
+    ![alt text](/uploads/time_travel_patching.JPG "Patching")
+
+
+After extract the newly patched executable, we can run it and the flag is given!!
+    ![alt text](/uploads/time_travel_flag.JPG "Patching")
+
+
+### 2. Roulette
+
+
+
+I did not solve this challenge during the time of the CTF, but I came back and worked on it!
+
+
+This is the prompt.
+    ![alt text](/uploads/rout_prompt.JPG "Prompt")
+
+
+This challenge seems to have a roulette theme, but beside that, nothing much can be get from the prompt. When we run the executable, nothing shows up, which lets us know that we have to use a debugger for it. Let's throw it into IDA!
+    ![alt text](/uploads/rout_IDA1.JPG "IDA1")
+
+
+First, it seems like we checking if argc is 2 or not, which means the executable takes in a command line parameter, and according to the prompt, it's taking in the flag.
+
+
+If the flag is given, we will branch to the right. **sub_BB3180** is a special fast-call function that is used to obsfucate the function calling, making static analysis harder. However, after steping through the code, I notice that this returns a function address into eax depending on the value of *edx* and *ecx*.
+
+
+First, it's calling **sub_BB32D0**. This function makes a series of calls using the obsfucating method above, but generally, it looks something like this. The calls are [GetModuleFileNameA](https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getmodulefilenamea), [GetLastError](https://docs.microsoft.com/en-us/windows/win32/api/errhandlingapi/nf-errhandlingapi-getlasterror), and [CreateFileA](https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea). Basically, it's checking the executable's existence! We don't need to worry much about this.
+    ![alt text](/uploads/rout_BN1.JPG "BN1")
+
+
+Next, it's calling [GetModuleHandle](https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getmodulehandlea) with a null parameter, which will returns the handle to the current executable.
+
+
+Then, it makes a call to **sub_BB33A0**. This function took me a while to process, and here's the code in BinaryNinja.
+
+```
+    004033b4  int32_t __saved_ebp
+    004033b4  int32_t* ebp_1 = &__saved_ebp
+    004033be  int32_t eax_1 = *data_406004 ^ &__saved_ebp
+    004033d7  unimplemented  {punpcklbw xmm0, xmm0}
+    004033de  unimplemented  {punpcklwd xmm0, xmm0}
+    004033e7  int32_t var_20
+    004033e7  int32_t var_54 = &var_20
+    004033e8  unimplemented  {pshufd xmm0, xmm0, 0x0}
+    004033f9  if (sub_403180(0x6ddb9555, 0x60afc95d)(file_handle) != 0)  // getFileSize(file_handle)
+    00403401      int32_t curr_file_size = var_20
+    00403419      int32_t heap_handle = sub_403180(0x6ddb9555, 0x36c007a2)(4, curr_file_size)  // GetProcessHeap
+                // rtlAllocateHeap(heap_handle, HEAP_GENERATE_EXCEPTIONS, file_size)
+    0040342b      void* heap_pointer = sub_403180(0x1edab0ed, 0x3be94c5a)(heap_handle)
+                // if heap_pointer != null and ReadFile(file_handle, heap_pointer, curr_file_size, ...)
+                // Read file into heap
+    00403454      if (heap_pointer != 0 && sub_403180(0x6ddb9555, 0x84d15061)(file_handle, heap_pointer, curr_file_size, 0, 0) != 0)
+    0040345c          int32_t PE_header_offset = *(heap_pointer + 0x3c)  // 0x3c of the file = offset to PE header
+                    // size_of_header - code base?
+    00403466          void* esi_3 = *(PE_header_offset + heap_pointer + 0x54) - *(PE_header_offset + heap_pointer + 0x2c)
+    0040346a          *(PE_header_offset + heap_pointer + 0x28) = what_is_this  // move arg2 into PE entry point. NOTE: WHAT IS ARG2??
+    0040347b          sub_401010(0x405130)  // vfprintf(FILE * stream, const char * format, va_list arg );
+    0040348a          int32_t ecx_1 = 3
+    0040348f          void* eax_11 = esi_3 + what_is_this + 0x20 + heap_pointer
+    00403491          int32_t temp0_1
+    00403491          do
+    00403491              eax_11 = eax_11 + 0x40
+    00403498              unimplemented  {pxor xmm0, xmm1}
+    0040349c              *(eax_11 + 0xffffffa0) = *(eax_11 + 0xffffffa0)
+    004034a4              unimplemented  {pxor xmm0, xmm1}
+    004034a8              *(eax_11 + 0xffffffb0) = *(eax_11 + 0xffffffb0)
+    004034b0              unimplemented  {pxor xmm0, xmm1}
+    004034b4              *(eax_11 + 0xffffffc0) = *(eax_11 + 0xffffffc0)
+    004034bc              unimplemented  {pxor xmm0, xmm1}
+    004034c0              *(eax_11 + 0xffffffd0) = *(eax_11 + 0xffffffd0)
+    004034c4              temp0_1 = ecx_1
+    004034c4              ecx_1 = ecx_1 - 1
+    004034c4          while (temp0_1 != 1)
+    004034df          int32_t eax_13 = sub_403180(0x6ddb9555, 0x36c007a2)(4, 0x104)  // getProcessHeap()
+    004034f1          int32_t temp_file_name = sub_403180(0x1edab0ed, 0x3be94c5a)(eax_13)  // rltAllocateHeap
+                    // GetTempFileName("routlette", )
+    0040351b          if (temp_file_name != 0 && sub_403180(0x6ddb9555, 0xea86aa5d)(0x405148, 0x40513c, 0, temp_file_name) != 0)  {"roulette"}
+                        // CreateFile()
+    00403542              int32_t temp_file_handle = sub_403180(0x6ddb9555, 0x687d20fa)(temp_file_name, 0xc0000000, 3, 0, 4, 0, 0)
+                        // if temp_file_handle != INVALID_FILE_HANDLE and WriteFile(temp_file_handle, heap_pointer, curr_file_size) != 0
+    0040357b              if (temp_file_handle != 0xffffffff && sub_403180(0x6ddb9555, 0xf1d207d0)(temp_file_handle, heap_pointer, curr_file_size, 0, 0) != 0)
+    00403576                  sub_403180(0x6ddb9555, 0xfdb928e7)(temp_file_handle)  // CloseHandle(temp_file_handle)
+    00403591                  int32_t process_heap_handle = sub_403180(0x6ddb9555, 0x36c007a2)(0, heap_pointer)  // GetProcessHeap()
+    0040359e                  sub_403180(0x6ddb9555, 0x4b184b05)(process_heap_handle)  // HeapFree(proces_heap_handle)
+    004035b9                  return sub_4037cb(eax_1 ^ &__saved_ebp, ebp_1, arg3, var_54)
+    004035bc  exit(status: 1)
+    004035bc  noreturn
+```
+
+Let's break it down. First, using the file handle, it calls [GetFileSize](https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getfilesize) to get the size of this executable. Then, it calls [GetProcessHeap](https://docs.microsoft.com/en-us/windows/win32/api/heapapi/nf-heapapi-getprocessheap) and [RtlAllocateHeap](https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlallocateheap) to allocate a buffer of the size we just got.
+
+
+It will attempt to read the entire file into this heap buffer, and change the entry point of this executable in the buffer into some value. Next, it will xor the block of size 0x120 bytes with the flag[40] character. Afterward, it calls [GetTempFileName](https://docs.microsoft.com/en-us/search/?category=All&terms=gettempfilename) and [CreateFileA](https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea) to create a temporary file, and calls [WriteFile](https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-writefile) to write the executable inside the buffer into this temp file.
+
+
+Overall, we can see what they are doing. They change the entrypoint to a block of code, encrypt the block with the 41th character of our flag. Next, we see **main** calls the function **sub_BB35D0** to check the flag.
+
+
+This function is huge, so I'm not gonna show it. Basically, it's creating a string "./temp_file our_flag" (depending on what the name of the temporary file and our flag is), calls [CreateProcess](https://docs.microsoft.com/en-us/windows/win32/procthread/creating-processes) to execute this temporary file with our flag as the command line argument.
+
+
+Then, it will calls [WaitForSingleObjectEx](https://docs.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitforsingleobjectex) to wait for this process to end and calls [GetExitCodeProcess](https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getexitcodeprocess). This exit code must be 0 in order for everything to works, and this means that our temporary file must execute and exit normally.
+
+
+This is a problem because the block of code at the entry point was xor-ed with our flag's character, so it won't be making much sense, and will not exit properly by executing invalid code. We must make the xor-ed code result valid code.
+
+
+Through PEid, we can see that the entry point of this temp file is ***0x2FE0***, and we must make the code at this entry point work. The simplest method is to make the first byte at this point 0x55, which is ``` push ebp ```. This instruction is the typical starting instruction or any function, so let's try that.
+    ![alt text](/uploads/rout_IDA2.JPG "IDA2")
+
+
+The first byte at ***0x2FE0*** of the original code is 0x38, and we need to xor it with something to make it 0x55. Since XOR is reversible, we can calculate this by xor-ing the original code and the result together. ``` 0x38 ^ 0x55 = 0x6d ```, and in ASCII, 0x6d is the character **'m'**.
+
+
+Let's try making our flag **'mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm'**, which is 50 **'m'**. We only care about flag[40], and the rest does not matter. Let's run it and see what we get for the temporary code.
+    ![alt text](/uploads/rout_IDA3.JPG "IDA3")
+
+
+It looks perfect like a legit function!! Let's see what it's executing here. First, it's calling [GetCommandLineA](https://docs.microsoft.com/en-us/windows/win32/api/processenv/nf-processenv-getcommandlinea) to retrieve the flag from the command line argument. Next, it calls the function **sub_4B32D0** to do the existence checking like the parent executable. **sub_4B33A0** is the same function to generate the temp file as above.
+
+
+One thing special is that instead of using flag[40] to perform bitwise XOR, it's using 0x13 on line 0x300E ``` movzx   ecx, byte ptr [edi+13h] ```. It seems like this number will change everytime we generate a new file. This makes sense because it seems like we need to fixed our flag **'mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm'** at one index at a time, with the first time being 40 and this time being 0x13.
+
+
+This might recursively calls for a lot of time, and we can perform our XOR calculation to change our flag the same way.
+
+
+We know that the index of every file is at an index of *0x3011 - 0x2FE0 + 1 or 0x32* constant, and this should be easy. We can write a simple python script to recursively do this.
+
+
+``` python
+    from __future__ import print_function
+    import sys
+    import os.path
+    import pefile
+    import glob, os, os.path
+    from shutil import copyfile, move
+    from threading import Thread 
+    import subprocess 
+    from time import sleep
+
+    current_flag = []
+
+    # fill flag up with 50 'm's
+    curr_flag = "m" * 50
+    for i in range(50):
+        current_flag.append(curr_flag[i])
+
+
+    # capture temp file and write it into file "file_name"
+    def copy_tmp_file(file_name):
+        done = False 
+        while not done:
+            for temp_file in glob.glob("*.tmp"):
+                file_size = os.path.getsize(temp_file)
+                if file_size > 200:
+                    copyfile(temp_file, file_name)
+                    done = True
+                    break
+
+
+    # return entry point of executable
+    def find_entry_point_section(pe_file, entry_point):
+        for section in pe_file.sections:
+            if section.contains_rva(entry_point):
+                return section
+
+        return None
+
+
+
+    def get_index_of_flag(file_path):
+        current_index = 0
+        pe_file = pefile.PE(file_path, fast_load=True)
+        
+        # Acquire entrypoint for PE
+        entry_point = pe_file.OPTIONAL_HEADER.AddressOfEntryPoint
+        code_section = find_entry_point_section(pe_file, entry_point)
+        if not code_section:
+            return
+        
+        # Get bytes at the section
+        code_at_start = code_section.get_data(entry_point, 0x32)
+
+
+        # Get last opcode (it contains the index)
+        current_index = code_at_start[-1:] 
+        current_index = int.from_bytes(current_index, "little") - 1
+        print('Index:', current_index)
+        pe_file.close()
+        return current_index
+
+
+    def get_first_opcode(file_path):
+        current_opcode = 0
+        pe = pefile.PE(file_path, fast_load=True)
+
+        # Acquire entrypoint for PE
+        eop = pe.OPTIONAL_HEADER.AddressOfEntryPoint
+        code_section = find_entry_point_section(pe, eop)
+        if not code_section:
+            return
+
+        # get first byte at entry point
+        code_at_start = code_section.get_data(eop, 1)
+
+        # Get first opcode
+        bad_opcode = code_at_start[0] 
+
+        print('Opcode:', hex(bad_opcode))
+        pe.close()
+
+        return bad_opcode
+
+    def main():
+        capture_file_thread = Thread(target=copy_tmp_file, args=("current.exe", ))
+        capture_file_thread.start()
+
+        subprocess.call(["d", ''.join(current_flag)], executable="roulette.exe", stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+        sleep(0.5)
+        try:
+            while True:
+                # Get index of current exe
+                current_index = get_index_of_flag("current.exe")
+
+                # Capture tmp file when it's being generated and copy it to "temporary.exe"
+                capture_file_thread = Thread(target=copy_tmp_file, args=("temporary.exe", ))
+                # we will use temporary.exe to read what is the opcode of the next one
+
+                capture_file_thread.start()
+
+                # Call current exe file, at this point, temporary.exe = new temp file
+                subprocess.call(["d",  ''.join(current_flag)], executable="current.exe")
+
+                # Acquire first opcode from start function
+                bad_opcode = get_first_opcode("temporary.exe")
+                os.remove("temporary.exe") 
+                sleep(0.5)
+
+                # Calculate character to get proper `push ebp` or 0x55
+                # opcode should be 0x55 in the end
+                good_opcode = chr(bad_opcode ^ 0x55 ^ ord(current_flag[current_index]))
+                print('Replace flag[' + current_index + '] with ' + good_opcode)
+                current_flag[current_index] = good_opcode
+                print('Flag: ' + ''.join(current_flag))
+
+                # copy new temp file into _current.exe, then call current.exe, capture the temp file and move the previous temp file into
+                # this current temp file
+                capture_file_thread = Thread(target=copy_tmp_file, args=("_current.exe", ))
+                capture_file_thread.start()
+
+                subprocess.call(["d",  ''.join(current_flag)], executable="current.exe")
+                move("_current.exe", "current.exe")
+
+                sleep(0.5)
+        except Exception:
+            # once we get no more file to read, we finish our flag.
+            exit(print('Final Flag: ' + ''.join(current_flag)))
+
+    if __name__ == '__main__':
+        main()
+```
+
+
+After running the python script for a while, we will see something like this! The correct flag is **cscml2020{p3_i5_my_f4v0rit3_r0ul3tt3_f0rm4t}**.
+    ![alt text](/uploads/rout_result.JPG "result")
+
+
+Huge shoutout to [1byte](https://medium.com/@ctfgudai/roulette-cscml2020-500-pts-3b8a19069e70) for helping me figuring out how to write the script to check the files recursively!!
