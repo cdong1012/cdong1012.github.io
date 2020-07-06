@@ -31,18 +31,21 @@ Pretty straightforward function! **Main** is calling [CreateThread](https://docs
 
 
 Let's dive into this function! First, we see that this function makes a called to **sub_407850**. If you look into this function, you will see a call to [IsDebuggerPresent](https://docs.microsoft.com/en-us/windows/win32/api/debugapi/nf-debugapi-isdebuggerpresent). We can tell that this function is going to check if the code is being ran in a debugger. If it is, it might terminate or something.
-    ![alt text](/uploads/time_travel_check_debugger1.JPG "checkdebugger")
+    
+  ![alt text](/uploads/time_travel_check_debugger1.JPG "checkdebugger")
 
 
 Following this, we see a bunch of [GetModuleHandleA](https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getmodulehandlea), but we don't see any call to the modules being returned. Therefore, I just ignored it when looking at it!
-    ![alt text](/uploads/time_travel_check.JPG "Checks")
+  
+  ![alt text](/uploads/time_travel_check.JPG "Checks")
 
 
 This is the interesting part of the code. Earlier, we saw that the result of **sub_407850** is stored in *eax* as 1 if we are using a debugger, and then this value in eax is stored inside *esi*.
 
 
 Here, we are testing if *esi* is 0 or not. If it is not, we branch to **loc_410921**. If you execute the code through IDA, you will see this. It seems like we want to avoid branching to this section.
-    ![alt text](/uploads/debugphobia.JPG "Debugphobia")
+
+  ![alt text](/uploads/debugphobia.JPG "Debugphobia")
 
 
 Also, from earlier when we ran it, it seems like the code branch to **loc_1207C9** to bring all of those dialogs. We might want to avoid this branch too. There are a few checks that we need to bypass.
@@ -64,11 +67,13 @@ First, we need to change the debugger check into a bunch of 0x90 (NOPS) so we ig
 
 
 Second, we need to change the date to the current time on the system. Currently, it is 07/06/2020 in my machine, so let's change the checks to that. Here is how I patch the executable.
-    ![alt text](/uploads/time_travel_patching.JPG "Patching")
+
+   ![alt text](/uploads/time_travel_patching.JPG "Patching")
 
 
 After extract the newly patched executable, we can run it and the flag is given!!
-    ![alt text](/uploads/time_travel_flag.JPG "Patching")
+   
+   ![alt text](/uploads/time_travel_flag.JPG "Patching")
 
 
 ### 2. Roulette
