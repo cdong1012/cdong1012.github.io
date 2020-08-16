@@ -221,7 +221,7 @@ The only thing left to do is calling [CreateRemoteThread](https://docs.microsoft
 
 And here should be the result. I'm creating a **python.exe** process running an infinite loop, and I will attempt to inject my own DLL into this process and have the pop-up shows up.
 
-{% include image="/uploads/dll_injection_result.gif" position="center" %}
+{% include figure.html image="/uploads/dll_injection_result.gif" position="center" %}
 ## 5. Wrapping up
 
 
