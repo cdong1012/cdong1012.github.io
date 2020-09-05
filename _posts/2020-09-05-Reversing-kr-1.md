@@ -131,4 +131,4 @@ So our final password is **Ea5yR3versing**!! Let's run the program and type it i
 
 ## 3. Recap
 
-This reversing challenge is pretty simple, but it's a pretty good practice for me to start reading x86 Assembly and reversing again!
+This reversing challenge is pretty simple, but it's pretty good practice for me to start reading x86 Assembly and reversing again!
