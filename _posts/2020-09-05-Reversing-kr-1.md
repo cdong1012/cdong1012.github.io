@@ -2,7 +2,7 @@
 title: Reversing.kr - Easy Crack
 categories:
   - Reverse Engineering
-description: Writeup for Easy Crack challenge from Reversing.kr
+description: Write-up for Easy Crack challenge from Reversing.kr
 ---
 
 # Reversing.kr - Easy Crack
