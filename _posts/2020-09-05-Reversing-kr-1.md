@@ -11,7 +11,7 @@ description: Write-up for Easy Crack challenge from Reversing.kr
 
 I've been working at Union Pacific for the network design team, so I have not had much practice with reverse engineering lately.
 
-Since [FLARE-on 2020](http://flare-on.com/) from FireEye is coming next weekend, I figure that I should do some reversing this weekend to prepare for it.
+Since [FLARE-On 2020](http://flare-on.com/) from FireEye is coming next weekend, I figure that I should do some reversing this weekend to prepare for it.
 
 I have picked [Reversing.kr](http://reversing.kr/index.php) to practice mainly because they have a lot of good Windows challenges for me to do. I have been trying to find them in normal CTFs, but most of them only makes reversing challenges for Linux machine.
 
