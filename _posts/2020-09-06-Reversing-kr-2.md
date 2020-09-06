@@ -102,7 +102,7 @@ So now, we can be sure that **sub_4011A2** is a **scanf** call. Let's rename the
 ![alt text](/uploads/EK9.PNG)
 
 
-Honestly, usually I tend to ignore these kind of assembly block of codes because I'm lazy, but since I'm writing a blog about reversing, I guess I have to go deeper into it and fully explain what it means. :disappointed:
+Honestly, usually I tend to ignore these kind of assembly block of codes because I'm lazy, but since I'm writing a blog post about reversing, I guess I have to go deeper into it and fully explain what it means. :disappointed:
 
 
 Let's break it down
