@@ -1,35 +1,33 @@
-{% if paginator.posts %}
-  <section class="section  typeset">
-    <ul class="list  list--posts">
-      {% for page in paginator.posts %}
-        <li class="item  item--post">
-          <article class="article  article--post">
-
-            <h2><a href="{{ site.baseurl }}{{ page.url }}">{{ page.title }}</a></h2>
-            {% include post-meta.html %}
-
-            <p>{{ page.description }}</p>
-
-          </article>
-        </li>
-      {% endfor %}
+{% if page.collection == "tag" %}
+    {% assign target = page.tag %}
+    <ul class="list list--posts">
+    {% for page in site.posts %}
+        {% if page.tags contains target %}
+            <li class="item item--post">
+                <div class="typeset">
+                    <h4><a href="{{ page.url }}" title="{{ page.title }}">{{ page.title }}</a></h4>
+                    {% include post-meta.html %}
+                    <span><br/>{{ page.excerpt | truncatewords: 20 }}</span>
+                </div>
+            </li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+{% elsif paginator.posts %}
+    <ul class="list list--posts">
+        {% for page in paginator.posts limit: site.paginate %}
+            <li class="item item--post">
+                <div class="typeset">
+                    <h4><a href="{{ page.url }}" title="{{ page.title }}">{{ page.title }}</a></h4>
+                    {% include post-meta.html %}
+                    <span><br/>{{ page.excerpt | truncatewords: 20 }}</span>
+                </div>
+            </li>
+        {% endfor %}
     </ul>
     {% include post-pagination.html %}
-  </section>
 {% else %}
-  <section class="section  typeset">
-    <ul class="list  list--posts">
-      {% for page in site.posts %}
-        <li class="item  item--post">
-          <article class="article  article--post">
-
-            <h2><a href="{{ site.baseurl }}{{ page.url }}">{{ page.title }}</a></h2>
-            {% include post-meta.html %}
-            <p>{{ page.description }}</p>
-
-          </article>
-        </li>
-      {% endfor %}
-    </ul>
-  </section>
+    <h4>Recent Posts</h4>
+    {% assign related_posts = site.posts | slice: 0, 3 %}
+    {% include post-related.html %}
 {% endif %}
