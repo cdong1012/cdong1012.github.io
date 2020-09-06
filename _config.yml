@@ -77,7 +77,7 @@ lang: en-GB # Set the site language
 title: "Chuong Dong" # Site name or title, also used in jekyll-seo-tag
 
 logo: "/assets/logos/logo-cdong.gif" # Site logo, also used in jekyll-seo-tag
-description: "Ya yeet description" # Site description and default description, also used in jekyll-seo-tag
+description: "Chuong's Security Blog" # Site description and default description, also used in jekyll-seo-tag
 url: "https://cdong1012.github.io/" # Site url, also used in jekyll-seo-tag
 baseurl: ""
 repo: "https://github.com/cdong1012/cdong1012.github.io"
