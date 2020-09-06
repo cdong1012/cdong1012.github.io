@@ -86,6 +86,7 @@ email: "cdong49@gatech.edu"
 # disqus: "alembic-1" # Blog post comments, uncomment the option and set the site ID from your Disqus account
 google_analytics: 'UA-168923617-1'
 google_analytics_anonymize_ip: false
+google_site_verification: fhiMUAXjII16BlWNx0x4tY2MXKJwEcdDVjILoXGUXYA
 service_worker: true # Will turn off the service worker if set to false
 css_inline: true # Will insert all styles into a single <style> block in the <head> element and remove the style <link> reference
 
