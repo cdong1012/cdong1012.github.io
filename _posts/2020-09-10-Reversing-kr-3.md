@@ -111,7 +111,7 @@ We don't need to worry because math is completely different on computer because 
 Basically, *eax* register can only store at most 32 bits, so even if we try to write something that is greater than 32 bits, it will only contains the lower 32 bits of that number.
 
 
-So, when we want *eax* to be *0x401071*, we can write to it *0xn00401071* where n can be any number from 1-F. Since, again, *eax* can only store the lower 32 bits, it will discard that 4 most significant bits.
+So, when we want *eax* to be *0x401071*, we can write to it *0x100401071*. Since, again, *eax* can only store the lower 32 bits, it will discard that 4 most significant bits.
 
 
 Let's have n be 1. So now our equation becomes
