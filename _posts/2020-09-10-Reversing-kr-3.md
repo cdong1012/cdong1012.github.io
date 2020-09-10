@@ -1,3 +1,9 @@
+---
+title: Reversing.kr - Replace
+categories:
+  - Reverse Engineering
+description: Write-up for Replace challenge from Reversing.kr
+---
 # Reversing.kr - Replace
 
 ## 1. Context
