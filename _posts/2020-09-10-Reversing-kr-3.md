@@ -56,7 +56,7 @@ Here, at **0x4046C4**, we have a ``` jmp     loc_401071```, and **loc_401071** i
 We must analyze the **sub_40466F** calls to see where they will modify these instructions.
 
 
-![alt text](/uploads/Replace5.PNG)
+![alt text](/uploads/Replace5.png)
 
 
 Alright, mission abort I guess. This is just raw x86 Assembly written by the author of this challenge instead of generated Assembly code. Ew :alien:
