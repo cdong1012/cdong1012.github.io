@@ -95,6 +95,9 @@ So here, *input_flag* is incremented by *2* again, and pushed to the stack as th
 Ah hah, so here, we are writing a NOP instruction into whatever *eax* is pointing to, which is *input_flag + 2 + 0x601605C7 + 2*. If we can get this value to be *0x401071*, the instruction there will be overwritten into a NOP, and we will execute the **Correct** message.
 
 
+![alt text](/uploads/Replace9.PNG)
+
+
 Let's do some quick math!
 
 
@@ -126,6 +129,8 @@ Solving for *input_flag*, we get *2687109798*.
 
 
 When we put this into the executable, we get the **Correct** message!!!
+
+![alt text](/uploads/Replace10.PNG)
 
 
 ## 3. Recap
