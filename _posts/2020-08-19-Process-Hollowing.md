@@ -157,7 +157,7 @@ printf("Created process PID %d\n", processInfo.dwProcessId);
 ```
 
 
-Notice that for the field *dwCreationFlags*, we are passing in **CREATE_SUSPENDED** in order to create the process in suspended state. To check if the process is created corrected, we can use Task Manager.
+Notice that for the field *dwCreationFlags*, we are passing in **CREATE_SUSPENDED** in order to create the process in suspended state. To check if the process is created correctly, we can use Task Manager.
 
 ![alt text](/uploads/suspended.PNG)
 
@@ -189,7 +189,7 @@ pNtHeaders->OptionalHeader.Subsystem = IMAGE_SUBSYSTEM_WINDOWS_GUI;
 ```
 
 
-Next, we need to get the [CONTEXT] of the thread. This struct contains processor-specific register data of the newly created thread, such as the image base address of the target from the *Ebx* field and Eax as entry point.
+Next, we need to get the **CONTEXT** of the thread. This struct contains processor-specific register data of the newly created thread, such as the image base address of the target from the *Ebx* field and *Eax* as entry point.
 
 ``` cpp
     DWORD dwResult;
