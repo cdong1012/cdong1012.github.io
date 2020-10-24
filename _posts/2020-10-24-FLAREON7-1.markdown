@@ -94,7 +94,7 @@ for i in range(1, 999):
 This is the result!
 
 
-![alt text](/uploads/FO1-7.PNG "Decodeflag")
+![alt text](/uploads/FO1-8.PNG "Decodeflag")
 
 
 Because of the brute-force, we can't get the exact value of the first character, but I think we can all guess which character that is 
