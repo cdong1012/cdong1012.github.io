@@ -102,7 +102,7 @@ Because of the brute-force, we can't get the exact value of the first character,
 
 ### Remark
 
-This is my first year participating in Flare-On, and I'm thrilled to have completed all the challenges and rank 172 in the world this year! :satisfied:
+This is my first year participating in Flare-On, and I'm thrilled to have completed all the challenges and ranked 172 in the world this year! :satisfied:
 
 I really like this first challenge since it's easy and took like 5 minutes to finish! A great starting point for sure!
 
