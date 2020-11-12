@@ -1,5 +1,5 @@
 ---
-title: Zero2Automated Custom Sample 1
+title: Zero2Automated Custom Sample
 categories:
 - Reverse Engineering
 description: Zero2Automated Custom Sample
