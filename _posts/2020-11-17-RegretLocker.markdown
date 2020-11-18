@@ -295,7 +295,7 @@ If the file is not a folder, it will just call the main encrypting function to e
 This function is divided into 2 condition blocks. If the file size is greater than 104857600 bytes or around 105MB, the file is counted as a large file and will be encrypted with the *encrypt_large_file()* function. If it's not, then **RegretLocker** proceeds to encrypt it using AES.
 
 
-![alt text](/uploads/RegretLocker20.png)
+![alt text](/uploads/RegretLocker20.PNG)
 
 
 There is a catch here. If the encryption fails because the file is being opened by any process, the ransomware checks if it's being ran as **Program Files**. If it is not, then **RegretLocker** will find the process that is currently using this file. It's accomplishing this through the use of **Restart Manager** with these API calls.
@@ -305,7 +305,7 @@ There is a catch here. If the encryption fails because the file is being opened 
   - **RmGetList**: Get the list of application of services/processes that are using this resource
   - **CreateToolhelp32Snapshot, Process32FirstW, and Process32NextW**: Check all running processes for their ID, comparing with the processes above
 
-![alt text](/uploads/RegretLocker21.png)
+![alt text](/uploads/RegretLocker21.PNG)
 
 
 After getting the processes that are using the file, it checks for the name. If they match any of these, they will not be added to the list and closed later.
@@ -333,7 +333,7 @@ The core of the encrypting functions above are this one AES encrypting function.
 After the encryption, it will write this encrypted buffer back into the file with the new file extension **.mouse**. It will also check the folder path to see if it has created the file **HOW TO RESTORE FILES.TXT** already and created one if it has not.
 
 
-![alt text](/uploads/RegretLocker23.png)
+![alt text](/uploads/RegretLocker23.PNG)
 
 
 ## YARA rule
