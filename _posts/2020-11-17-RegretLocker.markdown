@@ -298,7 +298,7 @@ This function is divided into 2 condition blocks. If the file size is greater th
 ![alt text](/uploads/RegretLocker20.PNG)
 
 
-There is a catch here. If the encryption fails because the file is being opened by any process, the ransomware checks if it's being ran as ***Program Files***. If it is not, then ***RegretLocker*** will find the process that is currently using this file. It's accomplishing this through the use of ***Restart Manager*** with these API calls.
+There is a catch here. If the encryption fails, it means the file is running or used by some process. For that case, ***RegretLocker*** will find the process that is currently using this file and attempt to terminate it. It's accomplishing this through the use of ***Restart Manager*** with these API calls.
 
   - ***RmStartSession***: Start a new session for ***Restart Manager***
   - ***RmRegisterResources***: Registering the file to be encrypted as a resource 
@@ -321,7 +321,7 @@ After getting the processes that are using the file, it checks for the name. If 
 
 ***RegretLocker*** then builds the command string ``` taskkill /F /IM \process_name ``` and runs it with ***cmd.exe***. This command basically just filters out the process with the given process name and terminates it.
 
-The ransomware will continuously loop until it successfully closes the process. Then it will attempt to encrypt again.
+The ransomware will continuously loop until it successfully closes the process. Then it will attempt the encryption again.
 
 
 ### Encryption - AES
