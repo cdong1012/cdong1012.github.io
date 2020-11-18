@@ -259,7 +259,7 @@ After the large file encryption, ***RegretLocker*** goes into a while loop to en
 *small_encrypt()* calls a wrapper function to navigate around directories and files before encrypting them. It specifically looks out for these to avoid encrypting them.
 
   - ***RegretLocker file***
-  - ****.log***
+  - ***.log***
   - ***HOW TO RESTORE FILES.TXT***
   - ***Windows folder***
   - ***ProgramData***
@@ -280,7 +280,7 @@ Inside of the recursive encrypting function, ***RegretLocker*** specifically loo
   - ***x96dbg***
   - ***Hex Editor***
   - ***tor-lib.dll***
-  - ****.mouse***
+  - ***.mouse***
 
 
 Since the drives are mounted, ***RegretLocker*** checks the file extension for ***".vhd"*** in order to detect any virtual drive. If found, it will call a function to open the virtual drive to start encrypting everything inside by recursively calling back to the recursive function. The ransomware uses a series of calls to ***OpenVirtualDisk, AttachVirtualDisk, GetVirtualDiskPhysicalPath, FindFirstVolumeW, CreateFileW, DeviceIoControl, GetVolumePathNamesForVolumeNameW, and FindNextVolumeW*** to retrieve a list of file and folder names inside.
