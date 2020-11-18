@@ -221,9 +221,9 @@ The malware is written in C++, and there is a class called ***smb_scanner***. Th
 ![alt text](/uploads/RegretLocker12.png)
 
 
-The result value is a buffer of all the SMB folders(is it supposed to be called folder? Can someone correct me on what we should call these things in SMB? :cry:) in string form.
+The result value is a buffer of all the SMB folders in string form.
 
-Then, it goes through a while loop calling a function to encrypt these SMB folders. I label this encryption function as *smb_encrypt()*. I actually have not set up SMB on my virtual machine, so when I ran this, I did not know if it could actually encrypt SMB folders or not...
+Then, it goes through a while loop calling a function to encrypt these SMB folders, so I label this encryption function as *smb_encrypt()*. I actually have not set up SMB on my virtual machine, so when I ran this, I did not know if it could actually encrypt SMB folders or not...
 
 
 ![alt text](/uploads/RegretLocker13.png)
