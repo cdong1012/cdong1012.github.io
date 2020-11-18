@@ -20,7 +20,7 @@ Typically, ***VHD*** files are huge in size with a max size of nearly 2TB becaus
 However, through mounting these virtual disks as physical disks, ***RegretLocker*** can go through and encrypt the individual files inside, which significantly increases encryption speed overall.
 
 
-For encryption, ***RegretLocker*** reaches out to the C2C server for a ***RSA*** key in order to encrypt and produce a unique ***AES*** key. This ***AES*** key will be used to encrypt all of the files on the disks. However, if the machine is offline or it can't reach C2C, it will just uses the hard-coded ***RSA*** key in memory, which makes it simple to write a decryption tool for!
+For encryption, ***RegretLocker*** reaches out to the C&C server for a ***RSA*** key in order to encrypt and produce a unique ***AES*** key. This ***AES*** key will be used to encrypt all of the files on the disks. However, if the machine is offline or it can't reach C&C, it will just uses the hard-coded ***RSA*** key in memory, which makes it simple to write a decryption tool for!
 
 
 All of the encrypted files have the extension ***.mouse***.
@@ -47,19 +47,19 @@ Huge shout-outs to [Vitali Kremez](https://twitter.com/VK_Intel) and [MalwareHun
 
 ***VirtDisk.dll***: Mounting virtual disk functionalities
 
-***tor-lib.dll***: DLL dropped by ***RegretLocker*** that is used to contact C2C through Tor
+***tor-lib.dll***: DLL dropped by ***RegretLocker*** that is used to contact C&C through Tor
 
 
 ## Networking
 
-***RegretLocker*** contacts the C2C server at ***http://regretzjibibtcgb.onion/input*** through Tor 3 times:
+***RegretLocker*** contacts the C&C server at ***http://regretzjibibtcgb.onion/input*** through Tor 3 times:
 
     - Retrieve RSA key from server
     - Sending information such as the computer's IP, name, volume of the disks,..
     - Signalling when it finishes encrypting
 
 
-Before contacting C2C, it sends a GET request to ***http://api.ipify.org/*** to retrieve the PC's public IP address. If this fails, the malware can assume that it's running offline and will use the hard-coded RSA key.
+Before contacting C&C, it sends a GET request to ***http://api.ipify.org/*** to retrieve the PC's public IP address. If this fails, the malware can assume that it's running offline and will use the hard-coded RSA key.
 
 ## Ransom Note
 
@@ -100,7 +100,7 @@ The malware extracts the path to the current directory it is located in through 
 ![alt text](/uploads/RegretLocker2.png)
 
 
-It then calls a function to extract the dll from its resource section through ***FindResourceA, LoadResource, and LockResource***. As we can see in ***Process Hacker***, the dll is stored unencrypted in the resource section. After extracting the dll, it calls ***LoadLibrary*** to get a handle to the dll. This handle will be used for the malware to contact C2C.
+It then calls a function to extract the dll from its resource section through ***FindResourceA, LoadResource, and LockResource***. As we can see in ***Resource Hacker***, the dll is stored unencrypted in the resource section. After extracting the dll, it calls ***LoadLibrary*** to get a handle to the dll. This handle will be used for the malware to contact C&C.
 
 
 ![alt text](/uploads/RegretLocker3.png)
@@ -167,13 +167,13 @@ These names are mounted to the C drive using ***GetVolumePathNamesForVolumeNameA
 ### Retrieving RSA key
 
 
-As discussed above, the malware will first reach out to C2C at ***http://regretzjibibtcgb.onion/input*** with ***get_key*** in the query to request the RSA key.
+As discussed above, the malware will first reach out to C&C at ***http://regretzjibibtcgb.onion/input*** with ***get_key*** in the query to request the RSA key.
 
 
 ![alt text](/uploads/RegretLocker9.png)
 
 
-The global variable ***RSA_KEY*** will be written accordingly with the RSA key depending on if it can reach the C2C or not. If it can't, it will use this hard-coded RSA key.
+The global variable ***RSA_KEY*** will be written accordingly with the RSA key depending on if it can reach the C&C or not. If it can't, it will use this hard-coded RSA key.
 
 ```
 -----BEGIN PUBLIC KEY-----
@@ -190,7 +190,7 @@ Using the RSA key, it will call ***CryptAcquireContextA, CryptDecodeObjectEx, Cr
 ![alt text](/uploads/RegretLocker14.png)
 
 
-With this method, the malware can generate a different AES key as long as it's receiving a different RSA key from C2C. However, this AES key is constant after this encryption if the malware is run offline, so it should be straightforward to produce a decrypting tool if either C2C is down or the PC is not connected to the Internet.
+With this method, the malware can generate a different AES key as long as it's receiving a different RSA key from C&C. However, this AES key is constant after this encryption if the malware is run offline, so it should be straightforward to produce a decrypting tool if either C&C is down or the PC is not connected to the Internet.
 
 
 ### Encryption - USB Drives
