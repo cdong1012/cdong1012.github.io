@@ -342,7 +342,7 @@ After the encryption, it will write this encrypted buffer back into the file wit
 rule regretlocker {
 	meta:
 		description = "YARA rule for RegretLocker"
-		reference = ""
+		reference = "http://chuongdong.com/reverse%20engineering/2020/11/17/RegretLocker/"
 		author = "@cPeterr"
 		tlp = "white"
 	strings:
