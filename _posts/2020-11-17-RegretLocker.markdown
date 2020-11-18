@@ -253,7 +253,7 @@ After the encryption, it will rename the encrypted file to the same name but wit
 After the large file encryption, ***RegretLocker*** goes into a while loop to encrypt everything else with *small_encrypt()*.
 
 
-![alt text](/uploads/RegretLocker17.png)
+![alt text](/uploads/RegretLocker17.PNG)
 
 
 *small_encrypt()* calls a wrapper function to navigate around directories and files before encrypting them. It specifically looks out for these to avoid encrypting them.
@@ -283,7 +283,7 @@ Inside of the recursive encrypting function, ***RegretLocker*** specifically loo
   - ****.mouse***
 
 
-Since folders are mounted as drives, ***RegretLocker*** checks the file extension for ***".vhd"*** in order to detect any virtual drive. If found, it will call a function to open the virtual drive to start encrypting everything inside by recursively calling back to the recursive function. The ransomware uses a series of calls to ***OpenVirtualDisk, AttachVirtualDisk, GetVirtualDiskPhysicalPath, FindFirstVolumeW, CreateFileW, DeviceIoControl, GetVolumePathNamesForVolumeNameW, and FindNextVolumeW*** to retrieve a list of file and folder names inside.
+Since the drives are mounted, ***RegretLocker*** checks the file extension for ***".vhd"*** in order to detect any virtual drive. If found, it will call a function to open the virtual drive to start encrypting everything inside by recursively calling back to the recursive function. The ransomware uses a series of calls to ***OpenVirtualDisk, AttachVirtualDisk, GetVirtualDiskPhysicalPath, FindFirstVolumeW, CreateFileW, DeviceIoControl, GetVolumePathNamesForVolumeNameW, and FindNextVolumeW*** to retrieve a list of file and folder names inside.
 
 
 ![alt text](/uploads/RegretLocker19.png)
