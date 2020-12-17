@@ -13,12 +13,12 @@ description: Malware Analysis Report - Conti Ransomware
 
 This is my full analysis for the Conti Ransomware version 2. Over the last few months, I have seen quite a few companies getting hit by this ransomware, so it's been interesting analyzing and figuring how it works.
 
-As one of the newer ransomware, Conti utilizes multi-threading features on Windows to encrypt files on machines To the fullest extent, making itself a lot faster than most ransomware out there.
+As one of the newer ransomware families, Conti utilizes multi-threading features on Windows to encrypt files on machines To the fullest extent, making itself a lot faster than most ransomware out there.
 
 From the analysis, it's clear that Conti is designed to target and encrypt business environments that uses SMB for file sharing and other services. Similar to the Sodinokibi family, Conti has the ability to scan existing ports and SMB shares on the network to spread its encryption, which can be a lot more impactful since it is not limited to the local machine.
 
 
-By the time this blog post comes out, researchers have found newer samples of the version 3, but I still think it's beneficial to provide the community with a clearer understanding about this malware through an older sample.
+By the time this blog post comes out, researchers have found newer samples of the version 3. Even though this is an old sample, I still think it's beneficial to provide the community with a deeper understanding about this malware.
 
 ![alt text](/uploads/Overview.PNG)
 
@@ -40,7 +40,7 @@ By the time this blog post comes out, researchers have found newer samples of th
 
 ## Ransom Note
 
-![alt text](/uploads/Conti31.PNG)
+![alt text](/uploads/Conti32.PNG)
 
 *Figure 3: Conti Ransom Note*
 
@@ -48,7 +48,7 @@ The ID appended at the end is actually hard-coded, so it's not a victim's ID. Th
 
 Below is the HTTPS version of the website for recovery service.
 
-![alt text](/uploads/Conti32.PNG)
+![alt text](/uploads/Conti33.PNG)
 
 
 *Figure 4: Conti Website*
@@ -83,7 +83,7 @@ Here is the full list of the imported DLLs.
 The unpacked version of the malware is around 208 KB in size, which consists of the **.text, .rdata, .data, .rsrc, and .reloc** sections.
 
 
-One of the main reasons why this executable is so big is because of the obsfucation way the malware developer uses. Instead of implementing a single string decryption function, they write one decrypting for loop for each encrypted string, which increases the amount of raw code tremendously.
+One of the main reasons why this executable is so big is because of the obsfucation method the developer uses. Instead of implementing a single string decryption function, they used one decrypting for loop for each encrypted string, which greatly increased the amount of raw code.
 
 
 ![alt text](/uploads/Conti2.PNG)
@@ -116,10 +116,10 @@ for i in range(len(buffer)):
 ### Dynamically Resolve API
 
 
-When resolving APIs, the function called a particular function that takes in an integer representing the DLL to find, an API hash value, and an offset into the API buffer.
+When resolving APIs, Conti calls a particular function that takes in an integer representing the DLL to find, an API hash value, and an offset into the API buffer.
 
 
-The DLL name is parsed from the integer given with a switch statement.
+The DLL name is retrieved from the given integer through a switch statement.
 
 
 | Integer value | DLL Name     |
@@ -138,7 +138,7 @@ The DLL name is parsed from the integer given with a switch statement.
 | 26            | ntdll.dll    | 
 
 
-After getting the DLL name, Conti will manually locate the export directory of that DLL, loop through each API, hashing the name, and compare it with the hash from the parameter. After finding the correct API with the right hash, it will find the address to that function.
+After getting the DLL name, Conti will manually locate the export directory of that DLL, loop through each API, hash the name, and compare it with the hash from the parameter. After finding the correct API with the right hash value, it will proceed to find the address to that function.
 
 
 ![alt text](/uploads/Conti4.PNG)
@@ -154,7 +154,7 @@ For the hashing algorithm, the constant **0x5BD1E995** gives this away that this
 *Figure 9: Conti's Murmur Hashing implementation*
 
 
-After finding the address of the API, the malware adds that into its API buffer at the provided offset. This helps reducing the time to look up an API's address if the malware has already resolved it before.
+After finding the address of the API, the malware adds that into its API array at the provided offset. This helps reducing the time to look up an API's address if the malware has already resolved it before.
 
 
 ### Run-once Mutex
@@ -172,13 +172,13 @@ Then, it checks if there is an instant of that Mutex running already. If there i
 ### Command-line Arguments
 
 
-Conti can only be ran with command-line arguments. If given arguments upon execution, it will process them and behave accordingly.
+Conti can only be ran with command-line arguments, so it must be launched by a loader. Upon execution, it will process these arguments and behave accordingly.
 
 
 | CMD Args | Functionality     |
 | -----------   | -----------  | 
 | -m   local         | Encrypting the local machine's hard drive with multiple threads | 
-| -m       net    | Encrypting network shares via SMB mutiple threads  |
+| -m       net    | Encrypting network shares via SMB with mutiple threads  |
 | -m   all         | Encrypting both locally and on the network with multiple threads| 
 | -p   [directory]  | Encrypt a specific directory locally with 1 thread | 
 | -size     [number]       | Large encryption value | 
@@ -192,7 +192,7 @@ Conti can only be ran with command-line arguments. If given arguments upon execu
 Despite having 3 different encrypting schemes, the main mechanism is relatively the same.
 
 
-First, it calls a function to initialize a structure used to initialize information about the thread/threads of that encrypting schemes. These information includes the number of threads to spawn and a thread buffer that is used to store thread **HANDLE** objects.
+First, it calls a function to populate a structure used to initialize information about the thread/threads of that encrypting schemes. These information includes the number of threads to spawn and a thread buffer that is used to store thread **HANDLE** objects.
 
 
 ![alt text](/uploads/Conti7.PNG)
@@ -200,7 +200,7 @@ First, it calls a function to initialize a structure used to initialize informat
 *Figure 11: Function initializing thread struct*
 
 
-Next, it calls a function that I has annotated to be **launch_threads_encrypt**. It checks the thread struct to see if the encrypting flag is set. If it is, loop from **0 to thread_count - 1** and spawn a thread to encrypt each time. It also adds these threads into the thread buffer for easy clean-up later.
+Next, it calls this function to launch child threads. It checks the thread struct to see if the encrypting flag is set. If it is, loop from **0 to thread_count - 1** and spawn a thread to encrypt each time. It also adds these threads into the thread buffer for easy clean-up later.
 
 
 ![alt text](/uploads/Conti8.PNG)
@@ -222,15 +222,15 @@ For everything else, the number of threads to spawn is the same as the number of
 *Figure 13: Determining how many threads to spawn from number of processor*
 
 
-Being able to thread its encryption, Conti utilizes all of the CPU threads available to simultaneously go through and encrypt the file system with extreme speed.
+Being able to thread its encryption, Conti utilizes all of the CPU threads available to simultaneously go through and encrypt the file system with incredible speed.
 
 
 ![alt text](/uploads/Conti10.PNG)
 
-*Figure 14: Photo capturing what happens inside a computer before a disaster. 2020, colorized*
+*Figure 14: Realistic representation of what happens when Conti runs*
 
 
-The most interesting information in the thread structure is the string of the path to be encrypted. After having launch the threads, Conti's main program will continuously traverse the file system and provide the thread structure with directory names. All of these threads will check this information and encrypt the updated path immediately. Because the workload is divided efficiently, Conti is able to speed up its traversing and encryption immensely.
+The most interesting information in the thread structure is the string of the path to be encrypted. After having launch the threads, Conti's main program will continuously traverse the file system and provide the thread structure with directory names. All of these threads will check this information and encrypt the updated path immediately. Because the workload is divided efficiently, Conti is able to speed up its traversing and encryption to a great extent.
 
 
 ![alt text](/uploads/Conti11.PNG)
@@ -255,7 +255,7 @@ First, each thread will call **CryptAcquireContextA** with the cryptographic pro
 *Figure 17: CryptAcquireContextA and CryptImportKey called*
 
 
-Next, it will have infinite while loops to wait for the main thread to add the path to encrypt or to send a signal to stop encrypting. This is accomplished solely through the shared thread struct that was created before launching these threads. Because the struct is shared between multiple threads, calls to **EnterCriticalSection** and **LeaveCriticalSection** are critical to maintain a thread-safe environment during encryption.
+Next, it will enter an infinite loop to wait for the main thread to add a target drive path or to send a stop signal. This is accomplished solely through the shared thread struct that was created before launching these threads. Because the struct is shared between multiple threads, calls to **EnterCriticalSection** and **LeaveCriticalSection** are critical to maintain a thread-safe environment during encryption.
 
 
 ![alt text](/uploads/Conti14.PNG)
@@ -269,7 +269,7 @@ In the main encrypting function, it will iteratively call **FindFirstFile** on t
 #### Directory Check
 
 
-If the file being checked is a directory, it will check to see if the directory name is valid or not. If it is, then it will add the path to the thread struct for itself or any other available thread to encrypt.
+If the file being checked is a directory, it will check to see if the directory name is valid or not. If it is, then the child thread will add that path to the thread struct for itself or any other available thread to encrypt.
 
 
 ![alt text](/uploads/Conti15.PNG)
@@ -280,7 +280,7 @@ If the file being checked is a directory, it will check to see if the directory 
 These are the directory name that Conti will avoid encrypting.
 
 ```
-  tmp, winnt, temp, thumb, $Recycle.Bin, $RECYCLE.BIN, System Volume Information, Boot, Windows, Trend Micro
+tmp, winnt, temp, thumb, $Recycle.Bin, $RECYCLE.BIN, System Volume Information, Boot, Windows, Trend Micro
 ```
 
 
@@ -297,7 +297,7 @@ If the file is just a normal file, Conti will check to see if the file name is v
 Conti will avoid encrypting any file with these names or extensions.
 
 ```
-  CONTI_LOG.txt, readme.txt, .msi, .sys, .lnk, .dll, .exe
+CONTI_LOG.txt, readme.txt, .msi, .sys, .lnk, .dll, .exe
 ```
 
 
@@ -323,11 +323,11 @@ struct CONTI_STRUCT
 };
 ```
 
-**Conti** will call **CryptGenRandom** to generate 2 different random buffer and put it into the **CONTI_STRUCT** and populate the SALSA20 constants which is just **"expand 32-byte k"** in binary.
+Conti will call **CryptGenRandom** to generate 2 different random buffers and put them into the **CONTI_STRUCT**. Then, it populates the SALSA20 constants which is just **"expand 32-byte k"** in hex form.
 
 The first buffer is 256 bytes, which is later used as the **ChaCha20** encrypting key, and the second one is 64 bytes, which is used as the **ChaCha20** nonce.
 
-Next, it will copy the key and nonce into the buffer to encrypt, and encrypt it using the RSA key imported earlier to generate the SALSA20 key that is 40 bytes long.
+Next, it will copy the key and nonce into the buffer at the end of the struct and encrypt it using the RSA key imported earlier. This is to ensure that the ChaCha key can not be recovered without the RSA private key.
 
 ![alt text](/uploads/Conti17.PNG)
 
@@ -340,12 +340,12 @@ Next, it will copy the key and nonce into the buffer to encrypt, and encrypt it 
 
 Conti has 3 file categories for encryption - small, medium, and large files. Small files are marked with the value of **0x24**, medium with **0x26**, and large with **0x25**. 
 
-Before encryption, Conti will write the encrypted ChaCha20 key from **CONTI_STRUCT**, this mark, and the file size of the file being encrypted at the end of the file.
+Before encryption, Conti will write the encrypted ChaCha20 key from **CONTI_STRUCT**, this mark, and the file size to at the end of the to-be-encrypted file.
 
 
 ![alt text](/uploads/Conti19.PNG)
 
-*Figure 23: Writing the random buffer, mark, and size to to-be-encrypted file*
+*Figure 23: Writing the random buffer, mark, and size to file*
 
 ![alt text](/uploads/Conti20.PNG)
 
@@ -400,7 +400,7 @@ Large files are files that are larger than 5MB. Conti specifically looks for the
 The large file encrypting function processes the **-size** argument and uses it in a switch statement to determine the encrypting offset and the encrypting size.
 
 
-The mechanism of encrypting can be simplify to this. Basically, Conti will encrypt *encrypt_len* amount and skip the next *encrypt_offset* before encrypting again until it reaches the end of the file. This makes encryption even quicker for large files because it does not have to encrypt everything.
+The mechanism of encrypting can be simplify to this. Basically, Conti will encrypt ***encrypt_length*** amount of bytes and skip the next ***encrypt_offset*** before encrypting again until it reaches the end of the file. This makes encryption quicker for large files because it does not have to encrypt everything.
 
 
 ![alt text](/uploads/Conti23.PNG)
@@ -443,16 +443,16 @@ Before encrypting, Conti's main thread calls **CoInitializeEx, CoInitializeSecur
 *Figure 30: Initializing COM Object*
 
 
-Next, it checks if the processor architecture of the machine is **x86-64** . If it is, then will call **CoCreateInstance** to create a single object of the class **IWbemContext** with the specified CLSID *674B6698-EE92-11D0-AD71-00C04FD8FDFF*.
+Next, it checks if the processor architecture of the machine is **x86-64** . If it is, then Conti will call **CoCreateInstance** to create a single object of the class **IWbemContext** with the specified CLSID *674B6698-EE92-11D0-AD71-00C04FD8FDFF*.
 
-With this **Call Context** object, Conti will modify the **__ProviderArchitecture** to force load the specified provider version which is 64-bit architecture.
+With this **Call Context** object, it can modify the **__ProviderArchitecture** to force load the specified provider version which is 64-bit architecture.
 
 ![alt text](/uploads/Conti26.PNG)
 
 *Figure 31: Force load 64-bit if needed*
 
 
-Using the **IWbemLocator** object earlier, Conti will call its **ConnectServer** method to connect with the local *ROOT\CIMV2* namespace and obtain the pointer to an **IWbemServices** object.
+Using the **IWbemLocator** object earlier, Conti calls its **ConnectServer** method to connect with the local *ROOT\CIMV2* namespace and obtain the pointer to an **IWbemServices** object.
 
 
 ![alt text](/uploads/Conti27.PNG)
@@ -460,9 +460,9 @@ Using the **IWbemLocator** object earlier, Conti will call its **ConnectServer**
 *Figure 32: Connecting to ROOT\CIMV2 to get IWbemServices object*
 
 
-With this object, it will execute the SQL query **"SELECT * FROM Win32_ShadowCopy"** to retrieve a enumerator of all the shadow copies stored on the local server.
+With this IWbemServices object, it executes the SQL query **"SELECT * FROM Win32_ShadowCopy"** to retrieve a enumerator of all the shadow copies stored in the local server.
 
-By enumerating through these informations, Conti extracts the ID of each shadow copy, add it to the format string **"cmd.exe /c C:\Windows\System32\wbem\WMIC.exe shadowcopy where "ID='%s'" delete"**, and create a new process to execute it. This will eventually deletes all the shadow copy storage areas the computer.
+By enumerating through these informations, Conti extracts the ID of each shadow copy, add that to the format string **"cmd.exe /c C:\Windows\System32\wbem\WMIC.exe shadowcopy where "ID='%s'" delete"**, and create a new process to execute. This will eventually deletes all the shadow copy storage areas in the computer.
 
 ![alt text](/uploads/Conti28.PNG)
 
@@ -479,9 +479,9 @@ For the network encryption, Conti calls **CreateIoCompletionPort** to spawn as m
 *Figure 34: CreateIoCompletionPort to spawn network encrypting thread*
 
 
-The main thread will then call **NetShareEnum** to get an enumerator to extract information about shared network resources. This basically scans the system to see if there exists any existing SMB network shares.
+The main thread then calls **NetShareEnum** to get an enumerator to extract information about shared network resources. This scans the system to see if there exists any existing SMB network shares.
 
-After getting this ARP cache, it will check that the IP addresses of hosts in the list start with **"172.", "192.168.", "10.", and "169."**. Since it only cares about encrypting local systems, any other IP address ranges are ignored.
+After getting this "ARP" cache, it will check if the IP addresses of hosts in the list start with **"172.", "192.168.", "10.", and "169."**. Since it only cares about encrypting local systems, any other IP address ranges is ignored.
 
 It will then scan and look for every shares with the name that is not **"ADMIN$"**, get the full path to the shares, and add it to an array of network shares.
 
@@ -493,7 +493,7 @@ It will then scan and look for every shares with the name that is not **"ADMIN$"
 
 After extracting this, it will loop through and call the function from *Figure 15* to push these share names into the thread struct so the child threads can begin encrypting.
 
-If scanning SMB for network hosts fail, Conti will just perform a port scan using **CreateIoCompletionPort GetQueuedCompletionStatus, and PostQueuedCompletionStatus**
+If scanning SMB for network hosts fails, Conti will perform just a port scan using **CreateIoCompletionPort GetQueuedCompletionStatus, and PostQueuedCompletionStatus**
 
 
 ![alt text](/uploads/Conti31.PNG)
@@ -506,9 +506,9 @@ After this point, the encryption happens the same as the local encryption, with 
 
 ## Key findings
 
-Overall, Conti ransomware is a sophisticated sample with many unique functionalities. By sacrificing the tremendous increase in size, the Conti team has implement a really troublesome string encryption method, which ended up taking me a while to go through and resolve all of the strings. 
+Overall, Conti ransomware is a sophisticated sample with many unique functionalities. By sacrificing the tremendous increase in size, the Conti team has implement a really troublesome string encryption method, which ended up taking me a while to go through and resolve all of the strings.
 
-The encryption scheme is a bit boring with a randomly generated key protected by a hard-coded public RSA key. However, the multi-threading encryption is implemented elegantly using a shared structure between all of the threads, which results in an extreme encrypting speed. Conti also avoids encrypting large files entirely, so it's obvious that the malware authors prioritize speed over encrypting quality. With its networking functionality, the ransomware actively looks for available shares on the network to spread its encryption. This mainly targets small business and enterprise fields that uses the SMB protocol for file sharing, as we have seen with Advantech, Riverside Community Care, Ixsight Technologies, Total Systems Services, ... 
+The encryption scheme is a bit boring with a randomly generated key protected by a hard-coded public RSA key. However, the multi-threading encryption is implemented elegantly using a shared structure between all of the threads, which results in extreme encrypting speed. Conti also avoids encrypting large files entirely, so it's obvious that the malware authors prioritize speed over encrypting quality. With its networking functionality, the ransomware actively looks for available shares on the network to spread its encryption. This mainly targets small business and enterprise fields that uses the SMB protocol for file sharing, as we have seen with Advantech, Riverside Community Care, Ixsight Technologies, Total Systems Services, ... 
 
 
 **NOTE:** For anyone who wants to analyze this sample further, you should set up a folder on your machine and runs the ransomware with the command line argument *"-p [directory]"* to test encryption on that directory only. It's a pretty neat way to set up a small environment for testing and dynamic analysis that the authors have provided us with, so huge shoutout to them for that!
@@ -522,17 +522,17 @@ rule ContiV2 {
 	  	description = "YARA rule for Conti Ransomware v2"
 		reference = "http://chuongdong.com/reverse%20engineering/2020/12/15/ContiRansomware/"
 		author = "@cPeterr"
-    	date = "2020-12-15"
-    	rule_version = "v2"
-    	malware_type = "ransomware"
-    	malware_family = "Ransom:W32/Conti"
+    		date = "2020-12-15"
+    		rule_version = "v2"
+    		malware_type = "ransomware"
+    		malware_family = "Ransom:W32/Conti"
 		tlp = "white"
 	strings:
 		$str1 = "polzarutu1982@protonmail.com"
 		$str2 = "http://m232fdxbfmbrcehbrj5iayknxnggf6niqfj6x4iedrgtab4qupzjlaid.onion"
-    	$str3 = "expand 32-byte k"
+    		$str3 = "expand 32-byte k"
 		$string_decryption = { 8a 07 8d 7f 01 0f b6 c0 b9 ?? 00 00 00 2b c8 6b c1 ?? 99 f7 fe 8d 42 7f 99 f7 fe 88 57 ff }
-    	$compare_size = { ?? ?? 00 00 50 00 }
+    		$compare_size = { ?? ?? 00 00 50 00 }
 	condition:
 		all of ($str*) and $string_decryption and $compare_size
 }
