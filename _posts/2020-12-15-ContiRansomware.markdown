@@ -349,7 +349,7 @@ Before encryption, Conti will write the encrypted ChaCha20 key from **CONTI_STRU
 
 ![alt text](/uploads/Conti19.PNG)
 
-*Figure 23: Writing the random buffer, mark, and size to file*
+*Figure 23: Writing the encrypted random ChaCha20 key, mark, and size to file*
 
 ![alt text](/uploads/Conti20.PNG)
 
