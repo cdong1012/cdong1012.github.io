@@ -20,11 +20,10 @@ From the analysis, it's clear that Conti is designed to target and encrypt busin
 
 By the time this blog post comes out, researchers have found newer samples of the version 3. Even though this is an old sample, I still think it's beneficial to provide the community with a deeper understanding about this malware.
 
-![alt text](/uploads/Overview.PNG)
+![alt text](/uploads/new_overview.png)
 
 *Figure 1: Conti overview*
 
-**NOTE: It's actually ChaCha8 instead of ChaCha20**
 
 ## IOCS
 
@@ -442,7 +441,7 @@ Nonetheless, since they are using a hard-coded public key, if anyone pays the ra
 This implementation clearly reflects how the Conti group mainly targets big companies instead of aiming to spread the malware to normal computer users. Once a company (or anyone) pays off the ransom, they have to discard all of the samples that use the private key and develop newer samples to spread.
 
 
-![alt text](/uploads/ChaCha20.PNG)
+![alt text](/uploads/ChaChaEncryption.png)
 
 *Figure 29: Conti's Encryption method*
 
