@@ -445,7 +445,6 @@ This implementation clearly reflects how the Conti group mainly targets big comp
 
 *Figure 29: Conti's Encryption method*
 
-**NOTE: It's actually ChaCha8 instead of ChaCha20**
 
 ### Delete Shadow Copy with COM Objects
 
