@@ -331,7 +331,7 @@ struct CONTI_STRUCT
 
 Conti will call **CryptGenRandom** to generate 2 different random buffers and put them into the **CONTI_STRUCT**. Then, it populates the ChaCha8 constants which is just **"expand 32-byte k"** in hex form.
 
-The first buffer is 256 bytes, which is later used as the **ChaCha8** encrypting key, and the second one is 64 bytes, which is used as the **ChaCha8** nonce.
+The first buffer is 256 bits, which is later used as the **ChaCha8** encrypting key, and the second one is 64 bits, which is used as the **ChaCha8** nonce.
 
 Next, it will copy the key and nonce into the buffer at the end of the struct and encrypt it using the RSA key imported earlier. This is to ensure that the ChaCha key can not be recovered without the RSA private key.
 
