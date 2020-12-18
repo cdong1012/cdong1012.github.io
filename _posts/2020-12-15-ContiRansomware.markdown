@@ -187,7 +187,7 @@ Conti can only be ran with command-line arguments, so it must be launched by a l
 | -m       net    | Encrypting network shares via SMB with mutiple threads  |
 | -m   all         | Encrypting both locally and on the network with multiple threads| 
 | -p   [directory]  | Encrypt a specific directory locally with 1 thread | 
-| -size     [number]       | Large encryption value | 
+| -size     [chunk mode]       | Large encryption chunk mode | 
 | -log     [file name]      | Logging mode. Log everything to the file with the given name  | 
 | backups | Unimplemented for some reason|
 
@@ -403,10 +403,18 @@ Large files are files that are larger than 5MB. Conti specifically looks for the
 .avdx, .vmcx, .is
 ```
 
-The large file encrypting function processes the **-size** argument and uses it in a switch statement to determine the encrypting offset and the encrypting size.
+The large file encrypting function processes the **-size** chunk mode argument and uses it in a switch statement to determine the encrypting offset and the encrypting size.
+
+According to [Michael Gillespie](https://twitter.com/demonslay335), here are the chunk mode values:
+
+ * 0x14 (default) ==> represent 3 chunks of (file_size / 100 * 7)
+ * 0x32 ==> represent 5 chunks of (file_size / 100 * 10)
 
 
 The mechanism of encrypting can be simplify to this. Basically, Conti will encrypt ***encrypt_length*** amount of bytes and skip the next ***encrypt_offset*** before encrypting again until it reaches the end of the file. This makes encryption quicker for large files because it does not have to encrypt everything.
+
+
+Also according to Michael, Conti has a bug where the keystream sometime goes out of sync in-between chunks during encryption because the encrypted buffer size is rounded up to the nearest 64 which is the ChaCha state matrix size.
 
 
 ![alt text](/uploads/Conti23.PNG)
@@ -560,4 +568,7 @@ https://www.carbonblack.com/blog/tau-threat-discovery-conti-ransomware/
 
 
 https://id-ransomware.malwarehunterteam.com/identify.php?case=2c61281154a1c9df22081099c5c36503a63e9b01
+
+
+https://twitter.com/demonslay335/status/1339975671817318400
 
