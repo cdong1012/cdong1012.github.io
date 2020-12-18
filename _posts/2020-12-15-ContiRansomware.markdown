@@ -24,6 +24,8 @@ By the time this blog post comes out, researchers have found newer samples of th
 
 *Figure 1: Conti overview*
 
+**NOTE: It's actually ChaCha8 instead of ChaCha20**
+
 ## IOCS
 
 
@@ -436,6 +438,7 @@ This implementation clearly reflects how the Conti group mainly targets big comp
 
 *Figure 29: Conti's Encryption method*
 
+**NOTE: It's actually ChaCha8 instead of ChaCha20**
 
 ### Delete Shadow Copy with COM Objects
 
