@@ -337,7 +337,7 @@ Next, it will copy the key and nonce into the buffer at the end of the struct an
 
 *Figure 21: Generating random number*
 
-![alt text](/uploads/Conti18.PNG)
+![alt text](/uploads/ChaCha8_init.PNG)
 
 *Figure 22: Populating ChaCha8 constants and encrypt the random numbers with the RSA key*
 
@@ -418,7 +418,7 @@ The mechanism of encrypting can be simplify to this. Basically, Conti will encry
 The **ChaCha8** implementation is pretty straightforward. The 256-byte key that was randomly generated earlier is then used as the encrypting key.
 
 
-![alt text](/uploads/Conti24.PNG)
+![alt text](/uploads/ChaCha8.png)
 
 *Figure 28: Conti's ChaCha8 implementation*
 
