@@ -545,8 +545,16 @@ rule ContiV2 {
 ## References
 
 https://twitter.com/Arkbird_SOLG/status/1337565128561225728
+
+
 https://twitter.com/VK_Intel/status/1297252264126685185
+
+
 https://www.bleepingcomputer.com/news/security/conti-ransomware-shows-signs-of-being-ryuks-successor/
+
+
 https://www.carbonblack.com/blog/tau-threat-discovery-conti-ransomware/
+
+
 https://id-ransomware.malwarehunterteam.com/identify.php?case=2c61281154a1c9df22081099c5c36503a63e9b01
 
