@@ -27,7 +27,7 @@ By the time this blog post comes out, researchers have found newer samples of th
 ## IOCS
 
 
-***Conti Ransomware version 2*** comes in the form of a 32-bit PE file(either **.exe** or **.dll**).
+***Conti Ransomware version 2*** comes in the form of a 32-bit PE file (either **.exe** or **.dll**).
 
 **MD5**: 0a49ed1c5419bb9752821d856f7ce4ff
 
