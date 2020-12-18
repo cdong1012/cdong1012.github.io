@@ -69,13 +69,18 @@ However, it does dynamically resolve a lot of DLLs through decrypting stack stri
 Here is the full list of the imported DLLs.
 
 
-| Kernel32.dll          | Ntdll_dll     |
-| -----------           | -----------   |
-| **Ole32.dll**         | **Shell32_dll**   |
-| **Ws2_32.dll**        | **Shlwapi_dll**   |
-| **Advapi32.dll**      | **Iphlpapi.dll**  |
-| **Rstrtmgr.dll**      | **Netapi32.dll**  |
-| **OleAut32_dll**      | **User32.dll**    |
+* **Kernel32.dll**
+* **Ntdll.dll**
+* **Ole32.dll**
+* **Shell32.dll**
+* **Ws2_32.dll**        
+* **Shlwapi.dll**
+* **Advapi32.dll**      
+* **Iphlpapi.dll**
+* **Rstrtmgr.dll**      
+* **Netapi32.dll**
+* **OleAut32_dll**      
+* **User32.dll**
 
 
 ## PE Layout
@@ -124,18 +129,18 @@ The DLL name is retrieved from the given integer through a switch statement.
 
 | Integer value | DLL Name     |
 | -----------   | -----------  | 
-| 15            | Kernel32.dll | 
-| 16            | Ws2_32.dll   |
-| 17            | Netapi32.dll | 
-| 18            | Iphlpapi.dll | 
-| 19            | Rstrtmgr.dll | 
-| 20            | User32.dll   | 
-| 21            | Ws2_32.dll   | 
-| 22            | Shlwapi.dll  | 
-| 23            | Shell32.dll  | 
-| 24            | Ole32.dll    | 
-| 25            | OleAut32.dll | 
-| 26            | ntdll.dll    | 
+| 15 | Kernel32.dll | 
+| 16 | Ws2_32.dll   |
+| 17 | Netapi32.dll | 
+| 18 | Iphlpapi.dll | 
+| 19 | Rstrtmgr.dll | 
+| 20 | User32.dll   | 
+| 21 | Ws2_32.dll   | 
+| 22 | Shlwapi.dll  | 
+| 23 | Shell32.dll  | 
+| 24 | Ole32.dll    | 
+| 25 | OleAut32.dll | 
+| 26 | ntdll.dll    | 
 
 
 After getting the DLL name, Conti will manually locate the export directory of that DLL, loop through each API, hash the name, and compare it with the hash from the parameter. After finding the correct API with the right hash value, it will proceed to find the address to that function.
