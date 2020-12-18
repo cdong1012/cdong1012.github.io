@@ -316,20 +316,20 @@ struct CONTI_STRUCT
   char *file_name;
   HANDLE hFile;
   LARGE_INTEGER file_size;
-  int CHACHA20_const[4];
-  int CHACHA20_256_KEY[8];
+  int CHACHA8_const[4];
+  int CHACHA8_256_KEY[8];
   int block_counter;
   int block_counter_ptr;
-  int CHACHA20_none[2];
+  int CHACHA8_none[2];
   int random1[2];
   int random2[8];
-  BYTE encrypted_key[524]; // encrypted ChaCha20 key
+  BYTE encrypted_key[524]; // encrypted ChaCha8 key
 };
 ```
 
-Conti will call **CryptGenRandom** to generate 2 different random buffers and put them into the **CONTI_STRUCT**. Then, it populates the SALSA20 constants which is just **"expand 32-byte k"** in hex form.
+Conti will call **CryptGenRandom** to generate 2 different random buffers and put them into the **CONTI_STRUCT**. Then, it populates the ChaCha8 constants which is just **"expand 32-byte k"** in hex form.
 
-The first buffer is 256 bytes, which is later used as the **ChaCha20** encrypting key, and the second one is 64 bytes, which is used as the **ChaCha20** nonce.
+The first buffer is 256 bytes, which is later used as the **ChaCha8** encrypting key, and the second one is 64 bytes, which is used as the **ChaCha8** nonce.
 
 Next, it will copy the key and nonce into the buffer at the end of the struct and encrypt it using the RSA key imported earlier. This is to ensure that the ChaCha key can not be recovered without the RSA private key.
 
@@ -339,17 +339,17 @@ Next, it will copy the key and nonce into the buffer at the end of the struct an
 
 ![alt text](/uploads/Conti18.PNG)
 
-*Figure 22: Populating SALSA20 constants and encrypt the random numbers with the RSA key*
+*Figure 22: Populating ChaCha8 constants and encrypt the random numbers with the RSA key*
 
 
 Conti has 3 file categories for encryption - small, medium, and large files. Small files are marked with the value of **0x24**, medium with **0x26**, and large with **0x25**. 
 
-Before encryption, Conti will write the encrypted ChaCha20 key from **CONTI_STRUCT**, this mark, and the file size to at the end of the to-be-encrypted file.
+Before encryption, Conti will write the encrypted ChaCha8 key from **CONTI_STRUCT**, this mark, and the file size to at the end of the to-be-encrypted file.
 
 
 ![alt text](/uploads/Conti19.PNG)
 
-*Figure 23: Writing the encrypted random ChaCha20 key, mark, and size to file*
+*Figure 23: Writing the encrypted random ChaCha8 key, mark, and size to file*
 
 ![alt text](/uploads/Conti20.PNG)
 
@@ -412,15 +412,15 @@ The mechanism of encrypting can be simplify to this. Basically, Conti will encry
 *Figure 27: Large File Encrypting mechanism*
 
 
-#### 4. ChaCha20 Encryption
+#### 4. ChaCha8 Encryption
 
 
-The **ChaCha20** implementation is pretty straightforward. The 256-byte key that was randomly generated earlier is then used as the encrypting key.
+The **ChaCha8** implementation is pretty straightforward. The 256-byte key that was randomly generated earlier is then used as the encrypting key.
 
 
 ![alt text](/uploads/Conti24.PNG)
 
-*Figure 28: Conti's ChaCha20 implementation*
+*Figure 28: Conti's ChaCha8 implementation*
 
 
 In order to be able to decrypt the files, we need to know the random key that Conti uses for each file, and the only way to retrieve it is through the encrypted key buffer at the end of the file.
