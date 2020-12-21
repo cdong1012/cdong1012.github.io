@@ -266,7 +266,7 @@ Next, it will enter an infinite loop to wait for the main thread to add a target
 ![alt text](/uploads/Conti14.PNG)
 
 
-*Figure 18: Each thread continuously polling for an path name and encrypt it*
+*Figure 18: Each thread continuously polling for a path name and encrypt it*
 
 
 In the main encrypting function, it will iteratively call **FindFirstFile** on the directory name to search for all files and folders inside, avoiding the two current path and parent path names **"."** and **".."** which can cause an infinite loop if processed.
