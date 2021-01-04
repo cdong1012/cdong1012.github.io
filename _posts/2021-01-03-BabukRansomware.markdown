@@ -143,7 +143,7 @@ After deleting the shadow copies, Babuk checks if the system is running under an
 ### Encryption
 
 
-#### Key Generation
+### Key Generation
 
 First, Babuk uses **RtlGenRandom** to generate 4 random buffers. Two of which are used as ChaCha8 keys, and the other two are used as ChaCha8 nonces.
 
@@ -183,7 +183,7 @@ Because of ECDH's mechanism, the ransomware author can generate the shared secre
 *Figure 10: Generating ChaCha8 keys from ECDH shared secret*
 
 
-#### Multithreading
+### Multithreading
 
 
 From a programmer's point of view, Babuk's approach to multithreading is pretty mediocre.
@@ -219,7 +219,7 @@ Since each thread is responsible for an entire drive, this forces it to use the 
 The workload for each thread varies based on the size of the drive it's encrypting, so the average encrypting time will just be approximately near the time it takes for one thread to encrypt the largest drive. This is inefficient and really defeats the purpose of using multithreading to encrypt drives.
 
 
-#### Folder Traversing
+### Folder Traversing
 
 
 As discussed above, Babuk uses a recursion method to traverse and encrypt files. Using **FindFirstFileW** and **FindNextFileW** calls, it goes through each directory to look for files and sub-directories.
@@ -236,7 +236,7 @@ When encountering a file, it will check if the file name is **How To Restore You
 *Figure 13: Traversing through folders*
 
 
-#### Kill File Owner
+### Kill File Owner
 
 
 Similar to Conti or REvil ransomware, Babuk utilizes the Windows Restart Manager to terminate any process that is using files. This ensures that nothing prevents it from opening and encrypting the files.
@@ -251,7 +251,7 @@ This is accomplished through the calls **RmStartSession**, **RmRegisterResources
 *Figure x: Killing processes that are using files*
 
 
-#### File Encryption
+### File Encryption
 
 
 Babuk's file encryption is divided into 2 different types - small file encryption and large file encryption.
@@ -281,7 +281,7 @@ For each of these regions, only the first 10485760 bytes or 10 MB will be encryp
 For encryption, Babuk uses the two ChaCha8 keys generated from the ECDH shared secret's SHA256 hash as the encrypting keys and the first 12 bytes of the shared secret as nonce.
 
 
-#### Remote File Encryption
+### Remote File Encryption
 
 
 To encrypt the remote drives from the victim machine, Babuk calls **WNetGetConnectionW** to retrieves the name of the network resources associated with those drives and pass them to the encrypting thread.
