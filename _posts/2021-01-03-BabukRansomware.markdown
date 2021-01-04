@@ -38,19 +38,19 @@ Babuk Ransomwarecomes in the form of a 32-bit *.exe* file.
 
 ![alt text](/uploads/VT.PNG)
 
-*Figure 1: VirusTotal result*
+*Figure 2: VirusTotal result*
 
 
 ## Ransom Note
 
 ![alt text](/uploads/RansomNote.PNG)
 
-*Figure 2: Babuk's ransom note*
+*Figure 3: Babuk's ransom note*
 
 
 ![alt text](/uploads/ChatLog.PNG)
 
-*Figure 3: Babuk's Website*
+*Figure 4: Babuk's Website*
 
 (Pretty unprofessional from the Babuk team since they did not remove the chat log between them and Sabelt)
 
@@ -63,7 +63,7 @@ Babuk can work with or without command line paramters. If no parameter is given,
 
 ![alt text](/uploads/Babuk1.PNG)
 
-*Figure 4: Argument parsing*
+*Figure 5: Argument parsing*
 
 
 If a parameter is given, it will process these arguments upon execution and behave accordingly.
@@ -87,7 +87,7 @@ It will then call **ControlService** with the control code *SERVICE_CONTROL_STOP
 
 ![alt text](/uploads/Babuk2.PNG)
 
-*Figure 5: Terminating serivces*
+*Figure 6: Terminating serivces*
 
 
 Here is the list of services to be closed.
@@ -111,7 +111,7 @@ Using calls to **CreateToolhelp32Snapshot**, **Process32FirstW**, and **Process3
 
 ![alt text](/uploads/Babuk3.PNG)
 
-*Figure 6: Terminating processes*
+*Figure 7: Terminating processes*
 
 
 Here is the list of processes to be closed.
@@ -137,7 +137,7 @@ After deleting the shadow copies, Babuk checks if the system is running under an
 
 ![alt text](/uploads/Babuk4.PNG)
 
-*Figure 7: Deleting Shadow Copies*
+*Figure 8: Deleting Shadow Copies*
 
 
 ### Encryption
@@ -151,7 +151,7 @@ First, Babuk uses **RtlGenRandom** to generate 4 random buffers. Two of which ar
 ![alt text](/uploads/Babuk7.PNG)
 
 
-*Figure 8: Randomly generating ChaCha8 keys and nonce*
+*Figure 9: Randomly generating ChaCha8 keys and nonce*
 
 
 Next, it will encrypt the second ChaCha8 key using the first key and nonce. After that, the first key is then encrypted using the encrypted second key and nonce.
@@ -162,7 +162,7 @@ This encrypted first key is treated as the Elliptic-curve Diffie–Hellman (ECDH
 ![alt text](/uploads/Babuk8.PNG)
 
 
-*Figure 9: Randomly generating ECDH private key*
+*Figure 10: Randomly generating ECDH private key*
 
 
 From here, Babuk generate a local ECDH public key from the private key using the code from [this ECDH library](https://github.com/kokke/tiny-ECDH-c/blob/master/ecdh.c).
@@ -180,7 +180,7 @@ Because of ECDH's mechanism, the ransomware author can generate the shared secre
 ![alt text](/uploads/Babuk9.PNG)
 
 
-*Figure 10: Generating ChaCha8 keys from ECDH shared secret*
+*Figure 11: Generating ChaCha8 keys from ECDH shared secret*
 
 
 ### Multithreading
@@ -195,7 +195,7 @@ First, it determines the number of threads to spawn by doubling the number of co
 ![alt text](/uploads/Babuk5.PNG)
 
 
-*Figure 11: Thread initialization*
+*Figure 12: Thread initialization*
 
 
 The first problem with this approach has to do with thread's concurrency in an OS. A huge amount of threads can potentially be created for each process. However, in an ideal situation, it's better to have one thread running per processor to avoid having threads competing with each other for the processor's time and resource during encryption. 
@@ -208,7 +208,7 @@ However, that, by itself, is not that big of a problem if the author implemented
 ![alt text](/uploads/Babuk6.PNG)
 
 
-*Figure 12: Launching encrypting threads*
+*Figure 13: Launching encrypting threads*
 
 
 In the case where the number of drives is less than the number of processors (which is highly likely), Babuk won't spawn as many threads as possible to encrypt. 
@@ -233,7 +233,7 @@ When encountering a file, it will check if the file name is **How To Restore You
 ![alt text](/uploads/Babuk10.PNG)
 
 
-*Figure 13: Traversing through folders*
+*Figure 14: Traversing through folders*
 
 
 ### Kill File Owner
@@ -248,7 +248,7 @@ This is accomplished through the calls **RmStartSession**, **RmRegisterResources
 ![alt text](/uploads/Babuk11.PNG)
 
 
-*Figure x: Killing processes that are using files*
+*Figure 15: Killing processes that are using files*
 
 
 ### File Encryption
@@ -263,7 +263,7 @@ For small files that are les than 41943040 bytes or roughly 41 MB in size, the f
 ![alt text](/uploads/Babuk12.PNG)
 
 
-*Figure 14: Small file encryption*
+*Figure 16: Small file encryption*
 
 
 With large files, encryption is a bit different. To save time, the entire file is divided into three equally-large regions.
@@ -275,7 +275,7 @@ For each of these regions, only the first 10485760 bytes or 10 MB will be encryp
 ![alt text](/uploads/Babuk13.PNG)
 
 
-*Figure 15: Large file encryption*
+*Figure 17: Large file encryption*
 
 
 For encryption, Babuk uses the two ChaCha8 keys generated from the ECDH shared secret's SHA256 hash as the encrypting keys and the first 12 bytes of the shared secret as nonce.
@@ -290,7 +290,7 @@ To encrypt the remote drives from the victim machine, Babuk calls **WNetGetConne
 ![alt text](/uploads/Babuk14.PNG)
 
 
-*Figure 16: Encrypting remote drives*
+*Figure 18: Encrypting remote drives*
 
 
 It also encrypts network shares on the machine's LAN given the correct parameter. 
@@ -300,7 +300,7 @@ Babuk calls **WNetOpenEnumW** and **WNetOpenEnumW** to traverse through remote f
 ![alt text](/uploads/Babuk14.PNG)
 
 
-*Figure 17: LAN Encryption*
+*Figure 19: LAN Encryption*
 
 
 ## Key Findings
