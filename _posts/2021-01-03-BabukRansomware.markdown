@@ -52,7 +52,7 @@ Babuk Ransomwarecomes in the form of a 32-bit *.exe* file.
 
 *Figure 4: Babuk's Website*
 
-(Pretty unprofessional from the Babuk team since they did not remove the chat log between them and an victim)
+(Pretty unprofessional from the Babuk team since they did not remove the chat log between them and a victim)
 
 ## Code Analysis
 
