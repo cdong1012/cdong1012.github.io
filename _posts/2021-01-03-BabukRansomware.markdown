@@ -22,7 +22,7 @@ For encrypting scheme, Babuk uses its own implementation of SHA256 hashing, ChaC
 
 ![alt text](/uploads/Raid.PNG)
 
-*Figure 1: RaidForum Babuk leak*
+*Figure 1: RaidForums Babuk leak*
 
 
 ## IOCS
