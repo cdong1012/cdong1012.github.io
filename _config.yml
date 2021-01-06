@@ -31,12 +31,12 @@ paginate: 2 # jekyll-paginate > items per page
 paginate_path: blog/page:num # jekyll-paginate > blog page
 jekyll-mentions: https://twitter.com # jekyll-mentions > service used when @replying
 twitter:
-  username: ChuongDong1 # jekyll-seo-tag > Owners twitter username
-author: ChuongDong # jekyll-seo-tag > default author
+  username: cPeterr # jekyll-seo-tag > Owners twitter username
+author: Chuong Dong # jekyll-seo-tag > default author
 social: # jekyll-seo-tag > social overrides
   name: Chuong Dong # jekyll-seo-tag > real name
   links:  # jekyll-seo-tag > social aliases (sameAs)
-    - https://twitter.com/ChuongDong1
+    - https://twitter.com/cPeterr
     - https://www.facebook.com/dongnguyen.chuong/
     - https://www.linkedin.com/in/chuong-dong-1012/
     - https://github.com/cdong1012
