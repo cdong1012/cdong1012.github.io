@@ -85,7 +85,7 @@ Before terminating a service, Babuk will calls **EnumDependentServicesA** to ret
 It will then call **ControlService** with the control code *SERVICE_CONTROL_STOP* to stop them before terminating the main service the same way.
 
 
-![alt text](/uploads/Babuk2.PNG)
+![alt text](/uploads/Babuk2_fixed.PNG)
 
 *Figure 6: Terminating serivces*
 
