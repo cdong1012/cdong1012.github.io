@@ -52,7 +52,7 @@ Babuk Ransomwarecomes in the form of a 32-bit *.exe* file.
 
 *Figure 4: Babuk's Website*
 
-(Pretty unprofessional from the Babuk team since they did not remove the chat log between them and Sabelt)
+(Pretty unprofessional from the Babuk team since they did not remove the chat log between them and an victim)
 
 ## Code Analysis
 
@@ -308,14 +308,14 @@ Babuk calls **WNetOpenEnumW** and **WNetOpenEnumW** to traverse through remote f
 
 Babuk is a new ransomware that started at the beginning of this year. Despite the amateur coding practices used, its strong encryption scheme that utilizes Elliptic-curve Diffie–Hellman algorithm has proven effective in attacking a lot of companies so far.
 
-Because the malware authors are using one private key for each Babuk sample, it's clear that their main target is large corporations instead of normal computer users. So far, according to the website embedded in the ransom note as well as the leaks on **Raidforums**, they have sucessfully compromised Sabelt, BOCA group, Spiratex, and Mecol.
+Because the malware authors are using one private key for each Babuk sample, it's clear that their main target is large corporations instead of normal computer users. So far, according to the website embedded in the ransom note as well as the leaks on **Raidforums**, they have sucessfully compromised BOCA group, Spiratex, and Mecol.
 
 
 ## YARA Rule
 
 
 ```
-rule BabukSabelt {
+rule BabukRansomware {
 	meta:
 	  	description = "YARA rule for Babuk Ransomware"
 		reference = "http://chuongdong.com/reverse%20engineering/2021/01/03/BabukRansomware/"
