@@ -275,7 +275,6 @@ DEPENDENCIES
   jekyll-sitemap
   jemoji
   kramdown (>= 2.3.0)
-  nokogiri (>= 1.11.0.rc4)
   rdiscount
   tzinfo (~> 1.2)
   tzinfo-data
