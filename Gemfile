@@ -42,3 +42,4 @@ gem 'jekyll-feed'
 gem 'jekyll-commonmark'
 gem 'jekyll-include-cache'
 gem 'jemoji'
+gem "nokogiri", ">= 1.11.0.rc4"
