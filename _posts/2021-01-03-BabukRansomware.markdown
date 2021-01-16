@@ -27,7 +27,7 @@ For encrypting scheme, Babuk uses its own implementation of SHA256 hashing, ChaC
 
 ## IOCS
 
-Babuk Ransomwarecomes in the form of a 32-bit *.exe* file.
+Babuk Ransomware comes in the form of a 32-bit *.exe* file.
 
 **MD5**: e10713a4a5f635767dcd54d609bed977
 
