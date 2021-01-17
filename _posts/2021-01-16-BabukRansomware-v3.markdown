@@ -28,7 +28,7 @@ Babuk v3 comes in the form of a 32-bit *.exe* file.
  
 **SHA256**: 704a0fa7de19564bc743fb68aa0652e38bf86e8ab694bc079b15f945c85f4320
  
-**Sample**: https://bazaar.abuse.ch/sample/8203c2f00ecd3ae960cb3247a7d7bfb35e55c38939607c85dbdb5c92f0495fa9/
+**Sample**: https://bazaar.abuse.ch/sample/704a0fa7de19564bc743fb68aa0652e38bf86e8ab694bc079b15f945c85f4320/
  
  
 ![alt text](/uploads/babukVT.PNG)
