@@ -95,7 +95,7 @@ The multithreading implementation has been changed a lot since the first version
 The steps taken to improve the ransomware's threading functionalities are in the right direction since they do increase the encryption speed by quite a bit. 
  
  
-Babuk uses a structure similar to a circular queue (Ring Buffer) backed by an array to store file names to encrypt. The queue size is double the number of processors on the system, which is the same amount of children threads being spawned.
+Babuk uses a structure similar to a circular queue (Ring Buffer) backed by an array to store file names to encrypt. The queue size is double the number of processors on the system, which is the same amount of child threads being spawned.
  
  
 ![alt text](/uploads/babukv3_4.PNG)
@@ -104,9 +104,9 @@ Babuk uses a structure similar to a circular queue (Ring Buffer) backed by an ar
 *Figure 6: Queue initialization*
  
  
-This queue is shared and used by children threads. 
+This queue is shared and used by child threads. 
  
-The parent thread will recursively crawl through directories and enqueue the file names it finds to the head of the queue. The children threads will start dequeuing them at the tail of the queue to begin encryption.
+The parent thread will recursively crawl through directories and enqueue the file names it finds to the head of the queue. The child threads will start dequeuing them at the tail of the queue to begin encryption.
  
  
 ![alt text](/uploads/babukv3_5.PNG)
@@ -115,13 +115,13 @@ The parent thread will recursively crawl through directories and enqueue the fil
 *Figure 7: Babuk's circular queue illustration*
  
  
-First, Babuk will spawn children threads. The number of threads being spawned is double the number of processors. This is clearly [not a good amount](https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createthread#remarks) so I have no idea why they still use it similar to the previous version.
+First, Babuk will spawn child threads. The number of threads being spawned is double the number of processors. This is clearly [not a good amount](https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createthread#remarks) so I have no idea why they still use it similar to the previous version.
  
  
 ![alt text](/uploads/babukv3_6.PNG)
  
  
-*Figure 8: Spawning children threads*
+*Figure 8: Spawning child threads*
  
  
 The Babuk parent thread then proceeds to traverse through an entire drive by checking whether it has encountered a directory or a file. 
@@ -138,13 +138,13 @@ Upon finding a file, it will enqueue that file to the head of the queue and move
 *Figure 9: Babuk parent thread traversing through directories and enqueuing files*
  
  
-Each children thread will dequeue a file at the tail of the queue and encrypt it.
+Each child thread will dequeue a file at the tail of the queue and encrypt it.
  
  
 ![alt text](/uploads/babukv3_8.PNG)
  
  
-*Figure 10: Babuk children threads dequeuing and encrypting files*
+*Figure 10: Babuk child threads dequeuing and encrypting files*
  
  
 Here is the implementation for enqueuing and dequeuing files.
@@ -168,7 +168,7 @@ As we can see, Babuk uses a file queue backed by an array. By keeping track of t
 With all of these new changes to the implementation, this new version of Babuk is much faster than the original one. Unfortunately, there is still a lot more room for improvement since it is nowhere near **Conti** and other ransomware in terms of speed and efficiency.
  
  
-With an array-backed queue, space is limited. As we can see in the enqueue function, there is no check to see if the queue is full before adding more files onto it. In the theoretical case where all the threads are busy encrypting files and the queue is full, the parent thread will continue adding more files. Since this is a circular queue, this will result in files being overwritten with new ones before children threads have a chance to encrypt them if the parent thread is fast enough.
+With an array-backed queue, space is limited. As we can see in the enqueue function, there is no check to see if the queue is full before adding more files onto it. In the theoretical case where all the threads are busy encrypting files and the queue is full, the parent thread will continue adding more files. Since this is a circular queue, this will result in files being overwritten with new ones before the child threads have a chance to encrypt them if the parent thread is fast enough.
  
  
 Moreover, the malware author still sticks with the old recursive approach to traversing files. With only the parent thread traversing entire drives, there will be an extreme amount of overhead from the stack frame since there will be too many recursion layers. This essentially makes the total encryption time dependent on the time it takes for one thread to traverse the entire system.
