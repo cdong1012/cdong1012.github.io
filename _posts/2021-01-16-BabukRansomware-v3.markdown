@@ -11,13 +11,13 @@ description: Malware Analysis Report - Babuk Ransomware version 3
 ## Overview
  
  
-This is a short report for the latest Babuk ransomware sample. This sample is marked as version 3 based on the run-once mutex string used.
+This is a short report for the latest Babuk ransomware sample. This sample is marked as version 3 based on the run-once mutex string.
  
 For this new version, the malware author keeps most of the old functionalities the same except for the encryption scheme and the multithreading approach.
  
 Since I have covered Babuk old sample [here](http://chuongdong.com/reverse%20engineering/2021/01/03/BabukRansomware/), I will only discuss the new changes in this report.
  
-For encryption, Babuk still uses ChaCha8 encryption, but the Elliptic-curve Diffie–Hellman (ECDH) key generation and exchange algorithm is changed from **NIST K-571** to [Curve25519](https://en.wikipedia.org/wiki/Curve25519), one of the faster ECDH curves.
+For encryption, Babuk still uses ChaCha8 encryption, but the Elliptic-curve Diffie–Hellman (ECDH) key generation and exchange algorithm is changed from **NIST K-571** to [Curve25519](https://en.wikipedia.org/wiki/Curve25519), one of the fastest ECDH curves.
  
  
 ## IOCS
@@ -106,7 +106,7 @@ Babuk uses a structure similar to a circular queue (Ring Buffer) backed by an ar
  
 This queue is shared and used by children threads. 
  
-The parent thread will recursively crawl through directories and enqueue the file names it finds to the tail of the queue. The children threads will start dequeuing them at the front of the queue to begin encryption.
+The parent thread will recursively crawl through directories and enqueue the file names it finds to the head of the queue. The children threads will start dequeuing them at the tail of the queue to begin encryption.
  
  
 ![alt text](/uploads/babukv3_5.PNG)
@@ -115,7 +115,7 @@ The parent thread will recursively crawl through directories and enqueue the fil
 *Figure x: Babuk's circular queue illustration*
  
  
-First, Babuk will spawn children threads. The number of threads being spawned is double the number of processors. This is clearly [not a good amount](https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createthread#remarks) so I have no idea why they still use it from the previous version.
+First, Babuk will spawn children threads. The number of threads being spawned is double the number of processors. This is clearly [not a good amount](https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createthread#remarks) so I have no idea why they still use it similar to the previous version.
  
  
 ![alt text](/uploads/babukv3_6.PNG)
@@ -124,12 +124,12 @@ First, Babuk will spawn children threads. The number of threads being spawned is
 *Figure x: Spawning children threads*
  
  
-The Babuk parent thread then proceeds to recursively traverse through an entire drive by checking whether it has encountered a directory or a file. 
+The Babuk parent thread then proceeds to traverse through an entire drive by checking whether it has encountered a directory or a file. 
  
  
-Upon finding a directory, it will call that function again and go down another layer to traverse that directory.
+Upon finding a directory, it will call that function again and go down another layer to recursively traverse that directory.
  
-Upon finding a file, it will enqueue that file to the end of the queue and move on.
+Upon finding a file, it will enqueue that file to the head of the queue and move on.
  
  
 ![alt text](/uploads/babukv3_7.PNG)
@@ -138,7 +138,7 @@ Upon finding a file, it will enqueue that file to the end of the queue and move 
 *Figure x: Babuk parent thread traversing through directories and enqueuing files*
  
  
-Each children thread will dequeue a file at the beginning of the queue and encrypt it.
+Each children thread will dequeue a file at the tail of the queue and encrypt it.
  
  
 ![alt text](/uploads/babukv3_8.PNG)
@@ -162,16 +162,16 @@ Here is the implementation for enqueuing and dequeuing files.
 *Figure x: Function to dequeue files*
  
  
-As we can see, Babuk uses an array to back the file queue. By keeping track of the head and tail indices, adding and removing file names from the queue take a constant time and are really fast.
+As we can see, Babuk uses a file queue backed by an array. By keeping track of the head and tail indices, adding and removing file names from the queue take a constant time and are really fast.
  
  
-With all of these new changes to the implementation, this new version of Babuk is much faster than the original one. Unfortunately, there is still a lot more room for improvement since it is nowhere near **Conti** and other bigger ransomware in terms of speed and efficiency.
+With all of these new changes to the implementation, this new version of Babuk is much faster than the original one. Unfortunately, there is still a lot more room for improvement since it is nowhere near **Conti** and other ransomware in terms of speed and efficiency.
  
  
-With an array-backed queue, space is limited. As we can see in the enqueue function, there is no check to see if the queue is full before adding more files onto it. In the theoretical case where all the queues are busy encrypting files and the queue is full, the parent thread will continue adding more files. Since this is a circular queue, this will result in files being overwritten with new ones before children threads have a chance to encrypt them if the parent thread is fast enough.
+With an array-backed queue, space is limited. As we can see in the enqueue function, there is no check to see if the queue is full before adding more files onto it. In the theoretical case where all the threads are busy encrypting files and the queue is full, the parent thread will continue adding more files. Since this is a circular queue, this will result in files being overwritten with new ones before children threads have a chance to encrypt them if the parent thread is fast enough.
  
  
-Moreover, the malware author still sticks with the old recursive approach to traversing files. With only the parent thread traversing entire drives, there will be an extreme amount of overhead from the stack frame since there will be too many recursion layers. This essentially makes total encryption time dependent on the time it takes for one thread to traverse the entire system.
+Moreover, the malware author still sticks with the old recursive approach to traversing files. With only the parent thread traversing entire drives, there will be an extreme amount of overhead from the stack frame since there will be too many recursion layers. This essentially makes the total encryption time dependent on the time it takes for one thread to traverse the entire system.
  
  
 ### Encryption
@@ -228,7 +228,7 @@ Instead of using 9 followed by all zeroes, the Babuk team uses an array of all 9
 *Figure x: Babuk's basepoint constant*
  
  
-Unless Babuk has modified the math in the Curve25519 source code to accommodate for this(which is unlikely), this basepoint constant will not generate a correct public key.
+Unless Babuk has modified the math in the Curve25519 source code to accommodate for this (which is unlikely), this basepoint constant will not generate a correct public key.
 
  
 With an incorrect public key, it's impossible for the malware author to generate the correct shared secret to decrypt files.
