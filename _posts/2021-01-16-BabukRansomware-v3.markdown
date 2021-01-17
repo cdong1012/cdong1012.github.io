@@ -220,7 +220,7 @@ According to [Dan Bernstein](https://cr.yp.to/djb.html) who was the author of th
 *Figure 16: Curve25519 Public Key Generation*
  
  
-Instead of using 9 followed by all zeroes, the Babuk team uses an array of all 9 values.
+Instead of using 9 followed by all zeroes, Babuk uses an array of all 9 values.
  
 ![alt text](/uploads/babukv3_15.PNG)
  
@@ -228,7 +228,7 @@ Instead of using 9 followed by all zeroes, the Babuk team uses an array of all 9
 *Figure 17: Babuk's basepoint constant*
  
  
-Unless Babuk has modified the math in the Curve25519 source code to accommodate for this (which is unlikely), this basepoint constant will not generate a correct public key.
+Unless the malware author has modified the math in the Curve25519 source code to accommodate for this (which is unlikely), this basepoint constant might not generate a correct public key.
 
  
 With an incorrect public key, it's impossible for the malware author to generate the correct shared secret to decrypt files.
