@@ -276,8 +276,11 @@ rule BabukRansomwareV3 {
 ```
  
 ## References
- 
- 
+
+
+https://twitter.com/Sebdraven/status/1350025347690098689
+
+
 http://chuongdong.com/reverse%20engineering/2021/01/03/BabukRansomware/
  
  
