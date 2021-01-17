@@ -188,7 +188,7 @@ For every file, a random buffer of 32 bytes is generated using **CryptGenRandom*
 *Figure 13: Generating random buffer*
  
  
-Next, using the this exact piece of [Curve25519 implementation](https://github.com/signalapp/libsignal-protocol-c/blob/master/src/curve25519/curve25519-donna.c), Babuk will generate a public key for the victim from the random buffer using ECDH.
+Next, using the this exact piece of [Curve25519 implementation](https://github.com/agl/curve25519-donna/blob/master/curve25519-donna.c), Babuk will generate a public key for the victim from the random buffer using ECDH.
  
  
 It will also generate a shared secret using its hard-coded public key and the random buffer. This shared secret is eventually used as the ChaCha8 key to encrypt the file.
@@ -284,4 +284,4 @@ http://chuongdong.com/reverse%20engineering/2021/01/03/BabukRansomware/
 https://cr.yp.to/ecdh.html
  
  
-https://github.com/signalapp/libsignal-protocol-c/blob/master/src/curve25519/curve25519-donna.c
+https://github.com/agl/curve25519-donna/blob/master/curve25519-donna.c
