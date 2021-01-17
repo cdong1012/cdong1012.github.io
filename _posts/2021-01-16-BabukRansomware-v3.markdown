@@ -1,0 +1,288 @@
+---
+title: Babuk Ransomware v3
+categories:
+  - Reverse Engineering
+description: Malware Analysis Report - Babuk Ransomware version 3
+---
+ 
+# Babuk Ransomware v3
+ 
+ 
+## Overview
+ 
+ 
+This is a short report for the latest Babuk ransomware sample. This sample is marked as version 3 based on the run-once mutex string used.
+ 
+For this new version, the malware author keeps most of the old functionalities the same except for the encryption scheme and the multithreading approach.
+ 
+Since I have covered Babuk old sample [here](http://chuongdong.com/reverse%20engineering/2021/01/03/BabukRansomware/), I will only discuss the new changes in this report.
+ 
+For encryption, Babuk still uses ChaCha8 encryption, but the Elliptic-curve Diffie–Hellman (ECDH) key generation and exchange algorithm is changed from **NIST K-571** to [Curve25519](https://en.wikipedia.org/wiki/Curve25519), one of the faster ECDH curves.
+ 
+ 
+## IOCS
+ 
+Babuk v3 comes in the form of a 32-bit *.exe* file.
+ 
+**MD5**: 8b9a0b44b738c7884e6a14f4cb18afff
+ 
+**SHA256**: 704a0fa7de19564bc743fb68aa0652e38bf86e8ab694bc079b15f945c85f4320
+ 
+**Sample**: https://bazaar.abuse.ch/sample/8203c2f00ecd3ae960cb3247a7d7bfb35e55c38939607c85dbdb5c92f0495fa9/
+ 
+ 
+![alt text](/uploads/babukVT.PNG)
+ 
+*Figure 2: VirusTotal result for Babuk v3*
+ 
+ 
+## Ransom Note
+ 
+![alt text](/uploads/blurred.png)
+ 
+*Figure 3: Babuk's new ransom note*
+ 
+ 
+## New Changes
+ 
+ 
+### Run-Once Mutex
+ 
+In the beginning, Babuk checks if a mutex with the name **"babuk_v3"** exists through the call to **OpenMutexA**. If it already exists, the malware exits immediately.
+ 
+ 
+This is commonly used by malware to prevent themselves from having multiple instances running at once.
+ 
+ 
+![alt text](/uploads/babukv3_1.PNG)
+ 
+*Figure x: Babuk checking for mutex*
+ 
+ 
+### Command-line Arguments
+ 
+Babuk can work with or without command line parameters.
+ 
+The new command line parameters are **"lanfirst"**, **"nolan"**, and **"shares"**.
+ 
+ 
+![alt text](/uploads/babukv3_2.PNG)
+ 
+*Figure x: Babuk checking for mutex*
+ 
+ 
+If a parameter is given, it will process these arguments upon execution and behave accordingly.
+ 
+| CMD Args | Functionality     |
+| -----------   | -----------  | 
+| -lanfirst        | Encrypting other drives on LAN and locally | 
+| -nolan  | Encrypting locally | 
+| shares <drive_names> | Encrypting shared drives and locally|
+ 
+ 
+### Multithreading
+ 
+ 
+The multithreading implementation has been changed a lot since the first version. I guess they really tried to improve it after reading what I had to say in the last blog post :relieved:
+ 
+ 
+![alt text](/uploads/babukv3_3.PNG)
+ 
+ 
+*Figure x: Babuk team's friendly response to my analysis!*
+ 
+ 
+The steps taken to improve the ransomware's threading functionalities are in the right direction since they do increase the encryption speed by quite a bit. 
+ 
+ 
+Babuk uses a structure similar to a circular queue (Ring Buffer) backed by an array to store file names to encrypt. The queue size is double the number of processors on the system, which is the same amount of children threads being spawned.
+ 
+ 
+![alt text](/uploads/babukv3_4.PNG)
+ 
+ 
+*Figure x: Queue initialization*
+ 
+ 
+This queue is shared and used by children threads. 
+ 
+The parent thread will recursively crawl through directories and enqueue the file names it finds to the tail of the queue. The children threads will start dequeuing them at the front of the queue to begin encryption.
+ 
+ 
+![alt text](/uploads/babukv3_5.PNG)
+ 
+ 
+*Figure x: Babuk's circular queue illustration*
+ 
+ 
+First, Babuk will spawn children threads. The number of threads being spawned is double the number of processors. This is clearly [not a good amount](https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createthread#remarks) so I have no idea why they still use it from the previous version.
+ 
+ 
+![alt text](/uploads/babukv3_6.PNG)
+ 
+ 
+*Figure x: Spawning children threads*
+ 
+ 
+The Babuk parent thread then proceeds to recursively traverse through an entire drive by checking whether it has encountered a directory or a file. 
+ 
+ 
+Upon finding a directory, it will call that function again and go down another layer to traverse that directory.
+ 
+Upon finding a file, it will enqueue that file to the end of the queue and move on.
+ 
+ 
+![alt text](/uploads/babukv3_7.PNG)
+ 
+ 
+*Figure x: Babuk parent thread traversing through directories and enqueuing files*
+ 
+ 
+Each children thread will dequeue a file at the beginning of the queue and encrypt it.
+ 
+ 
+![alt text](/uploads/babukv3_8.PNG)
+ 
+ 
+*Figure x: Babuk children threads dequeuing and encrypting files*
+ 
+ 
+Here is the implementation for enqueuing and dequeuing files.
+ 
+ 
+![alt text](/uploads/babukv3_9.PNG)
+ 
+ 
+*Figure x: Function to enqueue files*
+ 
+ 
+![alt text](/uploads/babukv3_10.PNG)
+ 
+ 
+*Figure x: Function to dequeue files*
+ 
+ 
+As we can see, Babuk uses an array to back the file queue. By keeping track of the head and tail indices, adding and removing file names from the queue take a constant time and are really fast.
+ 
+ 
+With all of these new changes to the implementation, this new version of Babuk is much faster than the original one. Unfortunately, there is still a lot more room for improvement since it is nowhere near **Conti** and other bigger ransomware in terms of speed and efficiency.
+ 
+ 
+With an array-backed queue, space is limited. As we can see in the enqueue function, there is no check to see if the queue is full before adding more files onto it. In the theoretical case where all the queues are busy encrypting files and the queue is full, the parent thread will continue adding more files. Since this is a circular queue, this will result in files being overwritten with new ones before children threads have a chance to encrypt them if the parent thread is fast enough.
+ 
+ 
+Moreover, the malware author still sticks with the old recursive approach to traversing files. With only the parent thread traversing entire drives, there will be an extreme amount of overhead from the stack frame since there will be too many recursion layers. This essentially makes total encryption time dependent on the time it takes for one thread to traverse the entire system.
+ 
+ 
+### Encryption
+ 
+Encryption scheme remains the same from the original version. However, there is a slight change in the ChaCha8 key generation.
+ 
+ 
+For every file, a random buffer of 32 bytes is generated using **CryptGenRandom**. 
+ 
+ 
+![alt text](/uploads/babukv3_11.PNG)
+ 
+ 
+*Figure x: Generating random buffer*
+ 
+ 
+Next, using the this exact piece of [Curve25519 implementation](https://github.com/signalapp/libsignal-protocol-c/blob/master/src/curve25519/curve25519-donna.c), Babuk will generate a public key for the victim from the random buffer using ECDH.
+ 
+ 
+It will also generate a shared secret using its hard-coded public key and the random buffer. This shared secret is eventually used as the ChaCha8 key to encrypt the file.
+ 
+ 
+![alt text](/uploads/babukv3_12.PNG)
+ 
+ 
+*Figure x: Public key and shared secret generation*
+ 
+ 
+Finally, the victim's public key is then written to the end of the file to be used for decryption if the victim decides to pay.
+ 
+ 
+![alt text](/uploads/babukv3_13.PNG)
+ 
+ 
+*Figure x: Victim's public key being written to the end of file*
+ 
+ 
+Not sure if this was intended, but I believe the Babuk group has messed up the public key generation phase. 
+ 
+According to [Dan Bernstein](https://cr.yp.to/djb.html) who was the author of this Diffie-Hellman function, here is the procedure of generating a public key using Curve25519.
+ 
+ 
+![alt text](/uploads/babukv3_14.PNG)
+ 
+ 
+*Figure x: Curve25519 Public Key Generation*
+ 
+ 
+Instead of using 9 followed by all zeroes, the Babuk team uses an array of all 9 values.
+ 
+![alt text](/uploads/babukv3_15.PNG)
+ 
+ 
+*Figure x: Babuk's basepoint constant*
+ 
+ 
+Unless Babuk has modified the math in the Curve25519 source code to accommodate for this(which is unlikely), this basepoint constant will not generate a correct public key.
+
+ 
+With an incorrect public key, it's impossible for the malware author to generate the correct shared secret to decrypt files.
+
+
+## Key Findings
+ 
+ 
+The new version of Babuk has been improved to encrypt files at a much faster rate using a better multithreading approach. Despite still having a lot to improve, Babuk has been really effective in attacking many corporations using ChaCha8 encryption as well as Elliptic-curve Diffie–Hellman algorithm.
+ 
+As suspected, the Babuk team probably uses spear phishing attacks to target certain companies. They have dropped this sample specifically targeting a mechanical contractor in Austria according to the ransom note and the conversation with the victim on their website.
+ 
+ 
+![alt text](/uploads/babukv3_16.PNG)
+ 
+ 
+*Figure x: Babuk team asking the victim to provide their company email*
+ 
+ 
+## YARA Rule
+ 
+ 
+```
+rule BabukRansomwareV3 {
+    meta:
+        description = "YARA rule for Babuk Ransomware v3"
+        reference = "http://chuongdong.com/reverse%20engineering/2021/01/16/BabukRansomware-v3/"
+        author = "@cPeterr"
+        date = "2021-01-16"
+        rule_version = "v3"
+        malware_type = "ransomware"
+        tlp = "white"
+    strings:
+        $lanstr1 = "-lanfirst"
+        $lanstr2 = "-nolan"
+        $lanstr3 = "shares"
+        $str1 = "BABUK LOCKER"
+        $str2 = "babukq4e2p4wu4iq.onion"
+        $str3 = "How To Restore Your Files.txt" wide
+        $str4 = "babuk_v3"
+        $str5 = ".babyk" wide
+    condition:
+        all of ($str*) and all of ($lanstr*)
+}
+```
+ 
+## References
+ 
+ 
+http://chuongdong.com/reverse%20engineering/2021/01/03/BabukRansomware/
+ 
+ 
+https://cr.yp.to/ecdh.html
+ 
+ 
+https://github.com/signalapp/libsignal-protocol-c/blob/master/src/curve25519/curve25519-donna.c
+
