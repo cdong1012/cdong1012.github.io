@@ -33,14 +33,14 @@ Babuk v3 comes in the form of a 32-bit *.exe* file.
  
 ![alt text](/uploads/babukVT.PNG)
  
-*Figure 2: VirusTotal result for Babuk v3*
+*Figure 1: VirusTotal result for Babuk v3*
  
  
 ## Ransom Note
  
 ![alt text](/uploads/blurred.png)
  
-*Figure 3: Babuk's new ransom note*
+*Figure 2: Babuk's new ransom note*
  
  
 ## New Changes
@@ -56,7 +56,7 @@ This is commonly used by malware to prevent themselves from having multiple inst
  
 ![alt text](/uploads/babukv3_1.PNG)
  
-*Figure x: Babuk checking for mutex*
+*Figure 3: Babuk checking for mutex*
  
  
 ### Command-line Arguments
@@ -68,7 +68,7 @@ The new command line parameters are **"lanfirst"**, **"nolan"**, and **"shares"*
  
 ![alt text](/uploads/babukv3_2.PNG)
  
-*Figure x: Babuk checking for mutex*
+*Figure 4: Babuk checking for mutex*
  
  
 If a parameter is given, it will process these arguments upon execution and behave accordingly.
@@ -89,7 +89,7 @@ The multithreading implementation has been changed a lot since the first version
 ![alt text](/uploads/babukv3_3.PNG)
  
  
-*Figure x: Babuk team's friendly response to my analysis!*
+*Figure 5: Babuk team's friendly response to my analysis!*
  
  
 The steps taken to improve the ransomware's threading functionalities are in the right direction since they do increase the encryption speed by quite a bit. 
@@ -101,7 +101,7 @@ Babuk uses a structure similar to a circular queue (Ring Buffer) backed by an ar
 ![alt text](/uploads/babukv3_4.PNG)
  
  
-*Figure x: Queue initialization*
+*Figure 6: Queue initialization*
  
  
 This queue is shared and used by children threads. 
@@ -112,7 +112,7 @@ The parent thread will recursively crawl through directories and enqueue the fil
 ![alt text](/uploads/babukv3_5.PNG)
  
  
-*Figure x: Babuk's circular queue illustration*
+*Figure 7: Babuk's circular queue illustration*
  
  
 First, Babuk will spawn children threads. The number of threads being spawned is double the number of processors. This is clearly [not a good amount](https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createthread#remarks) so I have no idea why they still use it similar to the previous version.
@@ -121,7 +121,7 @@ First, Babuk will spawn children threads. The number of threads being spawned is
 ![alt text](/uploads/babukv3_6.PNG)
  
  
-*Figure x: Spawning children threads*
+*Figure 8: Spawning children threads*
  
  
 The Babuk parent thread then proceeds to traverse through an entire drive by checking whether it has encountered a directory or a file. 
@@ -135,7 +135,7 @@ Upon finding a file, it will enqueue that file to the head of the queue and move
 ![alt text](/uploads/babukv3_7.PNG)
  
  
-*Figure x: Babuk parent thread traversing through directories and enqueuing files*
+*Figure 9: Babuk parent thread traversing through directories and enqueuing files*
  
  
 Each children thread will dequeue a file at the tail of the queue and encrypt it.
@@ -144,7 +144,7 @@ Each children thread will dequeue a file at the tail of the queue and encrypt it
 ![alt text](/uploads/babukv3_8.PNG)
  
  
-*Figure x: Babuk children threads dequeuing and encrypting files*
+*Figure 10: Babuk children threads dequeuing and encrypting files*
  
  
 Here is the implementation for enqueuing and dequeuing files.
@@ -153,13 +153,13 @@ Here is the implementation for enqueuing and dequeuing files.
 ![alt text](/uploads/babukv3_9.PNG)
  
  
-*Figure x: Function to enqueue files*
+*Figure 11: Function to enqueue files*
  
  
 ![alt text](/uploads/babukv3_10.PNG)
  
  
-*Figure x: Function to dequeue files*
+*Figure 12: Function to dequeue files*
  
  
 As we can see, Babuk uses a file queue backed by an array. By keeping track of the head and tail indices, adding and removing file names from the queue take a constant time and are really fast.
@@ -185,7 +185,7 @@ For every file, a random buffer of 32 bytes is generated using **CryptGenRandom*
 ![alt text](/uploads/babukv3_11.PNG)
  
  
-*Figure x: Generating random buffer*
+*Figure 13: Generating random buffer*
  
  
 Next, using the this exact piece of [Curve25519 implementation](https://github.com/signalapp/libsignal-protocol-c/blob/master/src/curve25519/curve25519-donna.c), Babuk will generate a public key for the victim from the random buffer using ECDH.
@@ -197,7 +197,7 @@ It will also generate a shared secret using its hard-coded public key and the ra
 ![alt text](/uploads/babukv3_12.PNG)
  
  
-*Figure x: Public key and shared secret generation*
+*Figure 14: Public key and shared secret generation*
  
  
 Finally, the victim's public key is then written to the end of the file to be used for decryption if the victim decides to pay.
@@ -206,7 +206,7 @@ Finally, the victim's public key is then written to the end of the file to be us
 ![alt text](/uploads/babukv3_13.PNG)
  
  
-*Figure x: Victim's public key being written to the end of file*
+*Figure 15: Victim's public key being written to the end of file*
  
  
 Not sure if this was intended, but I believe the Babuk group has messed up the public key generation phase. 
@@ -217,7 +217,7 @@ According to [Dan Bernstein](https://cr.yp.to/djb.html) who was the author of th
 ![alt text](/uploads/babukv3_14.PNG)
  
  
-*Figure x: Curve25519 Public Key Generation*
+*Figure 16: Curve25519 Public Key Generation*
  
  
 Instead of using 9 followed by all zeroes, the Babuk team uses an array of all 9 values.
@@ -225,7 +225,7 @@ Instead of using 9 followed by all zeroes, the Babuk team uses an array of all 9
 ![alt text](/uploads/babukv3_15.PNG)
  
  
-*Figure x: Babuk's basepoint constant*
+*Figure 17: Babuk's basepoint constant*
  
  
 Unless Babuk has modified the math in the Curve25519 source code to accommodate for this (which is unlikely), this basepoint constant will not generate a correct public key.
@@ -245,7 +245,7 @@ As suspected, the Babuk team probably uses spear phishing attacks to target cert
 ![alt text](/uploads/babukv3_16.PNG)
  
  
-*Figure x: Babuk team asking the victim to provide their company email*
+*Figure 18: Babuk team asking the victim to provide their company email*
  
  
 ## YARA Rule
@@ -285,4 +285,3 @@ https://cr.yp.to/ecdh.html
  
  
 https://github.com/signalapp/libsignal-protocol-c/blob/master/src/curve25519/curve25519-donna.c
-
