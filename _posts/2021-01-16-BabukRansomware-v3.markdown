@@ -17,7 +17,7 @@ For this new version, the malware author keeps most of the old functionalities t
  
 Since I have covered Babuk old sample [here](http://chuongdong.com/reverse%20engineering/2021/01/03/BabukRansomware/), I will only discuss the new changes in this report.
  
-For encryption, Babuk still uses ChaCha8 encryption, but the Elliptic-curve Diffie–Hellman (ECDH) key generation and exchange algorithm is changed from **NIST K-571** to [Curve25519](https://en.wikipedia.org/wiki/Curve25519), one of the fastest ECDH curves.
+For encryption, Babuk uses ChaCha20 encryption, but the Elliptic-curve Diffie–Hellman (ECDH) key generation and exchange algorithm is changed from **NIST K-571** to [Curve25519](https://en.wikipedia.org/wiki/Curve25519), one of the fastest ECDH curves.
  
  
 ## IOCS
@@ -176,7 +176,7 @@ Moreover, the malware author still sticks with the old recursive approach to tra
  
 ### Encryption
  
-Encryption scheme remains the same from the original version. However, there is a slight change in the ChaCha8 key generation.
+Encryption scheme remains the same from the original version. However, there is a slight change in the ChaCha20 key generation.
  
  
 For every file, a random buffer of 32 bytes is generated using **CryptGenRandom**. 
@@ -191,7 +191,7 @@ For every file, a random buffer of 32 bytes is generated using **CryptGenRandom*
 Next, using the this exact piece of [Curve25519 implementation](https://github.com/agl/curve25519-donna/blob/master/curve25519-donna.c), Babuk will generate a public key for the victim from the random buffer using ECDH.
  
  
-It will also generate a shared secret using its hard-coded public key and the random buffer. This shared secret is eventually used as the ChaCha8 key to encrypt the file.
+It will also generate a shared secret using its hard-coded public key and the random buffer. This shared secret is eventually used as the ChaCha20 key to encrypt the file.
  
  
 ![alt text](/uploads/babukv3_12.PNG)
@@ -237,7 +237,7 @@ With an incorrect public key, it's impossible for the malware author to generate
 ## Key Findings
  
  
-The new version of Babuk has been improved to encrypt files at a much faster rate using a better multithreading approach. Despite still having a lot to improve, Babuk has been really effective in attacking many corporations using ChaCha8 encryption as well as Elliptic-curve Diffie–Hellman algorithm.
+The new version of Babuk has been improved to encrypt files at a much faster rate using a better multithreading approach. Despite still having a lot to improve, Babuk has been really effective in attacking many corporations using ChaCha20 encryption as well as Elliptic-curve Diffie–Hellman algorithm.
  
 As suspected, the Babuk team probably uses spear phishing attacks to target certain companies. They have dropped this sample specifically targeting a mechanical contractor in Austria according to the ransom note and the conversation with the victim on their website.
  
