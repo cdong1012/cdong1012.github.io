@@ -10,15 +10,15 @@ aside: true
 <br/>
 {% include figure.html image="/uploads/profile.png" caption="This is me :)" position="center" width="400" height="400"%}
 <br/>
-Hi guys! My name is Chuong, and I'm a third-year Computer Science student at [Georgia Tech](https://www.gatech.edu/ "Georgia Tech") with a concentration in Systems & Architecture and Info Internetwork.
+Hi guys! My name is Chuong, and I'm a third-year Computer Science student at [Georgia Tech](https://www.gatech.edu/ "Georgia Tech") concentrating in Systems & Architecture and Info Internetwork.
 
-I'm interested in cybersecurity topics such as penetration testing, exploit development, reverse engineering, and malware development.
+I'm an upcoming Reverse Engineering Intern for FireEye's FLARE team in summer 2021!
 
-I'm dedicating this blog to writing about my projects as well as the things that I'm learning as I explore the security field!
+I do a lot of reverse engineering and malware development for fun, but currently I'm a bit inactive since school is killing me right now.
 
-Thank you for visiting, and I hope you enjoy your stay! 
+I'm dedicating this blog to writing about my projects as well as the things that I learn as I explore the security field!
 
-:blush:
+Thank you for visiting, and I hope you enjoy your stay!
 
 <br/><br/><br/><br/>
 
