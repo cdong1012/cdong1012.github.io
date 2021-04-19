@@ -310,6 +310,13 @@ Babuk is a new ransomware that started at the beginning of this year. Despite th
 
 Because the malware authors are using one private key for each Babuk sample, it's clear that their main target is large corporations instead of normal computer users. So far, according to the website embedded in the ransom note as well as the leaks on **Raidforums**, they have sucessfully compromised 5 different companies in the world.
 
+## Message to newer victims
+
+I recently notice I'm getting a lot more traffic from Europe on this page, which I'm assuming newer victims are viewing this to better their understanding of the ransomware.
+
+This blog post is really out of date because Babuk has evolved a lot, and the malwareis drastically different from what I talk about here.
+
+If recent Babuk victims are interested in getting more information about the newer version of this ransomware or require any assistance with analyzing any sample, feel free to reach out to me through my email **cdong49@gatech** or Twitter!
 
 ## YARA Rule
 
