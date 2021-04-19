@@ -314,7 +314,7 @@ Because the malware authors are using one private key for each Babuk sample, it'
 
 I recently notice I'm getting a lot more traffic from Europe on this page, which I'm assuming newer victims are viewing this to better their understanding of the ransomware.
 
-This blog post is really out of date because Babuk has evolved a lot, and the malwareis drastically different from what I talk about here.
+This blog post is really out of date because Babuk has evolved a lot, and the malware is drastically different from what I talk about here.
 
 If recent Babuk victims are interested in getting more information about the newer version of this ransomware or require any assistance with analyzing any sample, feel free to reach out to me through my email **cdong49@gatech** or Twitter!
 
