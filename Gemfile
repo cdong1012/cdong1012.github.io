@@ -18,6 +18,7 @@ gem "github-pages", group: :jekyll_plugins
 #  gem "jekyll-feed", "~> 0.12"
 #end
 gem "kramdown", ">= 2.3.1"
+
 # Windows and JRuby does not include zoneinfo files, so bundle the tzinfo-data gem
 # and associated library.
 platforms :mingw, :x64_mingw, :mswin, :jruby do
@@ -43,3 +44,4 @@ gem 'jekyll-commonmark'
 gem 'jekyll-include-cache'
 gem 'jemoji'
 gem "nokogiri", ">= 1.11.0.rc4"
+gem "rexml", ">= 3.2.5"
