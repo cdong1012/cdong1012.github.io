@@ -540,7 +540,7 @@ At this point, **Darkside** uses **InternetOpenW** and **InternetConnectW** to o
 
 *Figure 39: Connecting to C2.*
 
-After a connection is established, it sends a **STOP** request to the C2 using **HttpOpenRequestW**, decrypts the HTTP header, sets internet options using **InternetSetOptionW**, and finally sends the packet with the generated content buffer above.
+After a connection is established, it sends a **POST** request to the C2 using **HttpOpenRequestW**, decrypts the HTTP header, sets internet options using **InternetSetOptionW**, and finally sends the packet with the generated content buffer above.
 
 
 ![alt text](/uploads/Darkside40.PNG)
