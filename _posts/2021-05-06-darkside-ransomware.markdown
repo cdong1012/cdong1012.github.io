@@ -1070,7 +1070,7 @@ rule DarksideRansomware1_8_6_2 {
 
 ## Samples
 
-I got my sample from [MalwareBazaar!](https://bazaar.abuse.ch/sample/151fbd6c299e734f7853497bd083abfa29f8c186a9db31dbe330ace2d35660d5/).
+I got my sample from [MalwareBazaar!](https://bazaar.abuse.ch/sample/151fbd6c299e734f7853497bd083abfa29f8c186a9db31dbe330ace2d35660d5/)
 
 Huge shoutout to [@JAMESWT_MHT](https://twitter.com/JAMESWT_MHT) for uploading the sample!
 
