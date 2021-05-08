@@ -1042,7 +1042,7 @@ By design, the main thread's job is to recursively traverse through folders in a
 Starvation arises when the main thread can't traverse and send files fast enough while the receiving threads already finish their work. Therefore, unless the main thread has a constant throughput of 32 files being sent to I/O completion ports at any given point in time, some thread will definitely be starved, and the CPU will not be fully utitlized.
 
 
-Despite the fact that this throughput is almost impossible to obtain by a single thread, the total encryption time is still skewed toward the time it takes for the main thread to finish traversing the system.
+Beside the fact that this throughput is almost impossible to obtain by a single thread, the total encryption time is still skewed toward the time it takes for the main thread to finish traversing the system.
 
 This design ultimately defeats the purpose of using multithreading and I/O completion port.
 
