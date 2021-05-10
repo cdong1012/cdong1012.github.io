@@ -16,7 +16,7 @@ I'm an upcoming Reverse Engineering Intern for FireEye's FLARE team in summer 20
 
 I do a lot of reverse engineering and malware development for fun, but currently I'm a bit inactive since school is killing me right now.
 
-I'm dedicating this blog to writing about my projects as well as the things that I learn as I explore the security field!
+I'm dedicating this blog to writing about my projects as well as the things that I learn as I explore the security field! Anything posted here is my own work and is not affiliated with any company that I work/worked for.
 
 Thank you for visiting, and I hope you enjoy your stay!
 
