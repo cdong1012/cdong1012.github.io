@@ -239,7 +239,7 @@ With an incorrect public key, it's impossible for the malware author to generate
  
 The new version of Babuk has been improved to encrypt files at a much faster rate using a better multithreading approach. Despite still having a lot to improve, Babuk has been really effective in attacking many corporations using ChaCha20 encryption as well as Elliptic-curve Diffie–Hellman algorithm.
  
-As suspected, the Babuk team probably uses spear phishing attacks to target certain companies. They have dropped this sample specifically targeting a mechanical contractor in Austria according to the ransom note and the conversation with the victim on their website.
+As suspected, the Babuk team probably uses spear phishing attacks, VPN 0-days, and vulnerable RDP setup to target certain companies. They have dropped this sample specifically targeting a mechanical contractor in Austria according to the ransom note and the conversation with the victim on their website.
  
  
 ![alt text](/uploads/babukv3_16.PNG)
