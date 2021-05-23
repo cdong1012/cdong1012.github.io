@@ -648,7 +648,7 @@ Next, **MountLocker** builds the command line string to execute the **.bat** fil
 rule MountLocker5_0 {
 	meta:
 		description = "YARA rule for MountLocker v5.0"
-		reference = "http://chuongdong.com/reverse%20engineering/2021/05/22/MountLockerRansomware/"
+		reference = "http://chuongdong.com/reverse%20engineering/2021/05/23/MountLockerRansomware/"
 		author = "@cPeterr"
 		tlp = "white"
 	strings:
