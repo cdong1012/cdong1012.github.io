@@ -644,7 +644,7 @@ Next, **MountLocker** builds the command line string to execute the **.bat** fil
 
 ## YARA rule
 
-``` python
+``` yara
 rule MountLocker5_0 {
 	meta:
 		description = "YARA rule for MountLocker v5.0"
