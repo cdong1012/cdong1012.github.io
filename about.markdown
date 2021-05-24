@@ -12,9 +12,9 @@ aside: true
 <br/>
 Hi guys! My name is Chuong, and I'm a third-year Computer Science student at [Georgia Tech](https://www.gatech.edu/ "Georgia Tech") concentrating in Systems & Architecture and Info Internetwork.
 
-I'm an upcoming Reverse Engineering Intern for FireEye's FLARE team in summer 2021!
+I'm currently a Reverse Engineering Intern for FireEye's FLARE team!
 
-I do a lot of reverse engineering and malware development for fun, but currently I'm a bit inactive since school is killing me right now.
+I do a lot of reverse engineering and malware development for fun!
 
 I'm dedicating this blog to writing about my projects as well as the things that I learn as I explore the security field! Anything posted here is my own work and is not affiliated with any company that I work/worked for.
 
