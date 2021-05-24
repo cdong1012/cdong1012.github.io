@@ -53,7 +53,7 @@ The client ID embedded inside the ransom note is generated from the victim's com
 
 ![alt text](/uploads/mountlocker3.PNG)
 
-*Figure 3: Darkside ransom note.*
+*Figure 3: MountLocker ransom note.*
 
 
 ## Performance
