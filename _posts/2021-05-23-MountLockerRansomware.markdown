@@ -148,7 +148,7 @@ All file and network operations (enumeration, skipping, encrypting, error) are r
 
 If the **/NETWORK** argument is not provided, the malware will run in local mode.
 
-In this mode, if the **/NOKILL** argument is 1, it enumerates and kills all services with these strings in their name.
+In this mode, if the **/NOKILL** argument is 0, it enumerates and kills all services with these strings in their name.
 
 ``` python
 "SQL", "database", "msexchange"
@@ -173,7 +173,7 @@ If a service contains any of the three strings above, **MountLocker** will termi
 ### Terminating Processes
 
 
-If it's running in local mode and the **/NOKILL** argument is 1, **MountLocker** will enumerate and kill all processes with these strings in their name.
+If it's running in local mode and the **/NOKILL** argument is 0, **MountLocker** will enumerate and kill all processes with these strings in their name.
 
 ``` python
 "msftesql.exe", "sqlagent.exe", "sqlbrowser.exe", "sqlwriter.exe", "oracle.exe", "ocssd.exe", 
