@@ -400,7 +400,7 @@ Large files are files that are larger than 5MB. Conti specifically looks for the
 
 ```
 .vdi, .vhd, .vmdk, .pvm, .vmem, .vmsn, .vmsd, .nvram, .vmx, .raw, .qcow2, .subvol, .bin, .vsv, .avhd, .vmrs, .vhdx,
-.avdx, .vmcx, .is
+.avdx, .vmcx, .iso
 ```
 
 The large file encrypting function processes the **-size** chunk mode argument and uses it in a switch statement to determine the encrypting offset and the encrypting size.
