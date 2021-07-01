@@ -374,7 +374,7 @@ Small files are files that are potentially less than 1MB in size. Conti looks fo
 .p96, .p97, .pan, .pdb, .pdm, .pnz, .qry, .qvd, .rbf, .rctd, .rod, .rodx, .rpd, .rsd, .sas7bdat, .sbf, .scx, 
 .sdb, .sdc, .sdf, .sis, .spq, .sql, .sqlite, .sqlite3, .sqlitedb, .te, .temx, .tmd, .tps, .trc, .trm, .udb, 
 .udl, .usr, .v12, .vis, .vpd, .vvv, .wdb, .wmdb, .wrk, .xdb, .xld, .xmlff, .abcddb, .abs, .abx, .accdw, .adn, 
-.db2, .fm5, .hjt, .icg, .icr, .kdb, .lut, .maw, .mdn, .md
+.db2, .fm5, .hjt, .icg, .icr, .kdb, .lut, .maw, .mdn, .mdt
 ```
 
 Encrypting small files are straightforward. Since these files are small enough, it typically does not require to loop and encrypt more than once. The file content is read into a buffer and encrypted directly. Just to be safe, the malware author did limit the maximum buffer size to read to 5MB, but it's unlikely that the files going into this function is that big.
