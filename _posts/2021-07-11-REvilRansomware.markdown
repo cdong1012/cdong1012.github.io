@@ -49,7 +49,7 @@ description: Malware Analysis Report - REvil Ransomware
     * 22.4. [Network Shares Traversal](#network-shares-traversal)
     * 22.5. [Drive Shares Traversal](#drive-shares-traversal)
     * 22.6. [Network Drives and Resources Traversal](#network-drives-and-resources-traversal)
-23. [C2 Communication](#c2-communication)
+23. [Network Communication](#network-communication)
 24. [Self-Deletion](#self-deletion)
 25. [File Decryption](#file-decryption)
     * 25.1. [Operator Key](#i-operator-key)
@@ -329,8 +329,8 @@ Below is the list of configuration fields that this sample uses and their descri
 | **wht** |  Whitelist:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ***fld***: Folder names<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ***fls***: File names<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ***ext***: Extensions|
 | **prc** |  Processes to kill |
 | **svc** |  Services to stop |
-| **dmn** | C2 domains |
-| **net** |  Enable C2 communication |
+| **dmn** | Network domains |
+| **net** |  Enable network communication |
 | **nbody** |  Base64-encoded ransom note |
 | **nname** |  Ransom note filename |
 | **img** |  Base64-encoded ransom wallpaper image |
@@ -1062,9 +1062,9 @@ For each of these resources, the malware traverses and encrypts using the same t
 *Figure 64: Enumerating and encrypting network resources.*
 
 
-## C2 Communication
+## Network Communication
 
-If the value of the **net** field in the configuration is **true**, the malware sends the victim's information to C2 domains listed in the **dmn** field.
+If the value of the **net** field in the configuration is **true**, the malware sends the victim's information to network domains listed in the **dmn** field.
 
 The malware calls the function to [generate the victim information buffer](#generate-victim-information) prior to establishing a connection to each domain.
 
@@ -1087,15 +1087,15 @@ It then calls **WinHttpCrackUrl** to crack the generated URL into components and
 
 ![alt text](/uploads/revil65.PNG)
 
-*Figure 65: Establishing connection to C2 domain.*
+*Figure 65: Establishing connection to network domain.*
 
-Next, it calls **WinHttpOpenRequest** to create an HTTP POST request handle. Using this handle, the malware sends the victim information to the C2 domain through a **WinHttpOpenRequest** call.
+Next, it calls **WinHttpOpenRequest** to create an HTTP POST request handle. Using this handle, the malware sends the victim information to the domain through a **WinHttpOpenRequest** call.
 
 ![alt text](/uploads/revil66.PNG)
 
-*Figure 66: Sending data to C2 domain.*
+*Figure 66: Sending data to network domain.*
 
-C2 response is received using **WinHttpReceiveResponse** and read into a buffer using a stream object that uses an HGLOBAL memory handle, but the malware doesn't do anything with this.
+The server's response is received using **WinHttpReceiveResponse** and read into a buffer using a stream object that uses an HGLOBAL memory handle, but the malware doesn't do anything with this.
 
 
 ## Self-Deletion
