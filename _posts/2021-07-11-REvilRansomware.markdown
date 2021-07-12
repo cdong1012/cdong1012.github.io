@@ -1139,6 +1139,7 @@ Probably the most well-engineered ransomware out there. Fancy crypto and threadi
 
 
 ## References
+https://twitter.com/fwosar/status/1411281334870368260
 https://gist.github.com/fwosar/a63e1249bfccb8395b961d3d780c0354
 https://github.com/brainhub/SHA3IUF/blob/master/sha3.c
 https://intel471.com/blog/revil-ransomware-as-a-service-an-analysis-of-a-ransomware-affiliate-operation
