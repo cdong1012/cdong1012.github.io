@@ -1570,9 +1570,13 @@ Or maybe this method is fine and I'm just grumpy cause this ransomware is so dam
 ## References
 
 https://github.com/weidai11/cryptopp/blob/bc7d1bafa1e8ac732396374f0bca94ab9f396f1c/chacha_simd.cpp#L569
-https://twitter.com/fwosar/status/1411281334870368260
-https://gist.github.com/fwosar/a63e1249bfccb8395b961d3d780c0354
-https://github.com/brainhub/SHA3IUF/blob/master/sha3.c
-https://intel471.com/blog/revil-ransomware-as-a-service-an-analysis-of-a-ransomware-affiliate-operation
-https://www.secureworks.com/research/revil-sodinokibi-ransomware
+
+https://github.com/sisoma2/malware_analysis/tree/master/blackmatter
+
+https://github.com/advanced-threat-research/DarkSide-Config-Extract
+
+https://www.fireeye.com/content/dam/fireeye-www/current-threats/pdfs/wp-ransomware-protection-and-containment-strategies.pdf
+
+https://www.installsetupconfig.com/win32programming/networkmanagementapis16_41.html
+
 https://www.youtube.com/watch?v=R4xJou6JsIE
