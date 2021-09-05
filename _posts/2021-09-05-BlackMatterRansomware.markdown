@@ -119,6 +119,8 @@ Check out my IDAPython scripts [dll_exports.py](https://github.com/cdong1012/IDA
 
 These scripts are inspired by the **REVil** scripts from this [OALabs's Youtube video](https://www.youtube.com/watch?v=R4xJou6JsIE).
 
+[Jan G.](https://twitter.com/jan6ru) has a really good blog post explaining the **BlackMatter's** API hashing and obfuscation through trampoline pointers. If you're interested in the technical analysis of this, feel free to check [his work](https://blog.digital-investigations.info/2021-08-05-understanding-blackmatters-api-hashing.html) out.
+
 ## Anti-Analysis: String Encryption
 
 Like with other major ransomware out there, most strings in **BlackMatter** are encrypted and resolved during run-time.
@@ -1580,3 +1582,5 @@ https://www.fireeye.com/content/dam/fireeye-www/current-threats/pdfs/wp-ransomwa
 https://www.installsetupconfig.com/win32programming/networkmanagementapis16_41.html
 
 https://www.youtube.com/watch?v=R4xJou6JsIE
+
+https://blog.digital-investigations.info/2021-08-05-understanding-blackmatters-api-hashing.html
