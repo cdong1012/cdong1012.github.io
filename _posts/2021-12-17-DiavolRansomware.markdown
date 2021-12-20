@@ -91,7 +91,7 @@ First, the malware calls **VirtualAlloc** to allocate two memory buffers to late
 
 When **DIAVOL** wants to execute a certain functionality, it calls a function to load the shellcode into memory and executes a **call** instruction to transfer control to the shellcode.
 
-![alt text](/uploads/diavol05.PNG)
+![alt text](/uploads/new_diavol05.PNG)
 
 *Figure 5: Loading & Executing Shellcode.*
 
@@ -163,7 +163,7 @@ struct DIAVOL_GENBOTID_STRUCT
 };
 ```
 
-![alt text](/uploads/diavol11.PNG)
+![alt text](/uploads/new_diavol11.PNG)
 
 *Figure 11: Initialize Structure For GENBOTID.*
 
@@ -190,7 +190,7 @@ To generate the bot ID, the malware first calls **GetComputerNameA** and **GetUs
 
 Finally, to populate the **RSA_CRYPT_BUFF** field, the malware calls the **rand** function to generate a random 1024-byte buffer.
 
-![alt text](/uploads/diavol16.PNG)
+![alt text](/uploads/new_diavol16.PNG)
 
 *Figure 16: Generating RSA XOR Buffer.*
 
@@ -391,7 +391,7 @@ struct DIAVOL_RSAINIT_STRUCT
 };
 ```
 
-![alt text](/uploads/diavol32.PNG)
+![alt text](/uploads/new_diavol32.PNG)
 
 *Figure 32: Loading & Executing RSAINIT.*
 
@@ -405,7 +405,7 @@ First, it calls **CryptStringToBinaryW** to Base64-decode the RSA public key and
 
 Next, the malware calls **CryptImportKey** to import the RSA public key and retrieve the key handle. It calls **VirtualAlloc** to allocate a memory buffer and divides the **RSA_CRYPT_BUFF** buffer into 117-byte blocks. For each block, **DIAVOL** appends it into the allocated buffer and calls **CryptEncrypt** to encrypt it using the RSA key handle.
 
-![alt text](/uploads/diavol34.PNG)
+![alt text](/uploads/new_diavol34.PNG)
 
 *Figure 34: Importing RSA Public Key & Encrypting **RSA_CRYPT_BUFF**.*
 
@@ -684,7 +684,7 @@ struct DIAVOL_ENCDEFILES_TRUCT
 };
 ```
 
-![alt text](/uploads/diavol62.PNG)
+![alt text](/uploads/new_diavol62.PNG)
 
 *Figure 62: Populating ENCDEFILES Structure.*
 
