@@ -192,7 +192,7 @@ Finally, to populate the **RSA_CRYPT_BUFF** field, the malware calls the **rand*
 
 ![alt text](/uploads/new_diavol16.PNG)
 
-*Figure 16: Generating RSA XOR Buffer.*
+*Figure 16: Generating RSA CRYPT Buffer.*
 
 ## Hard-coded Configuration
 
