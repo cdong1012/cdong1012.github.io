@@ -708,7 +708,7 @@ To encrypt the file, the shellcode first calls **CreateFileW** to retrieve a han
 
 It then calls **GetFileSizeEx** to retrieve the size of the file and calculates the maximum size to encrypt the file. This is done by calculating the **MAX_FILE_CRYPT_PERCENT** percent from the total file size.
 
-Next, the file is encrypted in 2048-byte blocks each, and the malware allocates a 2048-byte buffer using **VirtualAlloc** to host this data. For each block, **DIAVOL** calls **ReadFile** to read data into the allocated buffer and encrypt it using the **RSA_CRYPT_BUFF** buffer.
+Next, the file is encrypted in 2048-byte blocks each, and the malware allocates a 2048-byte buffer using **VirtualAlloc** to host this data. For each block, **DIAVOL** calls **ReadFile** to read data into the allocated buffer and encrypts it using the **RSA_CRYPT_BUFF** buffer.
 
 It then calls **SetFilePointerEx** to set the file pointer to the beginning of the newly encrypted block and calls **WriteFile** to write the encrypted block back in.
 
