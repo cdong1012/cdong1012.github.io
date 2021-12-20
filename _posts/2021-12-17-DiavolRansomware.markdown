@@ -151,14 +151,14 @@ The first functionality **DIAVOL** executes is generating the bot ID through loa
 
 Prior to launching the shellcode, **DIAVOL** calls **time64** to retrieve the current timestamp on the system and uses it as the seed for **srand** to initialize the pseudo-random number generator.
 
-Next, it generates the following structure and passes it to the shellcode. The **bot_ID** field is later used to register the victim to the threat actor's remote server, and the **victim_ID** is the victim ID that is written to the ransom note. The **RSA_XOR_BUFF** is a buffer that is later used to encrypt files.
+Next, it generates the following structure and passes it to the shellcode. The **bot_ID** field is later used to register the victim to the threat actor's remote server, and the **victim_ID** is the victim ID that is written to the ransom note. The **RSA_CRYPT_BUFF** is a buffer that is later used to encrypt files.
 
 ``` C
 struct DIAVOL_GENBOTID_STRUCT
 {
   char* bot_ID;
   wchar_t* victim_ID;
-  BYTE* RSA_XOR_BUFF;
+  BYTE* RSA_CRYPT_BUFF;
   int (__stdcall *rand)();
 };
 ```
@@ -188,7 +188,7 @@ To generate the bot ID, the malware first calls **GetComputerNameA** and **GetUs
 
 *Figure 14, 15: Generating Bot ID.*
 
-Finally, to populate the **RSA_XOR_BUFF** field, the malware calls the **rand** function to generate a random 1024-byte buffer.
+Finally, to populate the **RSA_CRYPT_BUFF** field, the malware calls the **rand** function to generate a random 1024-byte buffer.
 
 ![alt text](/uploads/diavol16.PNG)
 
@@ -386,7 +386,7 @@ struct DIAVOL_RSAINIT_STRUCT
   BYTE* Base64_RSA_key; // Base64-encoded RSA key
   char* container_str; // "MicrosoftCryptoGuard"
   char* provider_str; // "Microsoft Enhanced Cryptographic Provider v1.0"
-  BYTE* RSA_XOR_BUFF;
+  BYTE* RSA_CRYPT_BUFF;
   BYTE* RSA_FOOTER;
 };
 ```
@@ -403,13 +403,13 @@ First, it calls **CryptStringToBinaryW** to Base64-decode the RSA public key and
 
 *Figure 33: Decode RSA Key & Retrieve CSP Handle.*
 
-Next, the malware calls **CryptImportKey** to import the RSA public key and retrieve the key handle. It calls **VirtualAlloc** to allocate a memory buffer and divides the **RSA_XOR_BUFF** buffer into 117-byte blocks. For each block, **DIAVOL** appends it into the allocated buffer and calls **CryptEncrypt** to encrypt it using the RSA key handle.
+Next, the malware calls **CryptImportKey** to import the RSA public key and retrieve the key handle. It calls **VirtualAlloc** to allocate a memory buffer and divides the **RSA_CRYPT_BUFF** buffer into 117-byte blocks. For each block, **DIAVOL** appends it into the allocated buffer and calls **CryptEncrypt** to encrypt it using the RSA key handle.
 
 ![alt text](/uploads/diavol34.PNG)
 
-*Figure 34: Importing RSA Public Key & Encrypting **RSA_XOR_BUFF**.*
+*Figure 34: Importing RSA Public Key & Encrypting **RSA_CRYPT_BUFF**.*
 
-Finally, the 2304-byte encoded buffer will be copied into the **RSA_FOOTER** buffer. How this and the **RSA_XOR_BUFF** buffer are used will later be discussed during [file encryption](#encryption-file-encryption).
+Finally, the 2304-byte encoded buffer will be copied into the **RSA_FOOTER** buffer. How this and the **RSA_CRYPT_BUFF** buffer are used will later be discussed during [file encryption](#encryption-file-encryption).
 
 ![alt text](/uploads/diavol35.PNG)
 
@@ -678,7 +678,7 @@ struct DIAVOL_ENCDEFILES_TRUCT
   wchar_t *file_name; // filename to encrypt
   __int64 MAX_FILE_CRYPT_PERCENT; // From the "-perc" command-line parameter
   FARPROC calculate_percent; // function to calculate percent (a / b * c where b is 100)
-  BYTE *RSA_XOR_BUFF;
+  BYTE *RSA_CRYPT_BUFF;
   BYTE *RSA_FOOTER;
   FARPROC log_to_file; // logging function
 };
@@ -708,13 +708,13 @@ To encrypt the file, the shellcode first calls **CreateFileW** to retrieve a han
 
 It then calls **GetFileSizeEx** to retrieve the size of the file and calculates the maximum size to encrypt the file. This is done by calculating the **MAX_FILE_CRYPT_PERCENT** percent from the total file size.
 
-Next, the file is encrypted in 2048-byte blocks each, and the malware allocates a 2048-byte buffer using **VirtualAlloc** to host this data. For each block, **DIAVOL** calls **ReadFile** to read data into the allocated buffer and encrypt it it using the **RSA_XOR_BUFF** buffer.
+Next, the file is encrypted in 2048-byte blocks each, and the malware allocates a 2048-byte buffer using **VirtualAlloc** to host this data. For each block, **DIAVOL** calls **ReadFile** to read data into the allocated buffer and encrypt it it using the **RSA_CRYPT_BUFF** buffer.
 
 It then calls **SetFilePointerEx** to set the file pointer to the beginning of the newly encrypted block and calls **WriteFile** to write the encrypted block back in.
 
 After the encryption is finished, **DIAVOL** calls **SetFilePointerEx** to set the file pointer to the end of the file. It then calls **WriteFile** to write to the end the **RSA_FOOTER** buffer, the max file size to encrypt, and the negation of every byte of that size.
 
-Using this file footer, the threat actor's decryptor can retrieve the **RSA_FOOTER** buffer and decrypt it into the **RSA_XOR_BUFF** buffer using their RSA private key to decrypt the file.
+Using this file footer, the threat actor's decryptor can retrieve the **RSA_FOOTER** buffer and decrypt it into the **RSA_CRYPT_BUFF** buffer using their RSA private key to decrypt the file.
 
 ![alt text](/uploads/diavol66.PNG)
 
