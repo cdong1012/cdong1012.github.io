@@ -179,7 +179,7 @@ To generate the bot ID, the malware first calls **GetComputerNameA** and **GetUs
 
  Then, the bot ID is built in the following string format.
 
-- **<computer_name> + <user_name> + "_W" + <8_character_string_from_OS_version> + "."**
+**<computer_name> + <user_name> + "_W" + <8_character_string_from_OS_version> + "."**
 
 
 ![alt text](/uploads/diavol14.PNG)
