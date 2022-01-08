@@ -553,7 +553,7 @@ Next, it copies the victim's private key that is encrypted using **ROOK's** publ
 
 *Figure 46: Writing Victim's Encrypted Private Key into File Footer.*
 
-If the file size is greater than 0x80000 bytes, the malware reads and encrypts at most two 0x80000-byte chunks at the beginning of the file.
+If the file size is greater than 0x80000 bytes, the malware reads and encrypts at most two 0x80000-byte chunks at the beginning of the file using AES-128 ECB.
 
 ![alt text](/uploads/rook47.PNG)
 
