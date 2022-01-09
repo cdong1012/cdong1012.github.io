@@ -559,7 +559,7 @@ If the file size is greater than 0x80000 bytes, the malware reads and encrypts a
 
 *Figure 47: Encrypting Files Larger Than 0x80000 Bytes.*
 
-If the file size is less than 0x80000 bytes or is between 0x80000 and 0x100000 bytes, the entire file will be encrypted.
+If the file size is less than 0x80000 bytes or is between 0x80000 and 0x180000 bytes, the entire file will be encrypted.
 
 ![alt text](/uploads/rook48.PNG)
 
