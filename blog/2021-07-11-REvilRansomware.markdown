@@ -78,7 +78,7 @@ This new sample also has a new field in the configuration to control how many ti
 
 ![alt text](/uploads/revil1.PNG)
 
-![alt text](https://twitter.com/matthew_d_green/status/1479862550259027970/photo/1)
+![alt text](https://pbs.twimg.com/media/FIriGEIWYA0WYSv?format=jpg&name=large)
 
 *Figure 1: REvil Ransomware leak site.*
 
