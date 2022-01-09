@@ -34,7 +34,7 @@ description: Malware Analysis Report - Rook Ransomware
 
 This is my analysis for **ROOK Ransomware**.
 
-**ROOK** is a relatively new ransomware that has been coming up in the last few months. With the [Mbed TLS library](https://github.com/ARMmbed/mbedtls), the malware uses a hybrid cryptography scheme to encrypt files using AES and protect its keys with RSA-1028.
+**ROOK** is a relatively new ransomware that has been coming up in the last few months. With the [Mbed TLS library](https://github.com/ARMmbed/mbedtls), the malware uses a hybrid cryptography scheme to encrypt files using AES and protect its keys with RSA-2028.
 
 For execution speed, **ROOK** is quite fast since it uses a decently good method of multithreading with two global lists for file and directory traversal.
 
@@ -553,7 +553,7 @@ Next, it copies the victim's private key that is encrypted using **ROOK's** publ
 
 *Figure 46: Writing Victim's Encrypted Private Key into File Footer.*
 
-If the file size is greater than 0x80000 bytes, the malware reads and encrypts at most two 0x80000-byte chunks at the beginning of the file using AES-128 ECB.
+If the file size is greater than 0x80000 bytes, the malware reads and encrypts at most three 0x80000-byte chunks at the beginning of the file using AES-128 ECB.
 
 ![alt text](/uploads/rook47.PNG)
 
