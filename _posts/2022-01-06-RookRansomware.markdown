@@ -40,7 +40,7 @@ For execution speed, **ROOK** is quite fast since it uses a decently good method
 
 As it has been claimed by other researchers, **ROOK** borrows some of the code from the leaked **BABUK** source code. To be more specific, the **ROOK** developers copied and pasted the code for services & processes termination as well as deleting shadow copies. **ROOK's** multithreading approach is a reimplementation and an upgrade from that of **BABUK version 3**, which is now more efficient for directory traversal.
 
-However, unlike **BABUK** devs who are a big fan of using ECDH curves and eSTREAM portfolio Profile 1 ciphers such as ChaCha and HC-128 for hybrid-encryption, **ROOK** devs stick with the traditional choice of RSA and AES.
+However, unlike **BABUK** devs who are big fans of using ECDH curves and eSTREAM portfolio Profile 1 ciphers such as ChaCha and HC-128 for hybrid-encryption, **ROOK** devs stick with the traditional choice of RSA and AES.
 
 ![alt text](/uploads/rook01.PNG)
 
