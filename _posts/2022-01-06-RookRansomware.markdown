@@ -34,7 +34,7 @@ description: Malware Analysis Report - Rook Ransomware
 
 This is my analysis for **ROOK Ransomware**.
 
-**ROOK** is a relatively new ransomware that has been coming up in the last few months. With the [Mbed TLS library](https://github.com/ARMmbed/mbedtls), the malware uses a hybrid cryptography scheme to encrypt files using AES and protect its keys with RSA-2028.
+**ROOK** is a relatively new ransomware that has been coming up in the last few months. With the [Mbed TLS library](https://github.com/ARMmbed/mbedtls), the malware uses a hybrid cryptography scheme to encrypt files using AES and protect its keys with RSA-2048.
 
 For execution speed, **ROOK** is quite fast since it uses a decently good method of multithreading with two global lists for file and directory traversal.
 
