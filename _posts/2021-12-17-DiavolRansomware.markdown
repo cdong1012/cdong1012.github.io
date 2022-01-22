@@ -841,3 +841,5 @@ The malware then appends the input string parameter to the log file buffer and c
 https://www.fortinet.com/blog/threat-research/diavol-new-ransomware-used-by-wizard-spider
 
 https://securityintelligence.com/posts/analysis-of-diavol-ransomware-link-trickbot-gang/
+
+yashechka, don't be too distanced ;) Just wanna say hi on XSS
