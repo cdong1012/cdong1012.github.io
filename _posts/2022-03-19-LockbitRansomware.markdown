@@ -452,7 +452,7 @@ Then, **LockBit** basically performs UAC bypass using **ColorDataProxy/CCMLuaUti
 
 **LockBit** avoids having multiple ransomware instances running at once by checking for a specific mutant object.
 
-First, it decodes the following stack string **"\BaseNamedObjects\\\{%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X}"** and calls **wsprintfW** to write the formatted data into a buffer. Each formatted field corresponds to a byte at a specific index of **LockBit's** hard-coded public key.
+First, it decodes the following stack string **"\BaseNamedObjects\\{\%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X}"** and calls **wsprintfW** to write the formatted data into a buffer. Each formatted field corresponds to a byte at a specific index of **LockBit's** hard-coded public key.
 
 ![alt text](/uploads/lockbit42.PNG)
 
