@@ -452,7 +452,7 @@ Then, **LockBit** basically performs UAC bypass using **ColorDataProxy/CCMLuaUti
 
 **LockBit** avoids having multiple ransomware instances running at once by checking for a specific mutant object.
 
-First, it decodes the following stack string **"\BaseNamedObjects\\\{%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X}"** and calls **wsprintfW** to write the formatted data into a buffer. Each formatted field corresponds to a byte at a specific index of **LockBit's** hard-coded public key.
+First, it decodes the following stack string **"\BaseNamedObjects\\{\%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X}"** and calls **wsprintfW** to write the formatted data into a buffer. Each formatted field corresponds to a byte at a specific index of **LockBit's** hard-coded public key.
 
 ![alt text](/uploads/lockbit42.PNG)
 
@@ -1036,7 +1036,7 @@ First, the malware resolves the stack string **"SOFTWARE\Microsoft\Windows\Curre
 
 *Figure 86: Retrieving Persistence Registry Key Handle.*
 
-First, the malware resolves the stack string **"\{%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X}"** and formats it using its public key. This formatted string will be used as the value name to set up the persistence registry key.
+First, the malware resolves the stack string **"\{\%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X}"** and formats it using its public key. This formatted string will be used as the value name to set up the persistence registry key.
 
 ![alt text](/uploads/lockbit87.PNG)
 
