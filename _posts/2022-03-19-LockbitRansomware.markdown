@@ -597,8 +597,6 @@ The malware also sets the GPO's **versionNumber** attribute to **"2621892"**.
 
 *Figure 59: Group Policy: Setting GPO's versionNumber Attribute.*
 
-https://www.trustedsec.com/blog/weaponizing-group-policy-objects-access/
-
 ### Updating GPT.INI
 
 Next, **LockBit** locates the root GPO GUID directory that contains a file called **"GPT.ini**. By updating the **Version** property inside this file, **LockBit** can signal to **gpupdate** that there is a new modification to apply the new settings.
