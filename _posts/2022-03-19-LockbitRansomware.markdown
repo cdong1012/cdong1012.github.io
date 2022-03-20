@@ -1988,14 +1988,25 @@ Finally, the malware calls **ShellExecuteExW** to execute the command above to d
 ## References
 
 https://asec.ahnlab.com/en/17147/
+
 https://news.sophos.com/en-us/2020/04/24/lockbit-ransomware-borrows-tricks-to-keep-up-with-revil-and-maze/
+
 https://www.trustedsec.com/blog/weaponizing-group-policy-objects-access/
+
 https://www.bleepingcomputer.com/news/security/lockbit-ransomware-now-encrypts-windows-domains-using-group-policies/
+
 https://devblogs.microsoft.com/oldnewthing/20080314-00/?p=23113
+
 https://www.ic3.gov/Media/News/2022/220204.pdf
+
 https://www.crowdstrike.com/blog/how-crowdstrike-prevents-volume-shadow-tampering-by-lockbit-ransomware/
+
 https://talos-intelligence-site.s3.amazonaws.com/production/document_files/files/000/095/481/original/010421_LockBit_Interview.pdf
+
 https://www.prodaft.com/m/reports/LockBit_Case_Report___TLPWHITE.pdf
+
 https://www.cyber.gov.au/acsc/view-all-content/advisories/2021-006-acsc-ransomware-profile-lockbit-20
+
 https://symantec-enterprise-blogs.security.com/blogs/threat-intelligence/ransomware-trends-lockbit-sodinokibi
+
 https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption
