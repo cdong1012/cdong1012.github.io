@@ -28,7 +28,7 @@ description: Malware Analysis Report - LockBit Ransomware v2.0
   - [Setting Group Policy For Active Directory](#setting-group-policy-for-active-directory)
     - [Checking If Running On Primary Domain Controller](#checking-if-running-on-primary-domain-controller)
     - [Retrieving DNS Domain Name](#retrieving-dns-domain-name)
-    - [Retrieving Domain Account Admin Name (get Domain admin name)](#retrieving-domain-account-admin-name-get-domain-admin-name)
+    - [Retrieving Domain Account Admin Name](#retrieving-domain-account-admin-name-get-domain-admin-name)
     - [COM Retrieve IGroupPolicyObject Interface](#com-retrieve-igrouppolicyobject-interface)
     - [Connect To Active Directory Domain](#connect-to-active-directory-domain)
     - [Setting GPO's attributes](#setting-gpos-attributes)
@@ -503,7 +503,7 @@ If the user has admin privilege, **LockBit** calls **GetComputerNameExW** to ret
 
 *Figure 48: Group Policy: Retrieving DNS Domain Name.*
 
-### Retrieving Domain Account Admin Name (get Domain admin name)
+### Retrieving Domain Account Admin Name
 
 After doing the usual **NtOpenProcessToken** and **NtQueryInformationToken** routine to retrieve admin user token information, **LockBit** calls **LookupAccountSidW** to look up the admin's account name and domain name.
 
