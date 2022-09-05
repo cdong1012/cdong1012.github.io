@@ -70,7 +70,7 @@ The content of the default ransom note is stored as an encoded string in **PLAY'
 
 ![alt text](/uploads/PLAY02.PNG)
 
-*Figure 3: ROOK's Ransom Note.*
+*Figure 3: PLAY's Ransom Note.*
 
 ## Anti Analysis
 
