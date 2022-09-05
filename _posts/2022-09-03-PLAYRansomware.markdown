@@ -377,6 +377,8 @@ struct file_footer_struct
   byte encrypted_symmetric_key[1024];
 };
 ```
+
+
 | Field                   | Description                                                                   |
 | ----------------------- | ----------------------------------------------------------------------------- |
 | **footer_marker_head**        | First index in the **file_marker** of file struct                            |
