@@ -103,7 +103,7 @@ The variable **disassembled** returned is useless to us because on it is only us
 
 The variable **expectedChecksum** is a byte array extracted from **EXPECTED_INSTRUCTIONS** at a certain index(line number). The fact that they call this the expected checksum let us know that this is the encrypted/hashed form of the answer, not the answer itself.
 
-The MD5 encryption part is below.
+The SHA-256 hashing part is below.
 
 
 ``` java
@@ -112,16 +112,16 @@ The MD5 encryption part is below.
 ```
 
 
-After encrypting the **lineValue**, the two byte arrays are being compared on line 94. If they match, then we have found our answer.
+After hashing the **lineValue**, the two byte arrays are being compared on line 94. If they match, then we have found our answer.
 
 
 ### 4. Bruteforcing time
 
 
-After having known the encryption algorithm they are using, I decide to write a Java program to bruteforce the answer.
+After having known the hashing algorithm they are using, I decide to write a Java program to bruteforce the answer.
 
 
-Since we know the range of the possible input (0x0 - 0xFFFF), we can loop through all of the possible number, encrypt it using the same encryption algorithm, and compare their byte array with the given byte array in the Jar file.
+Since we know the range of the possible input (0x0 - 0xFFFF), we can loop through all of the possible number, hash it using the same algorithm, and compare their byte array with the given byte array in the Jar file.
 
 
 ``` java
