@@ -8,11 +8,11 @@ aside: true
 # About Me
 <hr>
 <br/>
-{% include figure.html image="/uploads/profile.png" caption="This is me :)" position="center" width="400" height="400"%}
+{% include figure.html image="/uploads/new_profile.jpg" caption="This is me :)" position="center" width="500" height="500"%}
 <br/>
-Hi guys! My name is Chuong, and I'm a fourth-year Computer Science student at [Georgia Tech](https://www.gatech.edu/ "Georgia Tech") concentrating in Systems & Architecture and Info Internetwork.
+Hi guys! My name is Chuong, and I'm a Computer Science student at [Georgia Tech](https://www.gatech.edu/ "Georgia Tech") concentrating in Systems & Architecture and Info Internetwork.
 
-I do a lot of reverse engineering and malware development for fun!
+I do a lot of reverse engineering and malware development in my freetime!
 
 I'm dedicating this blog to writing about my projects as well as the things that I learn as I explore the security field! Anything posted here is my own work and is not affiliated with any company that I work/worked for.
 
