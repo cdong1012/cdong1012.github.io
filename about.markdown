@@ -8,7 +8,7 @@ aside: true
 # About Me
 <hr>
 <br/>
-{% include figure.html image="/uploads/new_profile.jpg" caption="This is me :)" position="center" width="500" height="500"%}
+{% include figure.html image="/uploads/new_profile.jpg" position="center" width="500" height="500"%}
 <br/>
 Hi guys! My name is Chuong, and I'm a Computer Science student at [Georgia Tech](https://www.gatech.edu/ "Georgia Tech") concentrating in Systems & Architecture and Info Internetwork.
 
