@@ -368,7 +368,7 @@ struct file_footer_struct
 {
   byte footer_marker_head[16];
   WORD last_chunk_size;
-  WORD total_chunk_count;
+  WORD skip_chunks;
   WORD large_file_flag;
   WORD small_file_flag;
   DWORD default_chunk_size;
@@ -383,9 +383,9 @@ struct file_footer_struct
 | ----------------------- | ----------------------------------------------------------------------------- |
 | **footer_marker_head**        | First index in the **file_marker** of file struct                            |
 | **last_chunk_size**            | Size of the last chunk at the end of the file                                          |
-| **total_chunk_count**    | Total number of chunks to be encrypted               |
+| **skip_chunks**    | Number of chunks to skip each time               |
 | **large_file_flag**           | Set to 1 if file is larger than 0x500000                                              |
-| **small_file_flag**         | Set to 1 when file size high is less than 0 |
+| **small_file_flag**         | Set to 1 when file size high is less than 0, used to determine GMC encryption mode |
 | **chunk_count**         | Number of chunks to encrypt in the file |
 | **default_chunk_size**  | 0x100000 bytes |
 | **footer_marker_tail**     | xxHash32 hash of footer_marker_head. Also the second index in the **file_marker** of file struct |
