@@ -1,0 +1,4 @@
+---
+layout: forward
+target: https://chuongdong.com/reverse%20engineering/2024/03/15/Lockbit4Ransomware/
+---
