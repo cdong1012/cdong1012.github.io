@@ -34,7 +34,7 @@ description: Malware Analysis Report - LockBit Ransomware v4.0
     - [Self-Delete](#self-delete)
     - [Stop Service](#stop-service)
     - [Clear Windows Event Logs](#clear-windows-event-logs)
-  - [Acknowledgement](#acknowledgement)
+- [Acknowledgement](#acknowledgement)
 
 
 ## Overview
