@@ -800,7 +800,7 @@ For each identified channel path, the malware calls ```EvtClearLog()``` to delet
 ![alt text](/uploads/lb4/evt_02.PNG)
 *Figure 59: Clearing logs in Windows Event Log channels*
 
-## Acknowledgement
+# Acknowledgement
 
 Huge thanks to [Fabian Wosar](https://x.com/fwosar) and [Michael Gillespie](https://x.com/demonslay335) for their valuable insights on the malware's encryption scheme.
 
