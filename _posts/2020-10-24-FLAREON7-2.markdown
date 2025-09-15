@@ -1,0 +1,82 @@
+---
+title: Flare-On 7 - Challenge 2
+categories:
+- Reverse Engineering
+description: Flare-On 7 | Garbage
+---
+
+After unzipping the challenge, we get a single Windows executable. This is the prompt given by the author.
+
+
+```
+One of our team members developed a Flare-On challenge but accidentally deleted it. 
+We recovered it using extreme digital forensic techniques but it seems to be corrupted. 
+We would fix it but we are too busy solving today's most important information security threats affecting our global economy. 
+You should be able to get it working again, reverse engineer it, and acquire the flag.
+```
+
+Like always, let's run the executable to see what it does.
+
+
+![alt text](/uploads/FO2-1.PNG "Init")
+
+
+Just like the author's note, this executable is indeed corrupted and can not be run normally.
+
+
+First, let's use [PEBear](https://hshrzd.wordpress.com/pe-bear/) to analyze the memory regions of this PE file.
+
+
+![alt text](/uploads/FO2-2.PNG "Init")
+
+
+First thing to notice is that this program is packed by UPX, so we can use UPX later to unpack it. Since it is corrupted, UPX won't work, so we must fix this first.
+
+
+The next thing that should catch our eyes is the resource section. The RAW size of this section is suspiciously small compared to the Virtual size. Let's open it in [HxD](https://mh-nexus.de/en/hxd/) to see how the resource section is corrupted.
+
+![alt text](/uploads/FO2-3.PNG "Init")
+
+
+As we can see, the XML code in the resource section is corrupted. We can simply fix this by parsing the Microsoft XML code into this section and pad it with null bytes until it matches the correct RAW size.
+
+
+![alt text](/uploads/FO2-4.PNG "Init")
+
+
+After doing this, let's try running it to see if we have fixed the corruption.
+
+![alt text](/uploads/FO2-5.PNG "Init")
+
+
+We now encounter another error. Let's try to unpack it using UPX and analyze it further with PEBear.
+
+![alt text](/uploads/FO2-6.PNG "Init")
+
+
+Seems like the import table is corrupted. However, I do see that the API function names are all in the EXE, so probably there is something wrong with the IAT header. 
+
+
+![alt text](/uploads/FO2-7.PNG "Init")
+
+With the need tracing feature of PEBear, we see that the Name RVA that should points to an imported DLL's name is currently empty in memory.
+
+
+We can guess the imported DLL from the API functions being imported, so for **ShellExecuteA**, it is **SHELL32.DLL**. For **UnhandleExceptionFilter**, it is **KERNEL32.DLL**. So if we go ahead and patch it in, it should look like this.
+
+
+![alt text](/uploads/FO2-8.PNG "Init")
+
+
+Now, PEBear can recognize and import the entire IAT correctly! Let's try and run it to get the flag!
+
+![alt text](/uploads/FO2-10.PNG "Init")
+
+
+### Remark
+
+
+This function seems hard to a lot of people that I talk to mainly because fixing a corrupted PE file was new to a lot of people.
+
+
+I'm glad I had implemented a PE parser as a simple version of PEBear to understand more about the PE file, so this challenge was not that big of a problem!

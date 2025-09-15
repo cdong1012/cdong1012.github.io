@@ -1,0 +1,109 @@
+---
+title: Flare-On 7 - Challenge 1
+categories:
+- Reverse Engineering
+description: Flare-On 7 | Fidler
+---
+
+# Rust Ransomware | Challenge 1
+
+
+After unzipping the challenge, we get 2 Python files, an EXE file, and some folder containing images used by the game. This prompt is given by the challenge's author.
+
+```
+Welcome to the Seventh Flare-On Challenge!
+
+This is a simple game. Win it by any means necessary and the victory screen will reveal the flag. Enter the flag here on this site to score and move on to the next level.
+
+This challenge is written in Python and is distributed as a runnable EXE and matching source code for your convenience. 
+You can run the source code directly on any Python platform with PyGame if you would prefer.
+```
+
+First, let's run the EXE file and see what we get.
+
+![alt text](/uploads/FO1-1.PNG "Init")
+
+
+The game is prompting us for a password, and if we enter the incorrect password, this is what we get!
+
+![alt text](/uploads/FO1-2.PNG "Wrongpass")
+
+
+So for the first stage of this challenge, we must bypass this password-check. Let's try to see if we can find anything in the given Python files.
+
+
+Immediately, we can see this obvious function that checks our input password.
+
+
+![alt text](/uploads/FO1-3.PNG "Passcheck")
+
+
+By copy this Python code and print the *key* variable out, we will get **ghost** as a result, and this string is being compared with our input!
+
+
+Let's enter **ghost** as the password and move on.
+
+
+![alt text](/uploads/FO1-4.PNG "Game")
+
+
+At this point, we just need to keep clicking this cat to increase our points until we get 100 Billion coins. 
+
+Of course, We won't not want to waste our time on this, so let's see if we can reverse the python code that generates the flag!
+
+
+![alt text](/uploads/FO1-5.PNG "Decodeflag")
+
+
+Ah-ha! This function is called to decode the flag. The algorithm is already in here, so we just need to find the correct parameter to give this function. Let's see where this function is called.
+
+
+![alt text](/uploads/FO1-6.PNG "Decodeflag")
+
+
+![alt text](/uploads/FO1-7.PNG "Decodeflag")
+
+
+With this trace, we can see that **decode_flag** is called by **victory_screen**, and **victory_screen** parameter is
+``` python
+    victory_screen(int(current_coins / 10**8))
+```
+
+Since we know our target score is 100 billions, *current_coins* will be somewhere above that range. If we divide that number by 10^8, the range of the possible parameter is between 1 to 999! That is easily brute-forcible!
+
+
+We can simply write this Python code to brute-force and get the flag!
+
+```python
+for i in range(1, 999):
+    frob = i
+
+    last_value = frob
+    encoded_flag = [1135, 1038, 1126, 1028, 1117, 1071, 1094, 1077, 1121, 1087, 1110, 1092, 1072, 1095, 1090, 1027,
+                    1127, 1040, 1137, 1030, 1127, 1099, 1062, 1101, 1123, 1027, 1136, 1054]
+    decoded_flag = []
+
+    for i in range(len(encoded_flag)):
+        c = encoded_flag[i]
+        val = (c - ((i % 2)*1 + (i % 3)*2)) ^ last_value
+        decoded_flag.append(val)
+        last_value = c
+    print(''.join([chr(x) for x in decoded_flag]))
+```
+
+This is the result!
+
+
+![alt text](/uploads/FO1-8.PNG "Decodeflag")
+
+
+Because of the brute-force, we can't get the exact value of the first character, but I think we can all guess which character that is 
+
+
+### Remark
+
+This is my first year participating in Flare-On, and I'm thrilled to have completed all the challenges and ranked 172 in the world this year! :satisfied:
+
+I really like this first challenge since it's easy and took like 5 minutes to finish! A great starting point for sure!
+
+I also plan on posting these write-up once a day for each challenge, so stay tune!

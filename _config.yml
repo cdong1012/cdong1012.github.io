@@ -1,0 +1,126 @@
+# Build settings
+remote_theme: daviddarnes/alembic@main
+plugins:
+  - jekyll-remote-theme
+  - jekyll-sitemap
+  - jekyll-mentions
+  - jekyll-paginate
+  - jekyll-seo-tag
+  - jekyll-redirect-from
+  - jekyll-default-layout
+  - jekyll-feed
+  - jekyll-commonmark
+  - jekyll-include-cache
+  - jemoji
+# Site configuration
+# 1. Files excluded from Jekyll builds
+# 2. Installed Gems
+# 3. Gem settings
+# 4. Jekyll settings
+# 5. Collections
+# 6. Jekyll collections settings
+# 7. Site settings
+# 8. Site favicons & manifest icons
+# 9. Site navigation
+
+# 3. Gem settings
+paginate: 2 # jekyll-paginate > items per page
+paginate_path: blog/page:num # jekyll-paginate > blog page
+jekyll-mentions: https://twitter.com # jekyll-mentions > service used when @replying
+twitter:
+  username: cPeterr # jekyll-seo-tag > Owners twitter username
+author: Chuong Dong # jekyll-seo-tag > default author
+social: # jekyll-seo-tag > social overrides
+  name: Chuong Dong # jekyll-seo-tag > real name
+  links: # jekyll-seo-tag > social aliases (sameAs)
+    - https://twitter.com/cPeterr
+    - https://www.linkedin.com/in/chuong-dong-1012/
+    - https://github.com/cdong1012
+
+# markdown: CommonMark # Markdown parse settings, CommonMark performs slightly better an others in build time
+# commonmark:
+#   options: ["SMART", "FOOTNOTES"]
+#   extensions: ["strikethrough", "autolink", "table"]
+
+# 4. Jekyll settings
+sass:
+  style: compressed # Style compression
+permalink: pretty # Permalink style (/YYYY/MM/DD/page-name/)
+excerpt_separator: <!-- more --> # Marks end of excerpt in posts
+timezone: America/New_York # Timezone for blog posts and alike
+
+# 5. Collections
+collections:
+  posts:
+    title: Blog Posts # Needed for Siteleaf
+    output: true
+    aside: true
+    #description: "My thoughts and ideas" # The post list page content
+    #feature_text:
+    #feature_image: "https://www.10wallpaper.com/wallpaper/2560x1600/1603/Polygon_triangles_green-Design_Thmem_HD_Wallpaper_2560x1600.jpg"
+
+#6. Jekyll collections settings
+defaults:
+  - scope:
+      path: ""
+    values:
+      image: "/assets/logos/kunal-logo.png" # Default image for sharing
+
+# 7. Site settings
+encoding: utf-8 # Make sure the encoding is right
+lang: en-GB # Set the site language
+title: "Chuong Dong" # Site name or title, also used in jekyll-seo-tag
+
+logo: "/assets/logos/logo-cdong.gif" # Site logo, also used in jekyll-seo-tag
+description: "Chuong's Security Blog" # Site description and default description, also used in jekyll-seo-tag
+url: "https://cdong1012.github.io/" # Site url, also used in jekyll-seo-tag
+baseurl: ""
+repo: "https://github.com/cdong1012/cdong1012.github.io"
+
+# disqus: "alembic-1" # Blog post comments, uncomment the option and set the site ID from your Disqus account
+google_analytics: "UA-168923617-1"
+google_analytics_anonymize_ip: false
+service_worker: true # Will turn off the service worker if set to false
+css_inline: true # Will insert all styles into a single <style> block in the <head> element and remove the style <link> reference
+
+# 8. Site favicons & manifest icons
+favicons: # Favicons are also used in the manifest file. Syntax is 'size: path'
+  16: "/assets/logos/16x.png"
+  32: "/assets/logos/32x.png"
+  96: "/assets/logos/96x.png"
+  120: "/assets/logos/120.png"
+  144: "/assets/logos/144.png"
+  180: "/assets/logos/180.png"
+  512: "/assets/logos/512.png"
+  1024: "/assets/logos/1024.png"
+
+# 9. Site navigation
+navigation_header:
+  - title: Home
+    url: /
+  - title: About
+    url: /about/
+  - title: Blog
+    url: /blog/
+  - title: Search
+    url: /search/
+# - title: Categories
+#   url: /categories/
+
+# - title: Fork Alembic
+#   url: https://github.com/daviddarnes/alembic
+
+navigation_footer:
+  - title: Chuong's Security Blog
+    url: https://cdong1012.github.io
+
+social_links: # Appears in sidebar. Set the urls then uncomment and comment out as desired
+  LinkedIn: https://www.linkedin.com/in/chuong-dong-1012/
+  GitHub: https://github.com/cdong1012
+  Twitter: https://twitter.com/cPeterr
+  # RSS: /feed.xml
+
+sharing_links: # Appear at the bottom of single blog posts, add as desired. The value can be 'true' or the desired button colour
+  Twitter: "#0d94e7"
+  Facebook: "#3B5998"
+  Email: true
