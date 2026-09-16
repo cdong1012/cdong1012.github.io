@@ -4,15 +4,18 @@ layout: default
 
 {% include site-header.html %}
 
-<main class="main  container">
+<main id="main-content">
+  <header class="page-hero  container">
+    {% if page.kicker %}<p class="eyebrow">{{ page.kicker }}</p>{% endif %}
+    <h1>{{ page.title }}</h1>
+    {% if page.description %}<p>{{ page.description }}</p>{% endif %}
+  </header>
 
-  <article class="article  article--page  content  typeset">
-
-    {{ content }}
-  </article>
-
-  {% if page.aside == true %}{% include site-aside.html %}{% endif %}
-
+  <div class="container  page-shell  page-shell--single">
+    <article class="page-content">
+      {{ content }}
+    </article>
+  </div>
 </main>
 
 {% include site-footer.html %}

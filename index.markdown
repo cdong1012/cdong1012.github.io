@@ -1,9 +1,5 @@
 ---
-title: Home
+title: Chuong Dong
 layout: home
-#feature_text:
-feature_image: "/uploads/hex-teal.gif"
-#excerpt:
+description: "Reverse engineering, malware analysis, and software obfuscation research by Chuong Dong."
 ---
-
-{% include figure.html image="/uploads/title.gif" position="center" width="1000"%}

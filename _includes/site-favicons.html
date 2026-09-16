@@ -4,4 +4,4 @@
     <link rel="apple-touch-icon" sizes="{{ icon[0] }}x{{ icon[0] }}" href="{{ icon[1] }}">
   {% endfor %}
 {% endif %}
-<link rel="shortcut icon" href="{{ site.avatarurl + '?s=32' | default: site.logo }}">
+<link rel="shortcut icon" href="{{ site.favicons[32] | default: site.logo | relative_url }}">

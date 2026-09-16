@@ -1,28 +1,19 @@
 <!DOCTYPE html>
 <html lang="{{ site.lang | default: "en-US" }}">
-
   <head>
-    <!-- General meta -->
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
 
     {% if page.indexing == false %}
       <meta name="robots" content="noindex">
     {% endif %}
 
-    {% if page.collectionpage %}
-      {% seo title=false %}
+    {% seo %}
 
-      {% assign collectiondata = site.collections | where: "label", page.collectionpage | first %}
-      <title>{{ collectiondata.title }} - {{ site.title }}</title>
-      <meta property="og:title" content="{{ collectiondata.title }}">
-      <meta name="description" content="{{ collectiondata.description }}">
-      <meta property="og:description" content="{{ collectiondata.description }}">
-    {% else %}
-      {% seo %}
-    {% endif %}
-
+    {% feed_meta %}
     <link rel="manifest" href="{{ "/manifest.json" | relative_url }}">
-    <meta name="theme-color" content="{{ site.manifest.theme_color | default: '#242e2b' }}"/>
+    <meta name="theme-color" content="{{ site.manifest.theme_color | default: '#0b1018' }}">
 
     {% if site.css_inline == true %}
       {% include site-styles.html %}
@@ -30,32 +21,32 @@
       <link rel="stylesheet" href="{{ "/assets/styles.css" | relative_url }}">
     {% endif %}
 
-    {% if site.favicons or site.avatarurl %}{% include site-favicons.html %}{% endif %}
+    {% if site.favicons %}{% include site-favicons.html %}{% endif %}
 
     {% if site.google_analytics %}{% include site-analytics.html %}{% endif %}
 
     {% include site-before-start.html %}
-    <meta name="google-site-verification" content="fhiMUAXjII16BlWNx0x4tY2MXKJwEcdDVjILoXGUXYA" />
+    <meta name="google-site-verification" content="fhiMUAXjII16BlWNx0x4tY2MXKJwEcdDVjILoXGUXYA">
   </head>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-168923617-1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-168923617-1');
-  </script>
-
 
   <body class="layout-{{ page.layout }}{% if page.title %}  {{ page.title | slugify }}{% endif %}">
+    <a class="skip-link" href="#main-content">Skip to content</a>
     {% include site-icons.svg %}
 
     {{ content }}
 
-    {% if site.service_worker != false %}{% include site-sw.html %}{% endif %}
-
     {% include site-before-end.html %}
-  </body>
 
+    {% if site.service_worker != false %}
+      {% include site-sw.html %}
+    {% else %}
+      <script>
+        if ("serviceWorker" in navigator) {
+          navigator.serviceWorker.getRegistrations().then(registrations => {
+            registrations.forEach(registration => registration.unregister());
+          });
+        }
+      </script>
+    {% endif %}
+  </body>
 </html>

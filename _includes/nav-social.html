@@ -1,8 +1,8 @@
-<nav class="nav  nav--social">
+<nav class="social-nav" aria-label="Social links">
   {% for link in site.social_links %}
     {% if link[1] != blank %}
       {% assign id = link[0] | downcase %}
-      <a href="{{ link[1] }}">
+      <a href="{{ link[1] }}" rel="me noopener" aria-label="{{ link[0] }}">
         {% include icon.html id=id title=id %}
       </a>
     {% endif %}

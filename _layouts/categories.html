@@ -4,24 +4,18 @@ layout: default
 
 {% include site-header.html %}
 
-<main class="main  container">
+<main id="main-content">
+  <header class="page-hero  container">
+    <p class="eyebrow">Topics</p>
+    <h1>{{ page.title }}</h1>
+    <p>Browse the research archive by subject area.</p>
+  </header>
 
-  <div class="content">
-
-    <article class="article  article--page  typeset">
-
-      <h1>{{ page.title }}</h1>
-
-      {{ content }}
-
-    </article>
-
+  <div class="container  page-shell  page-shell--single">
+    <div class="page-content">
     {% include post-categories.html %}
-
+    </div>
   </div>
-
-  {% if page.aside == true %}{% include site-aside.html align="left" %}{% endif %}
-
 </main>
 
 {% include site-footer.html %}

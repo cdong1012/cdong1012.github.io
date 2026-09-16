@@ -1,6 +1,5 @@
 ---
 title: Categories
 layout: categories
-excerpt: "Category index"
-aside: true
+description: "Browse articles by research topic."
 ---

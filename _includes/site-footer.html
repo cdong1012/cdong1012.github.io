@@ -1,9 +1,16 @@
-<footer class="footer">
-  <div class="container">
-    <div class="copyright  typeset">
-      <small class="small">&copy; {{ site.title }} {{ site.time | date: '%Y' }}</small>
+<footer class="site-footer">
+  <div class="container  footer-grid">
+    <div class="footer-about">
+      <a class="footer-brand" href="{{ "/" | relative_url }}">{{ site.title }}</a>
+      <p>Independent reverse engineering and malware analysis research.</p>
     </div>
 
-    {% include nav-footer.html %}
+    <div class="footer-links">
+      {% include nav-footer.html %}
+      {% include nav-social.html %}
+    </div>
+  </div>
+  <div class="container  footer-meta">
+    <small>&copy; {{ site.time | date: '%Y' }} {{ site.title }}. Opinions are my own.</small>
   </div>
 </footer>

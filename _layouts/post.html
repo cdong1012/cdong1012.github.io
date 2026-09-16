@@ -4,22 +4,36 @@ layout: default
 
 {% include site-header.html %}
 
-<main class="main  container">
+<div class="post-progress" data-reading-progress aria-hidden="true"></div>
 
-  <article class="article  article--post  content  typeset">
+<main id="main-content" class="post-shell  container">
+  <article class="post-article">
+    <div class="post-heading-meta">
+      {% include post-meta.html %}
+    </div>
 
-    {% include post-meta.html %}
-    
-    {{ content }}
+    <div class="post-content">
+      {{ content }}
+    </div>
 
-    {% include nav-share.html %}
-
-    {% include post-comments.html %}
-
+    <footer class="post-footer">
+      <h2>Share this research</h2>
+      {% include nav-share.html %}
+      {% include post-comments.html %}
+    </footer>
   </article>
 
-  {% if page.aside == true %}{% include site-aside.html %}{% endif %}
-
+  {% unless page.aside == false %}
+    <aside class="post-sidebar">
+      <section class="toc-panel">
+        <h2>On this page</h2>
+        <nav data-toc aria-label="Table of contents"></nav>
+      </section>
+      <section class="sidebar-panel">
+        {% include post-related.html %}
+      </section>
+    </aside>
+  {% endunless %}
 </main>
 
 {% include site-footer.html %}

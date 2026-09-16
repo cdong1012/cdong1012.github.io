@@ -1,35 +1,22 @@
 {% if paginator.posts %}
-  <section class="section  typeset">
-    <ul class="list  list--posts">
-      {% for page in paginator.posts %}
-        <li class="item  item--post">
-          <article class="article  article--post">
-
-            <h2><a href="{{ site.baseurl }}{{ page.url }}">{{ page.title }}</a></h2>
-            {% include post-meta.html %}
-
-            <p>{{ page.description }}</p>
-
-          </article>
-        </li>
-      {% endfor %}
-    </ul>
-    {% include post-pagination.html %}
-  </section>
+  {% assign posts = paginator.posts %}
 {% else %}
-  <section class="section  typeset">
-    <ul class="list  list--posts">
-      {% for page in site.posts %}
-        <li class="item  item--post">
-          <article class="article  article--post">
+  {% assign posts = site.posts %}
+{% endif %}
 
-            <h2><a href="{{ site.baseurl }}{{ page.url }}">{{ page.title }}</a></h2>
-            {% include post-meta.html %}
-            <p>{{ page.description }}</p>
+<div class="archive-list">
+  {% for post in posts %}
+    {% unless post.hidden %}
+      <article class="post-card">
+        {% include post-meta.html post=post %}
+        <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
+        <p>{{ post.description | default: post.excerpt | strip_html | truncatewords: 32 }}</p>
+        <span class="post-card-link">Read analysis &rarr;</span>
+      </article>
+    {% endunless %}
+  {% endfor %}
+</div>
 
-          </article>
-        </li>
-      {% endfor %}
-    </ul>
-  </section>
+{% if paginator.posts %}
+  {% include post-pagination.html %}
 {% endif %}

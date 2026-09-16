@@ -9,15 +9,17 @@ sitemap: false
   {% for collection in collections %}
     {% assign docs = collection.docs | where_exp:'doc','doc.sitemap != false' %}
     {% for doc in docs %}
+      {% unless doc.hidden %}
       {
         "title": {{ doc.title | jsonify }},
-        "excerpt": {{ doc.excerpt | markdownify | strip_html | jsonify }},
+        "excerpt": {{ doc.description | default: doc.excerpt | markdownify | strip_html | truncatewords: 32 | jsonify }},
         "content": {{ doc.content | markdownify | strip_html | jsonify }},
         "url": {{ site.baseurl | append: doc.url | jsonify }}
       },
+      {% endunless %}
     {% endfor %}
   {% endfor %}
-  {% assign pages = site.html_pages | where_exp:'doc','doc.sitemap != false' | where_exp:'doc','doc.title != null' %}
+  {% assign pages = site.html_pages | where_exp:'doc','doc.sitemap != false' | where_exp:'doc','doc.title != null' | where_exp:'doc','doc.title != false' %}
   {% for page in pages %}
   {
     "title": {{ page.title | jsonify }},

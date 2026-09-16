@@ -1,18 +1,27 @@
 ---
 title: About
 layout: page
-aside: true
+kicker: About
+description: "Reverse engineer focused on malware internals, protected software, and practical analysis."
 ---
 
-<br/>
-# About Me
-<hr>
-<br/>
-<br/>
-I'm Chuong. I'm a former reverse engineer on Mandiant FLARE team. I do a lot of reverse engineering and malware analysis in my freetime! Currently very interested in software obfuscation!
-<br/><br/>
-This blog is used to keep track of the reverse engineering work I do in my free time. Anything posted here is my own work and is not affiliated with any of my past or future employers.
+I am Chuong, and I do malware reversing! My work centers on understanding complex software through static analysis, dynamic analysis, and reconstruction of low-level behavior.
 
-<br/><br/><br/><br/>
+I use this website to document independent research from my free time. The reports are intended to preserve useful technical details, share repeatable analysis techniques, and make difficult malware behavior easier to understand.
 
-<hr>
+<div class="about-grid">
+  <section class="about-card">
+    <h2>Current interests</h2>
+    <p>Software obfuscation, anti-analysis techniques, Windows internals, and native malware written in C++, Rust, and Go.</p>
+  </section>
+  <section class="about-card">
+    <h2>Research archive</h2>
+    <p>Long-form reports covering ransomware families, reverse engineering challenges, and practical tooling experiments.</p>
+  </section>
+</div>
+
+## Independent work
+
+Everything published here represents my own research and opinions. It is not affiliated with or endorsed by any past, present, or future employer.
+
+[Browse the research archive]({{ "/blog/" | relative_url }}) or connect with me through [GitHub](https://github.com/cdong1012).

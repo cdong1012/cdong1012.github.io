@@ -1264,7 +1264,7 @@ Finally, the malware calls **SystemParametersInfoW** to set the desktop wallpape
 
 Below is the generated Bitmap wallpaper.
 
-![alt text](/uploads/lockbit122.bmp)
+![LockBit encrypted file output](/uploads/lockbit122.png)
 
 *Figure 122: Setting Desktop Wallpaper.*
 

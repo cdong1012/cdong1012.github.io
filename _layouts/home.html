@@ -4,15 +4,100 @@ layout: default
 
 {% include site-header.html %}
 
-<main class="main  container">
+<main id="main-content">
+  <section class="hero">
+    <div class="container  hero-grid">
+      <div>
+        <p class="eyebrow">Reverse engineer &amp; researcher</p>
+        <h1 class="hero-title">Malware Analysis Blog</h1>
+        <p class="hero-lede">I am Chuong. I reverse engineer malware and document the techniques that make software analysis more effective.</p>
+        <div class="hero-actions">
+          <a class="button" href="{{ "/blog/" | relative_url }}">Explore the research</a>
+          <a class="button  button--secondary" href="{{ "/about/" | relative_url }}">About me</a>
+        </div>
+      </div>
 
-  <article class="article  article--page  content  typeset">
+      <aside class="hero-panel" aria-label="Current research interests">
+        <p class="panel-label">Research focus</p>
+        <ul class="focus-list">
+          <li>Windows malware internals</li>
+          <li>Software obfuscation</li>
+          <li>Ransomware analysis</li>
+        </ul>
+        <p class="panel-note">Independent technical research and practical notes.</p>
+      </aside>
+    </div>
+  </section>
 
-    {{ content }}
+  <section class="section  section--surface" aria-labelledby="expertise-heading">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Core disciplines</p>
+          <h2 id="expertise-heading">What I investigate</h2>
+        </div>
+        <p>Research focused on how malicious and protected software behaves beneath its visible surface.</p>
+      </div>
 
-  </article>
+      <div class="expertise-grid">
+        <article class="expertise-card">
+          <span class="card-index">01 / MA</span>
+          <h3>Malware analysis</h3>
+          <p>Detailed behavioral and code-level analysis of ransomware and other Windows malware families.</p>
+        </article>
+        <article class="expertise-card">
+          <span class="card-index">02 / RE</span>
+          <h3>Reverse engineering</h3>
+          <p>Static and dynamic investigation of native software, data structures, and execution flow.</p>
+        </article>
+        <article class="expertise-card">
+          <span class="card-index">03 / OB</span>
+          <h3>Software obfuscation</h3>
+          <p>Exploration of anti-analysis techniques, protected code, and methods for recovering intent.</p>
+        </article>
+      </div>
+    </div>
+  </section>
 
-  {% if page.aside == true %}{% include site-aside.html %}{% endif %}
+  <section class="section" aria-labelledby="latest-heading">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">From the lab</p>
+          <h2 id="latest-heading">Latest research</h2>
+        </div>
+        <a class="text-link" href="{{ "/blog/" | relative_url }}">View all articles &rarr;</a>
+      </div>
+
+      <div class="post-grid">
+        {% assign shown_posts = 0 %}
+        {% for post in site.posts %}
+          {% unless post.hidden %}
+            {% if shown_posts < 3 %}
+              <article class="post-card">
+                {% include post-meta.html post=post %}
+                <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+                <p>{{ post.description | default: post.excerpt | strip_html | truncatewords: 24 }}</p>
+                <span class="post-card-link">Read analysis &rarr;</span>
+              </article>
+              {% assign shown_posts = shown_posts | plus: 1 %}
+            {% endif %}
+          {% endunless %}
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="section  section--bordered">
+    <div class="container  section-heading">
+      <div>
+        <p class="eyebrow">About the author</p>
+        <h2>Research with practitioner context.</h2>
+        <p>Just a reverse engineer who loves looking at malware. This site contains my independent work and personal technical notes.</p>
+      </div>
+      <a class="button  button--secondary" href="{{ "/about/" | relative_url }}">More about my work</a>
+    </div>
+  </section>
 </main>
 
 {% include site-footer.html %}

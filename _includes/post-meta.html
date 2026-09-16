@@ -1,16 +1,20 @@
-{% if page.categories %}
-  {% capture categories %}
-    {% for category in page.categories %}
-      <span class="label  label--category"><a href="{{ site.baseurl }}/categories/#{{ category | downcase }}">{{ category }}</a></span>{% if forloop.last == false %},{% endif %}
-    {% endfor %}
-  {% endcapture %}
-{% elsif page.category %}
-  {% capture categories %}
-    <span class="label  label--category"><a href="{{ site.baseurl }}/categories/#{{ page.category | downcase }}">{{ page.category }}</a></span>
-  {% endcapture %}
-{% endif %}
+{% assign entry = include.post | default: page %}
+{% assign word_count = entry.content | number_of_words %}
+{% assign reading_time = word_count | divided_by: 220 %}
+{% if reading_time < 1 %}{% assign reading_time = 1 %}{% endif %}
 
-<small class="small  post-meta">
+<div class="post-meta">
+  {% if entry.categories %}
+    {% for category in entry.categories %}
+      <a href="{{ "/categories/" | relative_url }}#{{ category | slugify }}">{{ category }}</a>
+      <span class="meta-separator" aria-hidden="true">/</span>
+    {% endfor %}
+  {% elsif entry.category %}
+    <a href="{{ "/categories/" | relative_url }}#{{ entry.category | slugify }}">{{ entry.category }}</a>
+    <span class="meta-separator" aria-hidden="true">/</span>
+  {% endif %}
   {% assign date_format = site.date_format | default: "%d %b %Y" %}
-  {{ categories | append: "&nbsp;&middot;&nbsp;" }}<time datetime="{{ page.date | date_to_xmlschema }}" class="time">{{ page.date | date: date_format }}</time>
-</small>
+  <time datetime="{{ entry.date | date_to_xmlschema }}">{{ entry.date | date: date_format }}</time>
+  <span class="meta-separator" aria-hidden="true">/</span>
+  <span>{{ reading_time }} min read</span>
+</div>

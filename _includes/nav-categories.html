@@ -1,9 +1,19 @@
-<nav class="nav  nav--categories">
-  <ul class="list  list--categories">
+<nav aria-label="Article categories">
+  <ul class="category-list">
     {% for item in site.categories %}
-      <li class="item  item--category">
-        <a href="#{{ item | first | slugify }}">{{ item | first }}</a>
+      {% assign visible_count = 0 %}
+      {% assign category_posts = item | last %}
+      {% for post in category_posts %}
+        {% unless post.hidden %}{% assign visible_count = visible_count | plus: 1 %}{% endunless %}
+      {% endfor %}
+      {% if visible_count > 0 %}
+      <li>
+        <a href="{{ "/categories/" | relative_url }}#{{ item | first | slugify }}">
+          {{ item | first }}
+          <span>{{ visible_count }}</span>
+        </a>
       </li>
+      {% endif %}
     {% endfor %}
   </ul>
 </nav>

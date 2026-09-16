@@ -1,8 +1,8 @@
 ---
 title: Search
-excerpt: "Search for a page or post"
+layout: page
+kicker: Search
+description: "Search titles and full text across the research archive."
 ---
 
-<br/>
 {% include site-search.html %}
-<br/><br/><br/><br/><br/>
